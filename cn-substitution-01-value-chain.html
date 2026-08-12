@@ -151,6 +151,7 @@ footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);
 <b>免责声明</b>　本页是对六份 AI 回答的<b>信息整合</b>，不是投资建议，我也不是投资顾问。"海外对标"指业务上的可替代关系，不代表技术水平或财务表现可比；"共识度"只反映六个模型提及的次数，与公司质地无关。公司上市状态截至 2026 年 8 月经公开信息核查，个股数据请以交易所与公司公告为准。
 </div>
 
+<div class="div" style="border-left:3px solid var(--t3);margin-bottom:16px"><h4><span class="tagl">2026-08-12 更新</span>四家公司实测在亏损，另有一条我自己的错误也已修正</h4><p>本页原本只核查<b>上市状态</b>，没有核查经营状态。接入金融数据接口后发现：<b>摩尔线程（PE -363）、沐曦股份（-436）、华大九天（-2479）、沪硅产业（-48.7）四家在亏损</b>，合计市值 6,959 亿元，已在表中逐条标出。国产 GPU 双雄合计 5,553 亿元、两家都无利润，市场用 PB 22 倍定价——与有利润的寒武纪（PE 208、PB 51）是<b>两种不同的估值状态</b>。</p><p>同时修正了<b>我自己写的一条错误</b>：此前多处写「国产对海外有 4–8 倍 PE 溢价，英伟达约 45x、AMAT 约 20–25x」。实测<b>英伟达 PE 仅 33.36，AMAT 49.35、泛林 53.23、ASML 59.16——三家设备商全部高于英伟达</b>。设备环节的真实溢价约 <b>2.3 倍</b>，4–8 倍集中在<b>芯片设计与制造</b>。本页的<b>共识度、上市状态、海外对标关系</b>不依赖估值数据，不受影响；完整估值修正见 <b>07 号文件</b>。</p></div>
 <h2>一、六模型都错的地方<span class="n">事实校正</span></h2>
 <p class="lead">六份回答中有多处上市状态已过时——尤其是存储与 AI 芯片环节，2025 年底至 2026 年发生了密集的 IPO。这是整合中最有价值的部分：<b>被所有模型当作"未上市、只能通过设备材料间接映射"的核心标的，现在已经可以直接买到</b>。</p>
 
@@ -345,7 +346,7 @@ const LAYERS = [
 // m = 提及该公司的模型索引 [0=GPT,1=oops5,2=Fable5,3=Gemini,4=DeepSeek,5=GLM]
 const D = [
 // ===== EDA / IP =====
-{n:"华大九天",code:"301269.SZ",s:"A",l:"eda",g:"EDA 平台",o:"Cadence · Synopsys · Siemens EDA",m:[0,1,5],note:"国内平台型 EDA 之一；完整工具链覆盖与先进节点能力需按具体工具评价"},
+{n:"华大九天",code:"301269.SZ",s:"A",l:"eda",g:"EDA 平台",o:"Cadence · Synopsys · Siemens EDA",m:[0,1,5],note:"国内平台型 EDA 之一；完整工具链覆盖与先进节点能力需按具体工具评价　❗<b>2026-08-12 实测：PE -2479，确认亏损</b>，市值 539 亿。对标 Synopsys 的营业利润率也只有 10.4%——这一格的问题不只是国产不行，整条赛道的盈利模型都很难。"},
 {n:"概伦电子",code:"688206.SH",s:"A",l:"eda",g:"器件建模 / 特性测试",o:"Synopsys · Cadence · Keysight",m:[0,1]},
 {n:"广立微",code:"301095.SZ",s:"A",l:"eda",g:"良率分析 EDA",o:"PDF Solutions · Synopsys 部分产品",m:[0,1]},
 {n:"芯原股份",code:"688521.SH",s:"A",l:"eda",g:"半导体 IP 与设计服务",o:"Arm · Synopsys IP · Cadence IP",m:[0,5],note:"更接近 IP 平台与设计服务，不是全流程 EDA 公司"},
@@ -354,7 +355,7 @@ const D = [
 {n:"芯和半导体 Xpeedic",code:"—",s:"U",l:"eda",g:"射频 / 封装 / 系统仿真",o:"Ansys · Cadence · Keysight",m:[0]},
 
 // ===== 设备 =====
-{n:"北方华创",code:"002371.SZ",s:"A",l:"equip",g:"平台型：刻蚀/沉积/炉管/清洗",o:"Applied Materials 应用材料 · Lam Research 泛林 · Tokyo Electron 东京电子 · Kokusai",m:[0,1,2,3,5],note:"平台型设备企业，非单一品类公司"},
+{n:"北方华创",code:"002371.SZ",s:"A",l:"equip",g:"平台型：刻蚀/沉积/炉管/清洗",o:"Applied Materials 应用材料 · Lam Research 泛林 · Tokyo Electron 东京电子 · Kokusai",m:[0,1,2,3,5],note:"平台型设备企业，非单一品类公司　<b>2026-08-12 实测：PE 98.91，处近一年 93% 分位</b>（过去一年仅 6.9% 的时间比现在贵）；对标 AMAT 实测 49.35 = 2.00 倍，<b>而非此前各处所写的 4–8 倍</b>。"},
 {n:"中微公司",code:"688012.SH",s:"A",l:"equip",g:"等离子刻蚀 · MOCVD",o:"Lam Research 泛林 · Applied Materials 应用材料 · Tokyo Electron",m:[0,1,2,3,5],note:"受益 3D NAND 层数增加与工艺复杂度提升"},
 {n:"拓荆科技",code:"688072.SH",s:"A",l:"equip",g:"PECVD · ALD · SACVD 薄膜沉积",o:"Applied Materials · Lam Research · ASM International",m:[0,1,2,3,5]},
 {n:"盛美上海",code:"688082.SH",s:"A",l:"equip",g:"清洗 · 电镀 · 先进封装设备",o:"SCREEN · Tokyo Electron · Lam Research",m:[0,1,2,5],note:"母体 ACM Research 在纳斯达克上市（ACMR）——全表唯一可通过美股参与的设备标的"},
@@ -378,7 +379,7 @@ const D = [
 {n:"鼎龙股份",code:"300054.SZ",s:"A",l:"mat",g:"CMP 抛光垫 · 半导体材料",o:"DuPont 杜邦 · Dow 陶氏",m:[0,1,3,5]},
 {n:"安集科技",code:"688019.SH",s:"A",l:"mat",g:"CMP 抛光液 · 湿电子化学品",o:"Entegris（原 Cabot Microelectronics）· Fujimi · DuPont",m:[0,1,2]},
 {n:"彤程新材",code:"603650.SH",s:"A",l:"mat",g:"半导体光刻胶（含北京科华）",o:"JSR · Tokyo Ohka 东京应化 · DuPont",m:[0,1,2]},
-{n:"华特气体",code:"688268.SH",s:"A",l:"mat",g:"电子特气",o:"Linde 林德 · Air Liquide 液化空气 · Air Products 空气化工 · Merck",m:[0,1,2],note:"特气认证周期长、纯度要求高，但不同气体品种壁垒差异很大"},
+{n:"华特气体",code:"688268.SH",s:"A",l:"mat",g:"电子特气",o:"Linde 林德 · Air Liquide 液化空气 · Air Products 空气化工 · Merck",m:[0,1,2],note:"特气认证周期长、纯度要求高，但不同气体品种壁垒差异很大　❗<b>2026-08-12 实测：PE -48.7，确认持续亏损</b>，PB 5.16 是全部国产标的中最低。"},
 {n:"金宏气体",code:"688106.SH",s:"A",l:"mat",g:"电子特气",o:"Linde · Air Liquide · Air Products",m:[0,1,2]},
 {n:"中船特气",code:"688146.SH",s:"A",l:"mat",g:"电子特气（含含氟气体）",o:"Linde · Air Liquide · SK Specialty",m:[0,1]},
 {n:"雅克科技",code:"002409.SZ",s:"A",l:"mat",g:"前驱体 · 光刻胶 · 电子材料",o:"Merck 默克 · Entegris · Air Liquide",m:[0,5]},
@@ -405,7 +406,7 @@ const D = [
 {n:"晶合集成",code:"688249.SH",s:"A",l:"foundry",g:"显示驱动 · 电源管理代工",o:"UMC · Powerchip 力积电",m:[0]},
 
 // ===== 存储 =====
-{n:"长鑫科技（长鑫存储 CXMT）",code:"688825.SH",s:"NEW",l:"mem",g:"DRAM（IDM 一体化）",o:"Samsung 三星 · SK Hynix 海力士 · Micron 美光",m:[0,1,2,3,4,5],note:"★ 六模型唯一全票。2026-07-27 科创板上市，募资约 666 亿创科创板最大 IPO，首日 +465%，市值约 3.28 万亿。全球第四大 DRAM 厂。六份回答均标注「未上市」，已过时"},
+{n:"长鑫科技（长鑫存储 CXMT）",code:"688825.SH",s:"NEW",l:"mem",g:"DRAM（IDM 一体化）",o:"Samsung 三星 · SK Hynix 海力士 · Micron 美光",m:[0,1,2,3,4,5],note:"★ 六模型唯一全票。2026-07-27 科创板上市，募资约 666 亿创科创板最大 IPO，首日 +465%，市值约 3.28 万亿。全球第四大 DRAM 厂。六份回答均标注「未上市」，已过时　<b>2026-08-12 实测：市值 3.58 万亿、PE 126.95、PB 43.80（全表最高）</b>，对标美光 PE 19.46 = 6.52 倍溢价。"},
 {n:"长江存储 YMTC",code:"—",s:"U",l:"mem",g:"3D NAND Flash",o:"Samsung 三星 · Kioxia 铠侠 · SK Hynix 海力士 / Solidigm · Micron 美光",m:[0,1,2,3,5],note:"2026-05-19 启动 IPO 辅导（中信证券 + 中信建投），预计 2026 下半年上市，估值预期约 3000 亿。全球第六大 NAND 供应商"},
 {n:"兆易创新",code:"603986.SH",s:"A",l:"mem",g:"NOR Flash · MCU · 利基 DRAM",o:"Winbond 华邦 · Macronix 旺宏 · Infineon · Microchip",m:[0,1,2,3,5],note:"不是三星、海力士意义上的主流大宗 DRAM 厂商"},
 {n:"江波龙",code:"301308.SZ",s:"A",l:"mem",g:"存储模组 · 主控",o:"Kingston 金士顿 · Phison 群联 · Western Digital 部分产品",m:[0,1],note:"采购颗粒后封装与品牌销售，与长鑫、长江存储处在不同价值层级"},
@@ -417,8 +418,8 @@ const D = [
 {n:"华为海思 / 昇腾",code:"—",s:"U",l:"chip",g:"AI GPU/NPU · 通用芯片",o:"NVIDIA 英伟达 · Google TPU · AMD Instinct",m:[0,2,3,5],note:"核心约束：先进制程、HBM、封装、软件生态与集群互联"},
 {n:"寒武纪",code:"688256.SH",s:"A",l:"chip",g:"云端 AI 加速芯片",o:"NVIDIA · AMD",m:[0,2,3,5],note:"研发投入大，商业化、软件生态与盈利能力需持续验证；估值可能提前透支"},
 {n:"海光信息",code:"688041.SH",s:"A",l:"chip",g:"服务器 CPU · DCU",o:"AMD EPYC · Intel Xeon · AMD Instinct",m:[0,2,5]},
-{n:"摩尔线程",code:"688795.SH",s:"NEW",l:"chip",g:"通用 GPU",o:"NVIDIA · AMD",m:[0,3],note:"2025-12-05 科创板上市（国产 GPU 第一股）。2026H1 营收 17.36 亿、同比 +147%。正筹划发行 H 股。原回答标注上市状态不确定，已核实"},
-{n:"沐曦股份",code:"688802.SH",s:"NEW",l:"chip",g:"通用 GPU",o:"NVIDIA · AMD",m:[],note:"★ 六模型全部遗漏，为核查补漏。2025-12 科创板上市，首日 +692.95%，市值一度接近摩尔线程"},
+{n:"摩尔线程",code:"688795.SH",s:"NEW",l:"chip",g:"通用 GPU",o:"NVIDIA · AMD",m:[0,3],note:"2025-12-05 科创板上市（国产 GPU 第一股）。2026H1 营收 17.36 亿、同比 +147%。正筹划发行 H 股。原回答标注上市状态不确定，已核实　❗<b>2026-08-12 实测：PE -362.94，确认亏损</b>，市值 2,691 亿、PB 22.10。"},
+{n:"沐曦股份",code:"688802.SH",s:"NEW",l:"chip",g:"通用 GPU",o:"NVIDIA · AMD",m:[],note:"★ 六模型全部遗漏，为核查补漏。2025-12 科创板上市，首日 +692.95%，市值一度接近摩尔线程　❗<b>2026-08-12 实测：PE -436.41，确认亏损</b>，市值 2,862 亿、PB 21.85（市值已反超摩尔线程）。"},
 {n:"壁仞科技",code:"06082.HK",s:"H",l:"chip",g:"通用 GPU（壁砺系列）",o:"NVIDIA · AMD",m:[0],note:"2026-01-02 港交所上市（港股 GPU 第一股），发行价 19.6 港元、募资 55.83 亿港元，18C 机制下最大规模新股"},
 {n:"燧原科技",code:"待定",s:"IPO",l:"chip",g:"云端 AI 芯片 · 智算集群",o:"NVIDIA · AMD · Google TPU",m:[0],note:"2026-07-09 注册获批，拟发行 6835 万股募资 60 亿，预计 8 月中旬上市。腾讯贡献超八成营收是审核关注点"},
 {n:"澜起科技",code:"688008.SH",s:"A",l:"chip",g:"内存接口芯片 · 服务器平台",o:"Rambus · Renesas 瑞萨（原 IDT）",m:[0,1,2,5],note:"DDR 代际升级与服务器内存容量提升会增加接口芯片需求"},
@@ -442,7 +443,7 @@ const D = [
 {n:"华为",code:"—",s:"U",l:"infra",g:"交换机 · 网络设备 · 云",o:"Cisco · Arista · Nokia · Ericsson",m:[0]},
 {n:"工业富联",code:"601138.SH",s:"A",l:"infra",g:"AI 服务器代工",o:"Supermicro 超微 · Quanta 广达 · Wistron",m:[3,5],caution:1,note:"组装集成利润率低，且受地缘博弈影响"},
 {n:"立讯精密",code:"002475.SZ",s:"A",l:"infra",g:"连接器 · 整机代工",o:"Amphenol 安费诺 · TE Connectivity · Foxconn",m:[3],caution:1},
-{n:"中际旭创",code:"300308.SZ",s:"A",l:"infra",g:"光模块",o:"Coherent · Lumentum · Marvell 光通信芯片",m:[0,1,3,5],caution:1,note:"⚠ 谨慎层。有中国制造优势但收入高度依赖北美云厂商，更接近全球 AI capex 链而非国产自主可控链，受制裁预期压制"},
+{n:"中际旭创",code:"300308.SZ",s:"A",l:"infra",g:"光模块",o:"Coherent · Lumentum · Marvell 光通信芯片",m:[0,1,3,5],caution:1,note:"⚠ 谨慎层。有中国制造优势但收入高度依赖北美云厂商，更接近全球 AI capex 链而非国产自主可控链，受制裁预期压制　<b>2026-08-12 实测：PE 72.07 vs Coherent 154.10 = 折价 0.47 倍</b>；但行业 PE 排名 22/98（便宜）、PB 92/98、PS 88/98（最贵一档）——低 PE 靠 29% 净利率撑起。"},
 {n:"新易盛",code:"300502.SZ",s:"A",l:"infra",g:"光模块",o:"Coherent · Lumentum",m:[0,1,3,5],caution:1,note:"⚠ 谨慎层，理由同上"},
 {n:"光迅科技",code:"002281.SZ",s:"A",l:"infra",g:"光模块 · 光器件",o:"Coherent · Lumentum · Fabrinet",m:[0],caution:1},
 {n:"天孚通信",code:"300394.SZ",s:"A",l:"infra",g:"光器件",o:"Coherent · Lumentum",m:[5],caution:1},

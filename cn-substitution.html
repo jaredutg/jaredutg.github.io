@@ -66,18 +66,26 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);font-si
 
 <h1>国产替代投资研究</h1>
 <p class="sub">对六个 AI 模型（GPT · oops5 · Fable5 · Gemini · DeepSeek · GLM5.2）关于国产替代投资回答的整合、事实校正与量化分析</p>
-<p class="meta">编制于 2026 年 8 月 ｜ 103 家公司 · 36 个环节 · 全产业链 41 节点 ｜ 六份文档，均为单文件离线可用</p>
+<p class="meta">编制于 2026 年 8 月 ｜ 103 家公司 · 36 个环节 · 全产业链 41 节点 ｜ <b>估值数据已于 2026-08-12 用金融数据接口重取</b> ｜ 七份文档，均为单文件离线可用</p>
 
 <div class="warn">
 <b>免责声明</b>　本站内容不是投资建议，编制者不是投资顾问，<b>不对任何标的给出买入或卖出意见</b>。所有数据来自公开行业报告与公司公告，口径不统一、时点混合，且部分为估算与推演（已逐项标注）。个股决策请以交易所与公司公告为准，风险自担。
 </div>
 
 <h2>文档目录</h2>
+<div class="kf rd" style="margin-bottom:14px"><h3>⚠ 2026-08-12 数据修正：我自己也错了三条</h3><p>此前各页的估值数据来自 5 月券商文章与 4–8 月财经报道，时点混杂且多为转述。接入金融数据接口后同日重取，发现<b>一条核心论断方向是错的</b>：此前写「英伟达约 45x、AMAT 约 20–25x，国产设备对海外溢价 4–8 倍」，实测<b>英伟达 PE 仅 33.36，而 AMAT 49.35、泛林 53.23、ASML 59.16——三家设备商 PE 全部高于英伟达</b>。设备环节真实溢价约 <b>2.3 倍</b>；4–8 倍集中在<b>芯片设计与制造</b>（寒武纪 6.25x、海光 7.35x、中芯 5.88x、长鑫 6.52x）。</p><p>另两条：<b>中际旭创折价更深（0.47x）但按 PB/PS 是行业最贵一档</b>（PE 排 22/98、PB 92/98、PS 88/98）——低 PE 靠 29% 净利率撑起；<b>Synopsys 毛利率 82.6% 但营业利润率仅 10.4%</b>，「EDA 利润率最高」只对了一半，利润池此前高估约 8 倍。还发现<b>四家公司在亏损</b>（摩尔线程、沐曦、华大九天、沪硅产业，合计市值 6,959 亿元）而此前完全未标注。</p><p><b>七份文件已全部实质更新</b>，不只是加提示。完整修正说明见 <b>07 号文件</b>。不依赖估值的判断（份额、国产化率、技术代差、利润分配结构）仍然成立。</p></div>
+
 
 <a class="card" href="cn-substitution-06-full-chain-flow.html" style="--c:var(--gold);--cb:var(--goldb)">
  <div class="ch"><span class="num">06</span><span class="tt">全产业链流程图</span></div>
  <p><b>建议从这里开始。</b>从 EDA 到人形机器人的 9 级 41 个环节完整流程，每个节点标注中国与海外代表公司、国产状态与关键指标。可按 AI／智能汽车／机器人链路筛选。</p>
  <div class="tags"><span class="tag">总览</span><span class="tag">可筛选</span><span class="tag">中国 vs 海外</span></div>
+</a>
+
+<a class="card" href="cn-substitution-07-measured-valuation.html" style="--c:var(--g4);--cb:var(--g4b)">
+ <div class="ch"><span class="num">07</span><span class="tt">实测估值数据 · 修正版</span></div>
+ <p><b>估值问题看这一份。</b>31 家国产 + 9 家海外的同日实测市值、PE、PB、溢价倍数；被推翻的三条结论；四家亏损公司；海外对标的毛利率与营业利润率落差对比。<b>凡涉及具体 PE 倍数与相对估值排序，以此页为准。</b></p>
+ <div class="tags"><span class="tag">同日实测</span><span class="tag">数据修正</span><span class="tag">40 家公司</span></div>
 </a>
 
 <a class="card" href="cn-substitution-01-value-chain.html" style="--c:var(--blue);--cb:var(--blueb)">
@@ -94,7 +102,7 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);font-si
 
 <a class="card" href="cn-substitution-03-data.xlsx" style="--c:var(--g1);--cb:var(--g1b)">
  <div class="ch"><span class="num">03</span><span class="tt">量化数据表（Excel）</span></div>
- <p>四个工作表：说明与方法 ／ 环节量化 ／ 公司量化 ／ 下游价值链与利润池。公式是活的，改汇率或利润率会自动重算。</p>
+ <p><b>五个</b>工作表：说明与方法 ／ 环节量化 ／ 公司量化 ／ 下游价值链与利润池 ／ <b>实测估值 2026-08-12（40 家同日数据）</b>。公式是活的。</p>
  <div class="tags"><span class="tag">.xlsx 下载</span><span class="tag">可编辑</span></div>
 </a>
 
@@ -119,7 +127,8 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);font-si
 
 <div class="kf gd">
 <h3>二、唯一赢了的公司，估值反而最便宜</h3>
-<p>半导体链的国产龙头普遍对海外对标有 <b>4–8 倍 PE 溢价</b>（寒武纪 305x vs 英伟达约 45x、中芯 234x vs 台积电 20–30x）。唯一例外是中际旭创：全球光模块份额 23.4–27% 第一，<b>PE 仅 61 倍，低于 Coherent 前瞻 49x／TTM 180x 和 Lumentum 159x</b>。折价的原因是美国 FCC 正讨论禁止中国产光模块——市场已经在为这个风险定价。</p>
+<p>半导体链的国产龙头对海外对标的溢价<b>分两段</b>：<b>设备环节 1.8–2.5 倍</b>（盛美 1.82x、北方华创 2.00x、中微 2.51x、拓荆 2.52x），<b>设计与制造 5.9–7.4 倍</b>（中芯 5.88x、寒武纪 6.25x、长鑫 6.52x、海光 7.35x）。若接受「卖铲子」逻辑，实测数据其实<b>支持</b>它——设备的相对估值远比设计便宜。</p>
+<p>唯一折价的是光模块：<b>中际旭创 PE 72.07、新易盛 55.59，而 Coherent 154.10、Lumentum 156.14</b>，折价 0.47x 与 0.36x。原因是美国 FCC 正讨论禁止中国产光模块，其 90% 以上收入来自境外。<b>但行业分位揭示了反面：旭创 PB 排 92/98、PS 排 88/98，属最贵一档——低 PE 是靠 29% 净利率撑起来的，一旦利润率回落，PE 会在股价不动的情况下自己变贵。</b></p>
 </div>
 
 <div class="kf">
