@@ -451,7 +451,9 @@ const GN={G1:["已突围","--g1","--g1b"],G2:["接近","--g2","--g2b"],G3:["追�
 /* —— 突围榜 —— */
 const BO=CO.filter(x=>x.grade==="G1").sort((a,b)=>(b.gs||b.cs||0)-(a.gs||a.cs||0));
 document.getElementById("bo").innerHTML=BO.map((x,i)=>{
-  const v = x.gs!=null ? [x.gs+"%","全球市场份额"] : [x.cs+"%","中国市场份额"];
+  const v = x.gs!=null ? [x.gs+"%","全球市场份额"]
+          : x.cs!=null ? [x.cs+"%","中国市场份额"]
+          : ["领先","份额未核实"];
   return `<div class="bc"><div class="rk">#${i+1}</div>
    <div class="nm">${x.n}</div><div class="cd">${x.cd} · ${x.seg}</div>
    <div class="kpi">${v[0]}</div><div class="kpil">${v[1]}</div>
