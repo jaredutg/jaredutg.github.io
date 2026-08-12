@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>国产替代投资价值链 · 六模型回答整合</title>
+<style>
+:root{
+  --bg:#faf9f7; --panel:#ffffff; --ink:#1f1e1c; --ink2:#57534e; --ink3:#8a8480;
+  --line:#e5e1dc; --line2:#d6d1ca;
+  --t1:#b8492e; --t1bg:#fdf1ed;
+  --t2:#a1701c; --t2bg:#fdf6e6;
+  --t3:#3f6f52; --t3bg:#eef5f0;
+  --t4:#41608c; --t4bg:#eef2f8;
+  --t5:#6b6560; --t5bg:#f4f2ef;
+  --warn:#9c3a3a; --warnbg:#fbeeee;
+  --accent:#1f1e1c;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#191817; --panel:#221f1d; --ink:#f0ece7; --ink2:#b6afa8; --ink3:#857d76;
+    --line:#332f2c; --line2:#443e3a;
+    --t1:#e08a6d; --t1bg:#2e211c;
+    --t2:#d6ad5c; --t2bg:#2b2419;
+    --t3:#7db393; --t3bg:#1c2620;
+    --t4:#89aad6; --t4bg:#1b222c;
+    --t5:#a8a09a; --t5bg:#26231f;
+    --warn:#e08585; --warnbg:#2d1c1c;
+    --accent:#f0ece7;
+  }
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:36px 24px 80px;}
+h1{font-size:27px;line-height:1.3;margin:0 0 6px;letter-spacing:-.01em;}
+.sub{color:var(--ink2);font-size:14px;margin:0 0 4px;}
+.meta{color:var(--ink3);font-size:12.5px;margin:0 0 26px;}
+h2{font-size:19px;margin:44px 0 6px;letter-spacing:-.01em;}
+h2 .n{color:var(--ink3);font-weight:400;font-size:14px;margin-left:8px;}
+.lead{color:var(--ink2);font-size:13.5px;margin:0 0 16px;max-width:820px;}
+
+.disc{background:var(--warnbg);border:1px solid color-mix(in srgb,var(--warn) 25%,transparent);
+  border-radius:8px;padding:12px 15px;font-size:12.5px;color:var(--ink2);margin:0 0 30px;line-height:1.6;}
+.disc b{color:var(--warn);}
+
+/* ---- 校正卡 ---- */
+.fixgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:11px;margin:16px 0 0;}
+.fix{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--t1);border-radius:7px;padding:12px 14px;}
+.fix .co{font-weight:650;font-size:14px;}
+.fix .co span{font-weight:400;color:var(--ink3);font-size:12px;margin-left:5px;}
+.fix .was{color:var(--ink3);font-size:12px;text-decoration:line-through;margin-top:3px;}
+.fix .now{color:var(--t1);font-size:12.5px;font-weight:550;margin-top:2px;}
+.fix .why{color:var(--ink2);font-size:12px;margin-top:5px;line-height:1.5;}
+
+/* ---- 价值链 ---- */
+.chain{margin:18px 0 0;}
+.layer{background:var(--panel);border:1px solid var(--line);border-radius:9px;
+  padding:13px 16px;margin-bottom:8px;cursor:pointer;transition:.14s;position:relative;overflow:hidden;}
+.layer:hover{border-color:var(--line2);transform:translateX(2px);}
+.layer.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);}
+.layer::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--lc,var(--t5));}
+.lhead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:5px;}
+.ltag{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--lc);
+  background:var(--lbg);padding:2px 7px;border-radius:4px;}
+.lname{font-weight:650;font-size:15.5px;}
+.lrole{font-size:12px;color:var(--ink3);}
+.lbar{margin-left:auto;display:flex;align-items:center;gap:7px;font-size:11px;color:var(--ink3);}
+.dots{display:flex;gap:2.5px;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--line2);}
+.dot.f{background:var(--lc);}
+.lseg{font-size:12.8px;color:var(--ink2);line-height:1.75;}
+.lseg b{color:var(--ink);font-weight:600;}
+.arrow{text-align:center;color:var(--line2);font-size:13px;line-height:1;margin:-2px 0 6px;}
+
+/* ---- 优先级 ---- */
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:11px;margin-top:16px;}
+.tier{border:1px solid var(--line);border-radius:9px;padding:14px 16px;background:var(--panel);}
+.tier h3{margin:0 0 2px;font-size:14.5px;display:flex;align-items:center;gap:8px;}
+.tier h3 .r{font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;}
+.tier p{margin:6px 0 0;font-size:12.5px;color:var(--ink2);line-height:1.6;}
+.tier .who{margin-top:8px;font-size:11.5px;color:var(--ink3);border-top:1px solid var(--line);padding-top:7px;}
+
+/* ---- 控件 ---- */
+.ctrl{position:sticky;top:0;background:var(--bg);padding:14px 0 11px;z-index:20;
+  border-bottom:1px solid var(--line);margin-bottom:0;}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+input[type=search]{flex:1;min-width:210px;padding:8px 12px;border:1px solid var(--line2);
+  border-radius:7px;background:var(--panel);color:var(--ink);font-size:13.5px;font-family:inherit;}
+input[type=search]:focus{outline:none;border-color:var(--accent);}
+.chip{padding:5px 11px;border:1px solid var(--line2);border-radius:20px;background:var(--panel);
+  color:var(--ink2);font-size:12.5px;cursor:pointer;transition:.12s;font-family:inherit;white-space:nowrap;}
+.chip:hover{border-color:var(--ink3);}
+.chip.on{background:var(--accent);color:var(--bg);border-color:var(--accent);}
+.cnt{font-size:12px;color:var(--ink3);margin-top:9px;}
+
+/* ---- 表 ---- */
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px;}
+th{text-align:left;font-size:11.5px;font-weight:650;color:var(--ink3);letter-spacing:.04em;
+  padding:9px 9px;border-bottom:1px solid var(--line2);white-space:nowrap;cursor:pointer;user-select:none;}
+th:hover{color:var(--ink);}
+th .s{opacity:.4;font-size:9px;}
+td{padding:9px 9px;border-bottom:1px solid var(--line);vertical-align:top;}
+tr:hover td{background:color-mix(in srgb,var(--panel) 70%,transparent);}
+.cn{font-weight:600;white-space:nowrap;}
+.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:var(--ink2);white-space:nowrap;}
+.st{font-size:11px;padding:1.5px 6px;border-radius:4px;white-space:nowrap;font-weight:600;}
+.st.a{background:var(--t3bg);color:var(--t3);}
+.st.h{background:var(--t4bg);color:var(--t4);}
+.st.u{background:var(--t2bg);color:var(--t2);}
+.st.n{background:var(--t1bg);color:var(--t1);}
+.seg{font-size:12px;color:var(--ink2);}
+.ov{font-size:12.3px;color:var(--ink2);line-height:1.5;}
+.con{white-space:nowrap;font-size:11px;color:var(--ink3);}
+.con .d{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--line2);margin-right:1.5px;}
+.con .d.f{background:var(--t3);}
+.note{font-size:11.5px;color:var(--ink3);line-height:1.45;}
+.flag{color:var(--warn);font-weight:600;}
+.empty{padding:32px;text-align:center;color:var(--ink3);font-size:13px;}
+
+/* ---- 分歧 ---- */
+.div{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:14px 16px;margin-bottom:9px;}
+.div h4{margin:0 0 4px;font-size:14px;}
+.div p{margin:0;font-size:12.8px;color:var(--ink2);line-height:1.65;}
+.div p + p{margin-top:6px;}
+.div .tagl{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;
+  padding:2px 6px;border-radius:4px;background:var(--t5bg);color:var(--t5);margin-right:7px;vertical-align:1.5px;}
+
+footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);
+  font-size:11.5px;color:var(--ink3);line-height:1.7;}
+@media (max-width:720px){
+  .wrap{padding:24px 15px 60px;}
+  h1{font-size:22px;}
+  table{font-size:12px;}
+  th,td{padding:7px 5px;}
+  .hide-s{display:none;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>国产替代投资价值链 · 六模型回答整合</h1>
+<p class="sub">GPT · oops5 · Fable5 · Gemini · DeepSeek · GLM5.2 六份回答的合并、去重、共识度标注与事实校正</p>
+<p class="meta">整合日期 2026-08-10 ｜ 收录 <b id="total">0</b> 家公司 ｜ 含未上市与境外上市标的 ｜ 上市状态经网络核查</p>
+
+<div class="disc">
+<b>免责声明</b>　本页是对六份 AI 回答的<b>信息整合</b>，不是投资建议，我也不是投资顾问。"海外对标"指业务上的可替代关系，不代表技术水平或财务表现可比；"共识度"只反映六个模型提及的次数，与公司质地无关。公司上市状态截至 2026 年 8 月经公开信息核查，个股数据请以交易所与公司公告为准。
+</div>
+
+<h2>一、六模型都错的地方<span class="n">事实校正</span></h2>
+<p class="lead">六份回答中有多处上市状态已过时——尤其是存储与 AI 芯片环节，2025 年底至 2026 年发生了密集的 IPO。这是整合中最有价值的部分：<b>被所有模型当作"未上市、只能通过设备材料间接映射"的核心标的，现在已经可以直接买到</b>。</p>
+
+<div class="fixgrid">
+<div class="fix">
+  <div class="co">长鑫科技（长鑫存储 CXMT）<span>六模型全部提及</span></div>
+  <div class="was">六份回答均标注：未上市</div>
+  <div class="now">已上市 · 688825.SH · 2026-07-27</div>
+  <div class="why">科创板史上最大 IPO，募资约 666 亿元，首日 +465%，市值约 3.28 万亿。国产 DRAM 逻辑不再需要靠设备材料间接映射。</div>
+</div>
+<div class="fix">
+  <div class="co">摩尔线程<span>GPT / Gemini 提及</span></div>
+  <div class="was">标注：未上市或上市进程中</div>
+  <div class="now">已上市 · 688795.SH · 2025-12-05</div>
+  <div class="why">"国产 GPU 第一股"，2026 上半年营收 17.36 亿、同比 +147%。同时在筹划发行 H 股。</div>
+</div>
+<div class="fix">
+  <div class="co">沐曦股份<span>六模型均未提及</span></div>
+  <div class="was">六份回答完全遗漏</div>
+  <div class="now">已上市 · 688802.SH · 2025-12</div>
+  <div class="why">国产 GPU 四小龙之一，上市首日 +692.95%，市值一度接近摩尔线程。整合中的重要补漏。</div>
+</div>
+<div class="fix">
+  <div class="co">壁仞科技<span>GPT 提及</span></div>
+  <div class="was">标注：未上市或上市进程中</div>
+  <div class="now">已上市 · 06082.HK · 2026-01-02</div>
+  <div class="why">"港股 GPU 第一股"，发行价 19.6 港元，募资 55.83 亿港元，是 18C 机制落地以来最大规模新股。</div>
+</div>
+<div class="fix">
+  <div class="co">燧原科技<span>GPT 提及</span></div>
+  <div class="was">标注：未上市或上市进程中</div>
+  <div class="now">注册获批 · 拟 8 月中旬上市</div>
+  <div class="why">2026-07-09 证监会同意注册，拟发行 6835 万股募资 60 亿。腾讯系，营收集中度高是其审核问询重点。</div>
+</div>
+<div class="fix">
+  <div class="co">长江存储（YMTC）<span>五模型提及</span></div>
+  <div class="was">标注：未上市（正确，但缺进展）</div>
+  <div class="now">仍未上市 · IPO 辅导中</div>
+  <div class="why">2026-05-19 启动辅导备案（中信证券 + 中信建投），预计 2026 下半年 IPO，市场估值预期约 3000 亿。</div>
+</div>
+<div class="fix">
+  <div class="co">上海微电子（SMEE）<span>五模型提及</span></div>
+  <div class="was">标注：未上市（正确，但缺路径）</div>
+  <div class="now">仍未上市 · 母公司短期无上市计划</div>
+  <div class="why">2024-10 主动撤回科创板辅导备案。路径改为分拆先进封装光刻子公司<b>芯上微装</b>（2026-01 融资估值约 280 亿），拟 2027 年报科创板。</div>
+</div>
+<div class="fix">
+  <div class="co">中环股份<span>oops5 写作"中环股份"</span></div>
+  <div class="was">名称已过时</div>
+  <div class="now">现名 TCL 中环 · 002129.SZ</div>
+  <div class="why">另注：oops5 将其列为"大硅片"，但公司主业以光伏硅片为主，半导体硅片占比有限，不宜与沪硅产业并列。</div>
+</div>
+</div>
+
+<h2>二、合并价值链<span class="n">点击任一层可筛选下方公司表</span></h2>
+<p class="lead">六份回答的价值链图结构高度一致，差别只在层级切分粗细。下面是合并版：右侧圆点表示<b>六个模型中有几个把该层单列为一个环节</b>——圆点越满，说明这一层的重要性越是跨模型共识。</p>
+
+<div class="chain" id="chain"></div>
+
+<div class="div" style="border-left:3px solid var(--t4);margin-top:14px">
+  <h4><span class="tagl">范围说明</span>这张价值链止于半导体，因为六份回答本身就止于半导体</h4>
+  <p>六个模型的讨论范围最远只到基础软件与工业软件，<b>没有一个把 AI 应用层、自动驾驶、机器人纳入价值链</b>。这是原始材料的边界，本页忠实保留，不擅自扩展——否则「共识度」这一列会失去意义。</p>
+  <p>但下游恰恰是利润分配最悬殊、且中国角色最不一样的地方：<b>在自动驾驶硬件上中国是领先方而非追赶方</b>（激光雷达海外龙头 Luminar 已破产，中国厂商占全球车载 80–95%），<b>而 AI 下游的利润高度集中在 CUDA 生态与 HBM</b>——恰好是国产最薄弱的两处。完整的下游价值链、利润池地图与生态位分析见 <b>05 号文件《下游价值链 · 利润池 · 生态位》</b>。</p>
+</div>
+
+<h2>三、优先级共识<span class="n">六份回答的推荐分层</span></h2>
+<p class="lead">六个模型对"买什么"的排序几乎完全一致，措辞也高度雷同：<b>越靠上游、越被卡脖子、越吃国家补贴的环节越优先</b>——即"淘金热里卖铲子"。真正的分歧只在最后一层。</p>
+
+<div class="tiers">
+<div class="tier" style="border-left:3px solid var(--t1)">
+  <h3>第一层<span class="r" style="background:var(--t1bg);color:var(--t1)">6/6 一致</span></h3>
+  <div style="font-weight:600;font-size:13.5px;margin-top:2px">设备 + 材料 + 量测 + EDA</div>
+  <p>六份回答无一例外把这里排在首位。理由完全重合：被海外限制最敏感、晶圆厂扩产必须采购、政策与产业基金优先砸入、同时服务逻辑/存储/功率/模拟多个下游。</p>
+  <div class="who">GPT · oops5 · Fable5 · Gemini · DeepSeek · GLM5.2</div>
+</div>
+<div class="tier" style="border-left:3px solid var(--t2)">
+  <h3>第二层<span class="r" style="background:var(--t2bg);color:var(--t2)">6/6 一致</span></h3>
+  <div style="font-weight:600;font-size:13.5px;margin-top:2px">国产存储</div>
+  <p>长鑫 DRAM + 长江存储 NAND。DeepSeek 与 Gemini 特别强调原文逻辑：存储吃掉了 AI 产业链过多利润（数据中心成本占比 15%→40%），国产突破会削弱韩系定价权。<span class="flag">注意：长鑫已于 2026-07 上市，这一层的可投资方式已经改变。</span></p>
+  <div class="who">GPT · oops5 · Fable5 · Gemini · DeepSeek · GLM5.2</div>
+</div>
+<div class="tier" style="border-left:3px solid var(--t3)">
+  <h3>第三层<span class="r" style="background:var(--t3bg);color:var(--t3)">5/6</span></h3>
+  <div style="font-weight:600;font-size:13.5px;margin-top:2px">AI 芯片 · 晶圆制造 · 先进封装</div>
+  <p>空间大但风险明确：技术迭代快、研发投入高、软件生态壁垒、先进制程与 HBM 约束、估值可能提前透支。GPT 与 GLM 都单独提示了估值风险。</p>
+  <div class="who">GPT · Fable5 · Gemini · DeepSeek · GLM5.2</div>
+</div>
+<div class="tier" style="border-left:3px solid var(--t4)">
+  <h3>第四层<span class="r" style="background:var(--t4bg);color:var(--t4)">3/6</span></h3>
+  <div style="font-weight:600;font-size:13.5px;margin-top:2px">服务器 · 网络 · 液冷 · 电源</div>
+  <p>商业兑现清晰，但竞争充分，产品差异与利润率通常不如核心设备和 EDA。只有 GPT 做了完整展开，Gemini 和 GLM 略提。</p>
+  <div class="who">GPT · Gemini · GLM5.2</div>
+</div>
+<div class="tier" style="border-left:3px solid var(--warn)">
+  <h3>谨慎层<span class="r" style="background:var(--warnbg);color:var(--warn)">5/6 明确回避</span></h3>
+  <div style="font-weight:600;font-size:13.5px;margin-top:2px">海外 AI 资本开支链（光模块等）</div>
+  <p>五个模型明确点名要减配光模块。共同理由：收入高度依赖北美云厂商，属于全球 AI capex 链而非国产自主可控链，受制裁预期与海外 capex 波动双重压制。oops5 说得最直接——"列在这里是为了对照，不是让你买"。</p>
+  <div class="who">GPT · oops5 · Gemini · DeepSeek · GLM5.2</div>
+</div>
+</div>
+
+<h2>四、公司 ↔ 海外对标全表<span class="n" id="cnt2"></span></h2>
+<p class="lead">六份回答合并去重后的完整清单。<b>共识度</b>列的绿点数 = 六个模型中提及该公司的数量（DeepSeek 基本只给行业方向未点名个股，因此其贡献主要体现在环节层面）。点击表头可排序。</p>
+
+<div class="ctrl">
+  <div class="row">
+    <input type="search" id="q" placeholder="搜索公司、代码、海外对标、环节…（如 ASML / 刻蚀 / 未上市 / 三星）">
+    <button class="chip on" data-f="all">全部</button>
+    <button class="chip" data-f="unlisted">未上市</button>
+    <button class="chip" data-f="hk">港股/美股</button>
+    <button class="chip" data-f="hi">高共识 ≥3</button>
+    <button class="chip" data-f="caution">谨慎层</button>
+  </div>
+  <div class="row" id="layerchips" style="margin-top:8px"></div>
+  <div class="cnt" id="cnt">—</div>
+</div>
+
+<table>
+<thead><tr>
+  <th data-s="name">公司 <span class="s">↕</span></th>
+  <th data-s="code" class="hide-s">代码 <span class="s">↕</span></th>
+  <th data-s="status">状态 <span class="s">↕</span></th>
+  <th data-s="layer">环节 <span class="s">↕</span></th>
+  <th data-s="seg" class="hide-s">细分 <span class="s">↕</span></th>
+  <th data-s="ov">海外对标 <span class="s">↕</span></th>
+  <th data-s="con">共识 <span class="s">↕</span></th>
+</tr></thead>
+<tbody id="tb"></tbody>
+</table>
+<div class="empty" id="empty" style="display:none">没有匹配的公司</div>
+
+<h2>五、六模型的真实分歧<span class="n">整合时不能一笔带过的地方</span></h2>
+
+<div class="div">
+  <h4><span class="tagl">分歧 1</span>覆盖广度差了一个数量级</h4>
+  <p>GPT 列了约 85 家公司、覆盖到基础软件与工业软件；Fable5 只列了约 25 家、止步于存储；DeepSeek 除长鑫外<b>一家个股都没点名</b>，只给行业方向与海外对标类型。这不是谁对谁错——DeepSeek 明确说明"文中并未具体点名，以下是逻辑的自然延伸"，反而是最诚实的处理。<b>整合取并集，用共识度列保留这个信息</b>：只有 1 个绿点的公司，意味着只有一个模型想到它，需要你自己额外验证。</p>
+</div>
+
+<div class="div">
+  <h4><span class="tagl">分歧 2</span>对"国产替代程度"的表述松紧不一</h4>
+  <p>Gemini 和 GLM 用"对标 ASML""替代应用材料"这类简洁表述，读起来像是已经替代了。GPT 反复加限定：上海微电子"封装及部分成熟制程设备具备国产替代意义，<b>但不能简单视为已经替代 ASML 先进制程光刻机</b>"；中芯国际"与台积电在最先进制程、设备可得性和全球客户结构上仍有明显差异"；封测企业"能替代传统封装，不代表在 CoWoS 级先进封装上已完全替代"。</p>
+  <p>这个差别很重要。本表"海外对标"一列一律理解为<b>业务对应关系而非能力等价</b>，替代成色差异已在备注列标出。</p>
+</div>
+
+<div class="div">
+  <h4><span class="tagl">分歧 3</span>光模块该不该完全排除</h4>
+  <p>oops5 态度最硬——单列"被排除的一类（文章明说要减仓）"。GLM 更中性，把它放进价值链正表并给了"已具备全球竞争力、但制裁风险敞口最大"的双面评价。GPT 的处理最细：指出这类公司<b>有中国制造优势但收入高度依赖北美云厂商</b>，因此更接近全球 AI capex 链而非国产自主可控链。三种说法其实不矛盾，是同一事实的不同侧重。</p>
+</div>
+
+<div class="div">
+  <h4><span class="tagl">分歧 4</span>把"概念归类"当成"业务归类"</h4>
+  <p>GPT 是唯一持续做这个区分的：万业企业"应分别考察设备验证、批量订单和上市公司业务结构，不能仅按概念归类"；精测电子"还包含显示、新能源检测业务，并非纯半导体设备标的"；容大感光的 PCB 光刻胶"与先进晶圆制造光刻胶并非完全相同的产品层级"；江波龙、佰维"主要采购颗粒后封装，与长鑫、长江存储处在不同价值层级"。<b>这些提醒已全部保留在备注列。</b></p>
+</div>
+
+<div class="div">
+  <h4><span class="tagl">分歧 5</span>盛美上海的双重上市身份</h4>
+  <p>只有 GPT 和 oops5 提到：盛美上海（688082.SH）的母体 ACM Research 在纳斯达克上市（ACMR）。这是全表中唯一一个可以通过美股参与的半导体设备标的，其他四个模型都漏了。</p>
+</div>
+
+<footer>
+<b>整合方法</b>　六份回答按环节拆分为条目 → 公司维度去重（同一公司在不同回答中的不同表述归一）→ 统计提及模型数作为共识度 → 上市状态与股票代码逐一网络核查 → 分歧点单独保留而非平均化。<br>
+<b>已知局限</b>　（1）共识度只衡量"被提到"，不衡量正确性，六个模型可能共同犯错——事实上在长鑫、摩尔线程的上市状态上它们就集体过时了。（2）六份回答均基于同一篇原始文章，观点相关性高，一致不等于独立验证。（3）沐曦股份等六模型集体遗漏的标的说明这份清单仍可能不完整。（4）海外对标为业务对应关系，不含技术水平或估值可比性判断。<br>
+<b>核查来源</b>　上交所科创板发行上市披露、证券时报、财联社、新华网、新浪财经、东方财富（2026 年 8 月检索）。
+</footer>
+
+</div>
+
+<script>
+const M = ["GPT","oops5","Fable5","Gemini","DeepSeek","GLM5.2"];
+
+const LAYERS = [
+ {id:"eda", tag:"L1", name:"EDA / 半导体 IP", role:"设计端的软件铲子，制裁敏感度最高",
+  seg:"前端设计与验证 · 逻辑综合 · 布局布线 · 物理验证 · 器件建模 · 良率分析 · IP 授权", n:5, c:"--t1", bg:"--t1bg"},
+ {id:"equip", tag:"L1", name:"半导体设备", role:"六模型一致的第一优先级",
+  seg:"光刻 · 涂胶显影 · <b>刻蚀</b> · 薄膜沉积 · 清洗 · <b>量测检测</b> · CMP · 离子注入 · 炉管 · 封测设备", n:6, c:"--t1", bg:"--t1bg"},
+ {id:"mat", tag:"L1", name:"半导体材料", role:"扩产的持续性消耗品，验证周期长",
+  seg:"大硅片 · 光刻胶 · 电子特气 · 湿电子化学品 · CMP 抛光液与垫 · 溅射靶材 · 前驱体 · 石英件 · 掩膜版 · 封装基板", n:6, c:"--t1", bg:"--t1bg"},
+ {id:"foundry", tag:"L2", name:"晶圆制造 / 代工", role:"国产芯片落地的底座",
+  seg:"先进制程逻辑代工 · 成熟制程 · 特色工艺 · 功率器件 · 显示驱动与电源管理", n:5, c:"--t3", bg:"--t3bg"},
+ {id:"mem", tag:"L2", name:"存储制造", role:"六模型共同强调的超级利润池",
+  seg:"DRAM · HBM · 3D NAND · NOR Flash 与利基存储 · 存储模组与主控", n:6, c:"--t2", bg:"--t2bg"},
+ {id:"chip", tag:"L3", name:"芯片设计", role:"直面禁令的前线，估值波动最大",
+  seg:"AI GPU / NPU · 服务器 CPU · 车载智驾芯片 · 内存接口 · 网络与接口芯片", n:5, c:"--t3", bg:"--t3bg"},
+ {id:"pkg", tag:"L4", name:"先进封装与测试", role:"先进制程受限后重要性显著上升",
+  seg:"倒装 / SiP · 2.5D 与 3D 封装 · HBM 集成 · 测试机与分选机", n:4, c:"--t3", bg:"--t3bg"},
+ {id:"infra", tag:"L5", name:"AI 基础设施", role:"兑现清晰但竞争充分",
+  seg:"AI 服务器 · 交换机与高速互联 · <span style='color:var(--warn)'>光模块（谨慎层）</span> · 液冷温控 · UPS 与数据中心电源 · 整机代工", n:3, c:"--t4", bg:"--t4bg"},
+ {id:"sw", tag:"L6", name:"基础软件与工业软件", role:"依赖生态建设，最下游延伸",
+  seg:"操作系统 · 数据库 · 中间件 · ERP · 工业自动化与工业软件", n:1, c:"--t5", bg:"--t5bg"}
+];
+
+// m = 提及该公司的模型索引 [0=GPT,1=oops5,2=Fable5,3=Gemini,4=DeepSeek,5=GLM]
+const D = [
+// ===== EDA / IP =====
+{n:"华大九天",code:"301269.SZ",s:"A",l:"eda",g:"EDA 平台",o:"Cadence · Synopsys · Siemens EDA",m:[0,1,5],note:"国内平台型 EDA 之一；完整工具链覆盖与先进节点能力需按具体工具评价"},
+{n:"概伦电子",code:"688206.SH",s:"A",l:"eda",g:"器件建模 / 特性测试",o:"Synopsys · Cadence · Keysight",m:[0,1]},
+{n:"广立微",code:"301095.SZ",s:"A",l:"eda",g:"良率分析 EDA",o:"PDF Solutions · Synopsys 部分产品",m:[0,1]},
+{n:"芯原股份",code:"688521.SH",s:"A",l:"eda",g:"半导体 IP 与设计服务",o:"Arm · Synopsys IP · Cadence IP",m:[0,5],note:"更接近 IP 平台与设计服务，不是全流程 EDA 公司"},
+{n:"芯华章",code:"—",s:"U",l:"eda",g:"验证 EDA",o:"Synopsys · Cadence · Siemens EDA",m:[1]},
+{n:"国微思尔芯",code:"688176 关联",s:"A",l:"eda",g:"原型验证",o:"Synopsys · Cadence",m:[1]},
+{n:"芯和半导体 Xpeedic",code:"—",s:"U",l:"eda",g:"射频 / 封装 / 系统仿真",o:"Ansys · Cadence · Keysight",m:[0]},
+
+// ===== 设备 =====
+{n:"北方华创",code:"002371.SZ",s:"A",l:"equip",g:"平台型：刻蚀/沉积/炉管/清洗",o:"Applied Materials 应用材料 · Lam Research 泛林 · Tokyo Electron 东京电子 · Kokusai",m:[0,1,2,3,5],note:"平台型设备企业，非单一品类公司"},
+{n:"中微公司",code:"688012.SH",s:"A",l:"equip",g:"等离子刻蚀 · MOCVD",o:"Lam Research 泛林 · Applied Materials 应用材料 · Tokyo Electron",m:[0,1,2,3,5],note:"受益 3D NAND 层数增加与工艺复杂度提升"},
+{n:"拓荆科技",code:"688072.SH",s:"A",l:"equip",g:"PECVD · ALD · SACVD 薄膜沉积",o:"Applied Materials · Lam Research · ASM International",m:[0,1,2,3,5]},
+{n:"盛美上海",code:"688082.SH",s:"A",l:"equip",g:"清洗 · 电镀 · 先进封装设备",o:"SCREEN · Tokyo Electron · Lam Research",m:[0,1,2,5],note:"母体 ACM Research 在纳斯达克上市（ACMR）——全表唯一可通过美股参与的设备标的"},
+{n:"上海微电子 SMEE",code:"—",s:"U",l:"equip",g:"光刻机 · 封装光刻",o:"ASML 阿斯麦 · Nikon 尼康 · Canon 佳能",m:[0,1,2,3,5],note:"卡得最深也最难突破的一环。2024-10 撤回科创板辅导；分拆子公司芯上微装拟 2027 报科创板。封装及部分成熟制程有替代意义，不等于已替代 ASML 先进制程"},
+{n:"芯源微",code:"688037.SH",s:"A",l:"equip",g:"涂胶显影 · 清洗",o:"Tokyo Electron 东京电子",m:[0,1,2],note:"涂胶显影是光刻工序中除光刻机外的关键设备"},
+{n:"中科飞测",code:"688361.SH",s:"A",l:"equip",g:"缺陷检测 · 膜厚量测",o:"KLA 科磊 · Applied Materials · Onto Innovation",m:[0,1,2],note:"制程越先进、良率要求越高，量测设备价值量越高"},
+{n:"华海清科",code:"688120.SH",s:"A",l:"equip",g:"CMP 化学机械抛光",o:"Applied Materials · Ebara 荏原",m:[0,1,5],note:"逻辑、存储、先进封装均需多次平坦化"},
+{n:"万业企业 / 凯世通",code:"600641.SH",s:"A",l:"equip",g:"离子注入",o:"Applied Materials · Axcelis",m:[0,1,2],note:"应分别考察设备验证、批量订单与上市公司业务结构，不能仅按概念归类"},
+{n:"精测电子",code:"300567.SZ",s:"A",l:"equip",g:"量测检测（子公司）",o:"KLA · Onto Innovation",m:[0,1],note:"还包含显示、新能源检测业务，并非纯半导体设备标的"},
+{n:"至纯科技",code:"603690.SH",s:"A",l:"equip",g:"清洗设备 · 高纯工艺系统",o:"SCREEN · Tokyo Electron",m:[1]},
+{n:"中科信",code:"—",s:"U",l:"equip",g:"离子注入",o:"Applied Materials · Axcelis",m:[1,2]},
+{n:"睿励科学仪器",code:"—",s:"U",l:"equip",g:"光学量测",o:"KLA · Onto Innovation",m:[0]},
+{n:"长川科技",code:"300604.SZ",s:"A",l:"pkg",g:"测试机 · 分选机",o:"Advantest 爱德万 · Teradyne 泰瑞达 · Cohu",m:[0]},
+{n:"华峰测控",code:"688200.SH",s:"A",l:"pkg",g:"模拟/功率/SoC 测试系统",o:"Teradyne · Advantest",m:[0]},
+{n:"联动科技",code:"301369.SZ",s:"A",l:"pkg",g:"半导体测试系统",o:"Teradyne · Advantest",m:[0]},
+
+// ===== 材料 =====
+{n:"沪硅产业",code:"688126.SH",s:"A",l:"mat",g:"大尺寸半导体硅片",o:"Shin-Etsu 信越 · SUMCO 胜高 · GlobalWafers 环球晶圆 · Siltronic",m:[0,1,2,3,5]},
+{n:"南大光电",code:"300346.SZ",s:"A",l:"mat",g:"光刻胶 · 电子特气 · 前驱体",o:"JSR · Tokyo Ohka 东京应化 · Shin-Etsu · Entegris 英特格",m:[0,1,2,5]},
+{n:"江丰电子",code:"300666.SZ",s:"A",l:"mat",g:"溅射靶材",o:"JX Advanced Metals 日矿金属 · Honeywell 霍尼韦尔 · Praxair",m:[0,1,2,3]},
+{n:"鼎龙股份",code:"300054.SZ",s:"A",l:"mat",g:"CMP 抛光垫 · 半导体材料",o:"DuPont 杜邦 · Dow 陶氏",m:[0,1,3,5]},
+{n:"安集科技",code:"688019.SH",s:"A",l:"mat",g:"CMP 抛光液 · 湿电子化学品",o:"Entegris（原 Cabot Microelectronics）· Fujimi · DuPont",m:[0,1,2]},
+{n:"彤程新材",code:"603650.SH",s:"A",l:"mat",g:"半导体光刻胶（含北京科华）",o:"JSR · Tokyo Ohka 东京应化 · DuPont",m:[0,1,2]},
+{n:"华特气体",code:"688268.SH",s:"A",l:"mat",g:"电子特气",o:"Linde 林德 · Air Liquide 液化空气 · Air Products 空气化工 · Merck",m:[0,1,2],note:"特气认证周期长、纯度要求高，但不同气体品种壁垒差异很大"},
+{n:"金宏气体",code:"688106.SH",s:"A",l:"mat",g:"电子特气",o:"Linde · Air Liquide · Air Products",m:[0,1,2]},
+{n:"中船特气",code:"688146.SH",s:"A",l:"mat",g:"电子特气（含含氟气体）",o:"Linde · Air Liquide · SK Specialty",m:[0,1]},
+{n:"雅克科技",code:"002409.SZ",s:"A",l:"mat",g:"前驱体 · 光刻胶 · 电子材料",o:"Merck 默克 · Entegris · Air Liquide",m:[0,5]},
+{n:"晶瑞电材",code:"300655.SZ",s:"A",l:"mat",g:"光刻胶 · 湿电子化学品",o:"JSR · Tokyo Ohka · Kanto Chemical 关东化学",m:[0,2]},
+{n:"江化微",code:"603078.SH",s:"A",l:"mat",g:"湿电子化学品",o:"Kanto Chemical · Stella Chemifa · BASF 巴斯夫 · Entegris",m:[0,2]},
+{n:"立昂微",code:"605358.SH",s:"A",l:"mat",g:"半导体硅片 + 功率器件",o:"GlobalWafers · SUMCO",m:[0,1]},
+{n:"有研新材",code:"600206.SH",s:"A",l:"mat",g:"高纯金属材料 · 靶材",o:"JX Advanced Metals · Honeywell",m:[0,1]},
+{n:"上海新阳",code:"300236.SZ",s:"A",l:"mat",g:"电镀液 · 清洗液 · 光刻胶",o:"DuPont · Entegris · JSR",m:[0]},
+{n:"有研硅",code:"688432.SH",s:"A",l:"mat",g:"半导体硅片",o:"SUMCO · GlobalWafers",m:[0]},
+{n:"TCL 中环",code:"002129.SZ",s:"A",l:"mat",g:"硅片（光伏为主）",o:"SUMCO · GlobalWafers",m:[1],note:"原名中环股份。主业以光伏硅片为主，半导体硅片占比有限，不宜与沪硅产业并列"},
+{n:"中欣晶圆",code:"—",s:"U",l:"mat",g:"大尺寸半导体硅片",o:"Shin-Etsu · SUMCO · GlobalWafers",m:[0],note:"2025-10 办理北交所 IPO 辅导备案，仍未上市；2025 年营收 17.4 亿、同比 +30%"},
+{n:"格林达",code:"603931.SH",s:"A",l:"mat",g:"湿电子化学品",o:"Kanto Chemical · BASF",m:[1]},
+{n:"菲利华",code:"300395.SZ",s:"A",l:"mat",g:"高性能石英玻璃",o:"Heraeus 贺利氏 · Momentive 迈图",m:[0]},
+{n:"神工股份",code:"688233.SH",s:"A",l:"mat",g:"大直径硅材料 · 硅零部件",o:"Hana Materials · Worldex",m:[0]},
+{n:"清溢光电",code:"688138.SH",s:"A",l:"mat",g:"掩膜版",o:"Photronics · Hoya · Toppan",m:[3]},
+{n:"华懋科技 / 徐州博康",code:"603306.SH",s:"A",l:"mat",g:"光刻胶（参股）",o:"JSR · Tokyo Ohka · Shin-Etsu",m:[1],note:"通过参股方式布局，非并表主业"},
+{n:"容大感光",code:"300576.SZ",s:"A",l:"mat",g:"PCB / 显示光刻胶",o:"部分海外感光材料企业",m:[0],note:"与先进晶圆制造光刻胶并非同一产品层级"},
+{n:"深南电路",code:"002916.SZ",s:"A",l:"mat",g:"封装基板 · 高端 PCB",o:"Ibiden 揖斐电 · Shinko 新光 · Unimicron 欣兴",m:[0]},
+{n:"兴森科技",code:"002436.SZ",s:"A",l:"mat",g:"IC 封装基板 · PCB",o:"Ibiden · Kinsus · Unimicron",m:[0]},
+
+// ===== 晶圆制造 =====
+{n:"中芯国际",code:"688981.SH / 00981.HK",s:"AH",l:"foundry",g:"逻辑代工",o:"TSMC 台积电 · Samsung Foundry 三星代工 · GlobalFoundries 格芯 · UMC 联电",m:[0,1,2,3,5],note:"在最先进制程、设备可得性和全球客户结构上与台积电仍有明显差异"},
+{n:"华虹公司",code:"688347.SH / 01347.HK",s:"AH",l:"foundry",g:"特色工艺 · 功率 · 嵌入式存储",o:"UMC 联电 · GlobalFoundries · Tower Semiconductor",m:[0,2,5]},
+{n:"晶合集成",code:"688249.SH",s:"A",l:"foundry",g:"显示驱动 · 电源管理代工",o:"UMC · Powerchip 力积电",m:[0]},
+
+// ===== 存储 =====
+{n:"长鑫科技（长鑫存储 CXMT）",code:"688825.SH",s:"NEW",l:"mem",g:"DRAM（IDM 一体化）",o:"Samsung 三星 · SK Hynix 海力士 · Micron 美光",m:[0,1,2,3,4,5],note:"★ 六模型唯一全票。2026-07-27 科创板上市，募资约 666 亿创科创板最大 IPO，首日 +465%，市值约 3.28 万亿。全球第四大 DRAM 厂。六份回答均标注「未上市」，已过时"},
+{n:"长江存储 YMTC",code:"—",s:"U",l:"mem",g:"3D NAND Flash",o:"Samsung 三星 · Kioxia 铠侠 · SK Hynix 海力士 / Solidigm · Micron 美光",m:[0,1,2,3,5],note:"2026-05-19 启动 IPO 辅导（中信证券 + 中信建投），预计 2026 下半年上市，估值预期约 3000 亿。全球第六大 NAND 供应商"},
+{n:"兆易创新",code:"603986.SH",s:"A",l:"mem",g:"NOR Flash · MCU · 利基 DRAM",o:"Winbond 华邦 · Macronix 旺宏 · Infineon · Microchip",m:[0,1,2,3,5],note:"不是三星、海力士意义上的主流大宗 DRAM 厂商"},
+{n:"江波龙",code:"301308.SZ",s:"A",l:"mem",g:"存储模组 · 主控",o:"Kingston 金士顿 · Phison 群联 · Western Digital 部分产品",m:[0,1],note:"采购颗粒后封装与品牌销售，与长鑫、长江存储处在不同价值层级"},
+{n:"佰维存储",code:"688525.SH",s:"A",l:"mem",g:"存储模组 · 先进封装",o:"Kingston · Phison · Seagate 部分产品",m:[0,1],note:"同上，模组层级"},
+{n:"德明利",code:"001309.SZ",s:"A",l:"mem",g:"存储模组 · 主控",o:"Phison · Silicon Motion 慧荣",m:[1]},
+{n:"福建晋华",code:"—",s:"U",l:"mem",g:"DRAM",o:"Micron 美光 · Samsung 三星 · SK Hynix 海力士",m:[0],note:"外部限制与技术商业化进度不确定性较高"},
+
+// ===== 芯片设计 =====
+{n:"华为海思 / 昇腾",code:"—",s:"U",l:"chip",g:"AI GPU/NPU · 通用芯片",o:"NVIDIA 英伟达 · Google TPU · AMD Instinct",m:[0,2,3,5],note:"核心约束：先进制程、HBM、封装、软件生态与集群互联"},
+{n:"寒武纪",code:"688256.SH",s:"A",l:"chip",g:"云端 AI 加速芯片",o:"NVIDIA · AMD",m:[0,2,3,5],note:"研发投入大，商业化、软件生态与盈利能力需持续验证；估值可能提前透支"},
+{n:"海光信息",code:"688041.SH",s:"A",l:"chip",g:"服务器 CPU · DCU",o:"AMD EPYC · Intel Xeon · AMD Instinct",m:[0,2,5]},
+{n:"摩尔线程",code:"688795.SH",s:"NEW",l:"chip",g:"通用 GPU",o:"NVIDIA · AMD",m:[0,3],note:"2025-12-05 科创板上市（国产 GPU 第一股）。2026H1 营收 17.36 亿、同比 +147%。正筹划发行 H 股。原回答标注上市状态不确定，已核实"},
+{n:"沐曦股份",code:"688802.SH",s:"NEW",l:"chip",g:"通用 GPU",o:"NVIDIA · AMD",m:[],note:"★ 六模型全部遗漏，为核查补漏。2025-12 科创板上市，首日 +692.95%，市值一度接近摩尔线程"},
+{n:"壁仞科技",code:"06082.HK",s:"H",l:"chip",g:"通用 GPU（壁砺系列）",o:"NVIDIA · AMD",m:[0],note:"2026-01-02 港交所上市（港股 GPU 第一股），发行价 19.6 港元、募资 55.83 亿港元，18C 机制下最大规模新股"},
+{n:"燧原科技",code:"待定",s:"IPO",l:"chip",g:"云端 AI 芯片 · 智算集群",o:"NVIDIA · AMD · Google TPU",m:[0],note:"2026-07-09 注册获批，拟发行 6835 万股募资 60 亿，预计 8 月中旬上市。腾讯贡献超八成营收是审核关注点"},
+{n:"澜起科技",code:"688008.SH",s:"A",l:"chip",g:"内存接口芯片 · 服务器平台",o:"Rambus · Renesas 瑞萨（原 IDT）",m:[0,1,2,5],note:"DDR 代际升级与服务器内存容量提升会增加接口芯片需求"},
+{n:"龙芯中科",code:"688047.SH",s:"A",l:"chip",g:"自主指令系统 CPU",o:"Intel · AMD · Arm 生态处理器",m:[0]},
+{n:"飞腾信息",code:"—",s:"U",l:"chip",g:"Arm 架构服务器/桌面 CPU",o:"Intel · AMD · Ampere Computing",m:[0]},
+{n:"地平线机器人",code:"09660.HK",s:"H",l:"chip",g:"智能驾驶计算芯片",o:"NVIDIA Drive · Mobileye · Qualcomm 汽车平台",m:[0],note:"车载 AI 国产替代，不属于数据中心 AI 主线"},
+{n:"黑芝麻智能",code:"02533.HK",s:"H",l:"chip",g:"智能驾驶芯片",o:"NVIDIA Drive · Mobileye · Qualcomm",m:[0],note:"同为车载主线"},
+
+// ===== 先进封装 =====
+{n:"长电科技",code:"600584.SH",s:"A",l:"pkg",g:"封装测试 · 系统级封装",o:"ASE 日月光 · Amkor 安靠 · Powertech 力成",m:[0,5],note:"能替代传统封装，不代表在 CoWoS 级先进封装与 HBM 集成上已完全替代"},
+{n:"通富微电",code:"002156.SZ",s:"A",l:"pkg",g:"CPU/GPU 封测（AMD 合作方）",o:"ASE 日月光 · Amkor 安靠",m:[0,5]},
+{n:"华天科技",code:"002185.SZ",s:"A",l:"pkg",g:"封装测试",o:"ASE · Amkor · Powertech",m:[0]},
+
+// ===== AI 基础设施 =====
+{n:"浪潮信息",code:"000977.SZ",s:"A",l:"infra",g:"AI 服务器",o:"Dell 戴尔 · HPE 慧与 · Supermicro 超微",m:[0,5]},
+{n:"中科曙光",code:"603019.SH",s:"A",l:"infra",g:"服务器 · 高性能计算",o:"HPE · Dell · Supermicro",m:[0]},
+{n:"联想集团",code:"00992.HK",s:"H",l:"infra",g:"服务器 · 整机",o:"Dell · HPE",m:[0],note:"境外上市的中国公司"},
+{n:"紫光股份 / 新华三",code:"000938.SZ",s:"A",l:"infra",g:"服务器 · 交换机 · 企业网络",o:"HPE · Cisco 思科 · Arista",m:[0]},
+{n:"中兴通讯",code:"000063.SZ / 00763.HK",s:"AH",l:"infra",g:"通信设备 · 服务器",o:"Ericsson 爱立信 · Nokia 诺基亚 · Cisco",m:[0]},
+{n:"锐捷网络",code:"301165.SZ",s:"A",l:"infra",g:"交换机 · 数据中心网络",o:"Cisco · Arista",m:[0]},
+{n:"华为",code:"—",s:"U",l:"infra",g:"交换机 · 网络设备 · 云",o:"Cisco · Arista · Nokia · Ericsson",m:[0]},
+{n:"工业富联",code:"601138.SH",s:"A",l:"infra",g:"AI 服务器代工",o:"Supermicro 超微 · Quanta 广达 · Wistron",m:[3,5],caution:1,note:"组装集成利润率低，且受地缘博弈影响"},
+{n:"立讯精密",code:"002475.SZ",s:"A",l:"infra",g:"连接器 · 整机代工",o:"Amphenol 安费诺 · TE Connectivity · Foxconn",m:[3],caution:1},
+{n:"中际旭创",code:"300308.SZ",s:"A",l:"infra",g:"光模块",o:"Coherent · Lumentum · Marvell 光通信芯片",m:[0,1,3,5],caution:1,note:"⚠ 谨慎层。有中国制造优势但收入高度依赖北美云厂商，更接近全球 AI capex 链而非国产自主可控链，受制裁预期压制"},
+{n:"新易盛",code:"300502.SZ",s:"A",l:"infra",g:"光模块",o:"Coherent · Lumentum",m:[0,1,3,5],caution:1,note:"⚠ 谨慎层，理由同上"},
+{n:"光迅科技",code:"002281.SZ",s:"A",l:"infra",g:"光模块 · 光器件",o:"Coherent · Lumentum · Fabrinet",m:[0],caution:1},
+{n:"天孚通信",code:"300394.SZ",s:"A",l:"infra",g:"光器件",o:"Coherent · Lumentum",m:[5],caution:1},
+{n:"英维克",code:"002837.SZ",s:"A",l:"infra",g:"液冷 · 温控",o:"Vertiv 维谛 · Schneider 施耐德 · nVent",m:[0]},
+{n:"申菱环境",code:"301018.SZ",s:"A",l:"infra",g:"数据中心温控",o:"Vertiv · Johnson Controls",m:[0]},
+{n:"佳力图",code:"603912.SH",s:"A",l:"infra",g:"精密温控",o:"Vertiv · Schneider",m:[0]},
+{n:"科华数据",code:"002335.SZ",s:"A",l:"infra",g:"UPS · 数据中心电源",o:"Vertiv 维谛 · Eaton 伊顿 · Schneider 施耐德",m:[0]},
+{n:"科士达",code:"002518.SZ",s:"A",l:"infra",g:"UPS · 数据中心电源",o:"Vertiv · Eaton · Schneider",m:[0]},
+{n:"中恒电气",code:"002364.SZ",s:"A",l:"infra",g:"高压直流电源",o:"Vertiv · Eaton",m:[0]},
+
+// ===== 基础软件 =====
+{n:"麒麟软件",code:"—",s:"U",l:"sw",g:"操作系统",o:"Microsoft Windows · Red Hat Enterprise Linux",m:[0]},
+{n:"统信软件",code:"—",s:"U",l:"sw",g:"操作系统",o:"Windows · Red Hat · Ubuntu 企业生态",m:[0]},
+{n:"达梦数据",code:"688692.SH",s:"A",l:"sw",g:"数据库",o:"Oracle · Microsoft SQL Server · IBM Db2",m:[0]},
+{n:"人大金仓 / 太极股份",code:"002368.SZ",s:"A",l:"sw",g:"数据库",o:"Oracle · IBM Db2 · PostgreSQL 商业发行版",m:[0],note:"人大金仓未单独上市，相关体系涉及太极股份"},
+{n:"东方通",code:"300379.SZ",s:"A",l:"sw",g:"中间件",o:"IBM WebSphere · Oracle WebLogic",m:[0]},
+{n:"用友网络",code:"600588.SH",s:"A",l:"sw",g:"ERP · 企业管理软件",o:"SAP · Oracle 企业应用",m:[0]},
+{n:"金蝶国际",code:"00268.HK",s:"H",l:"sw",g:"ERP · 云服务",o:"SAP · Oracle · Microsoft Dynamics",m:[0],note:"香港上市的中国公司"},
+{n:"中控技术",code:"688777.SH",s:"A",l:"sw",g:"工业自动化 · DCS",o:"Honeywell · Emerson 艾默生 · Rockwell · Siemens",m:[0]},
+{n:"宝信软件",code:"600845.SH",s:"A",l:"sw",g:"工业软件 · 信息化",o:"Siemens · AVEVA · SAP",m:[0]},
+{n:"广联达",code:"002410.SZ",s:"A",l:"sw",g:"建筑数字化软件",o:"Autodesk · Bentley Systems",m:[0]}
+];
+
+const SL={A:["A","A 股"],AH:["h","A+H"],H:["h","港股"],U:["u","未上市"],NEW:["n","新上市"],IPO:["n","待上市"]};
+const LN={}; LAYERS.forEach(l=>LN[l.id]=l.name);
+
+// 渲染价值链
+const chainEl=document.getElementById("chain");
+LAYERS.forEach((l,i)=>{
+  const d=document.createElement("div");
+  d.className="layer"; d.dataset.l=l.id;
+  d.style.setProperty("--lc",`var(${l.c})`); d.style.setProperty("--lbg",`var(${l.bg})`);
+  const dots=Array.from({length:6},(_,k)=>`<span class="dot ${k<l.n?'f':''}"></span>`).join("");
+  const cnt=D.filter(x=>x.l===l.id).length;
+  d.innerHTML=`<div class="lhead">
+      <span class="ltag">${l.tag}</span><span class="lname">${l.name}</span>
+      <span class="lrole">${l.role}</span>
+      <span class="lbar"><span class="dots">${dots}</span>${l.n}/6 模型单列 · ${cnt} 家</span>
+    </div><div class="lseg">${l.seg}</div>`;
+  d.onclick=()=>{
+    const on=d.classList.contains("on");
+    document.querySelectorAll(".layer").forEach(x=>x.classList.remove("on"));
+    if(!on){d.classList.add("on"); state.layer=l.id;} else state.layer=null;
+    document.querySelectorAll("#layerchips .chip").forEach(c=>c.classList.toggle("on",c.dataset.l===state.layer));
+    render();
+    document.querySelector(".ctrl").scrollIntoView({behavior:"smooth",block:"start"});
+  };
+  chainEl.appendChild(d);
+  if(i<LAYERS.length-1){const a=document.createElement("div");a.className="arrow";a.textContent="▼";chainEl.appendChild(a);}
+});
+
+// 环节 chips
+const lc=document.getElementById("layerchips");
+LAYERS.forEach(l=>{
+  const b=document.createElement("button");
+  b.className="chip"; b.dataset.l=l.id;
+  b.textContent=`${l.name} ${D.filter(x=>x.l===l.id).length}`;
+  b.onclick=()=>{
+    state.layer = state.layer===l.id ? null : l.id;
+    document.querySelectorAll("#layerchips .chip").forEach(c=>c.classList.toggle("on",c.dataset.l===state.layer));
+    document.querySelectorAll(".layer").forEach(x=>x.classList.toggle("on",x.dataset.l===state.layer));
+    render();
+  };
+  lc.appendChild(b);
+});
+
+const state={q:"",f:"all",layer:null,sort:"con",dir:-1};
+const LORD={}; LAYERS.forEach((l,i)=>LORD[l.id]=i);
+
+document.getElementById("q").oninput=e=>{state.q=e.target.value.trim().toLowerCase();render();};
+document.querySelectorAll(".ctrl .row:first-child .chip").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll(".ctrl .row:first-child .chip").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on"); state.f=b.dataset.f; render();
+  };
+});
+document.querySelectorAll("th").forEach(th=>{
+  th.onclick=()=>{const s=th.dataset.s; state.dir = state.sort===s ? -state.dir : (s==="con"?-1:1); state.sort=s; render();};
+});
+
+function render(){
+  let r=D.slice();
+  if(state.layer) r=r.filter(x=>x.l===state.layer);
+  if(state.f==="unlisted") r=r.filter(x=>x.s==="U"||x.s==="IPO");
+  if(state.f==="hk") r=r.filter(x=>x.s==="H"||x.s==="AH"||(x.note||"").includes("纳斯达克"));
+  if(state.f==="hi") r=r.filter(x=>x.m.length>=3);
+  if(state.f==="caution") r=r.filter(x=>x.caution);
+  if(state.q){
+    const q=state.q;
+    r=r.filter(x=>[x.n,x.code,x.g,x.o,x.note||"",LN[x.l],SL[x.s][1]].join(" ").toLowerCase().includes(q));
+  }
+  const K={name:x=>x.n,code:x=>x.code,status:x=>x.s,layer:x=>LORD[x.l],seg:x=>x.g,ov:x=>x.o,con:x=>x.m.length};
+  r.sort((a,b)=>{
+    const va=K[state.sort](a), vb=K[state.sort](b);
+    let c = typeof va==="number" ? va-vb : String(va).localeCompare(String(vb),"zh");
+    if(c===0) c = b.m.length-a.m.length;
+    return c*state.dir;
+  });
+  document.getElementById("tb").innerHTML=r.map(x=>{
+    const dots=Array.from({length:6},(_,k)=>`<span class="d ${k<x.m.length?'f':''}"></span>`).join("");
+    const who=x.m.length?x.m.map(i=>M[i]).join(" · "):"核查补漏";
+    return `<tr>
+      <td class="cn">${x.n}</td>
+      <td class="code hide-s">${x.code}</td>
+      <td><span class="st ${SL[x.s][0]}">${SL[x.s][1]}</span></td>
+      <td class="seg">${LN[x.l]}</td>
+      <td class="seg hide-s">${x.g}</td>
+      <td class="ov">${x.o}${x.note?`<div class="note" style="margin-top:3px">${x.note}</div>`:""}</td>
+      <td class="con" title="${who}">${dots}<div style="margin-top:2px">${x.m.length}/6</div></td>
+    </tr>`;
+  }).join("");
+  document.getElementById("empty").style.display=r.length?"none":"block";
+  document.getElementById("cnt").textContent=`显示 ${r.length} / ${D.length} 家`;
+}
+document.getElementById("total").textContent=D.length;
+document.getElementById("cnt2").textContent=`共 ${D.length} 家`;
+render();
+</script>
+</body>
+</html>

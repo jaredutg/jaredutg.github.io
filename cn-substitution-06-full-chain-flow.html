@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全产业链流程图 · 上中下游 · 中国 vs 海外</title>
+<style>
+:root{
+ --bg:#faf9f7;--panel:#fff;--ink:#1f1e1c;--ink2:#57534e;--ink3:#8a8480;
+ --line:#e5e1dc;--line2:#d6d1ca;
+ --lead:#1f7a4d;--leadb:#e4f2ea;
+ --brk:#4a8f5f;--brkb:#eaf4ed;
+ --near:#8a8a1f;--nearb:#f5f5e4;
+ --chase:#b8722e;--chaseb:#fbf0e5;
+ --block:#a83232;--blockb:#fbeaea;
+ --cn:#b8492e;--ov:#41608c;--ovb:#eef2f8;--cnb:#fdf1ed;
+ --up:#6b5b95;--mid:#2b7a8c;--down:#9a7112;
+ --accent:#1f1e1c;
+}
+@media(prefers-color-scheme:dark){:root{
+ --bg:#191817;--panel:#221f1d;--ink:#f0ece7;--ink2:#b6afa8;--ink3:#857d76;
+ --line:#332f2c;--line2:#443e3a;
+ --lead:#5fc48c;--leadb:#16281e; --brk:#63b585;--brkb:#1a271f;
+ --near:#c3c35c;--nearb:#26260f; --chase:#dd9a5e;--chaseb:#2b2117;
+ --block:#e07070;--blockb:#2c1919;
+ --cn:#e08a6d;--ov:#89aad6;--ovb:#1b222c;--cnb:#2e211c;
+ --up:#a795cc;--mid:#6cc0d1;--down:#d9b45c;
+ --accent:#f0ece7;}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:1400px;margin:0 auto;padding:32px 20px 80px}
+h1{font-size:25px;margin:0 0 6px;letter-spacing:-.01em}
+.sub{color:var(--ink2);font-size:14px;margin:0 0 3px}
+.meta{color:var(--ink3);font-size:12.5px;margin:0 0 18px}
+.warn{background:var(--blockb);border:1px solid color-mix(in srgb,var(--block) 26%,transparent);
+ border-radius:8px;padding:11px 14px;font-size:12.4px;color:var(--ink2);margin:0 0 16px;line-height:1.6}
+.warn b{color:var(--block)}
+
+/* 控件 */
+.ctrl{position:sticky;top:0;z-index:30;background:var(--bg);padding:12px 0 10px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.chip{padding:5px 13px;border:1px solid var(--line2);border-radius:20px;background:var(--panel);
+ color:var(--ink2);font-size:12.8px;cursor:pointer;font-family:inherit;font-weight:600;transition:.12s;white-space:nowrap}
+.chip:hover{border-color:var(--ink3)}
+.chip.on{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.lg{display:flex;gap:13px;flex-wrap:wrap;font-size:11.5px;color:var(--ink2);margin-top:9px}
+.lg span{display:flex;align-items:center;gap:5px}
+.sw{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+/* 层级 */
+.tier{margin-top:22px}
+.tierhead{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.tierbadge{font-size:11px;font-weight:800;letter-spacing:.1em;padding:3px 11px;border-radius:5px;color:#fff}
+.tiername{font-weight:700;font-size:16px}
+.tierdesc{font-size:12.3px;color:var(--ink3)}
+.stage{margin-bottom:10px}
+.stagelbl{font-size:11.5px;color:var(--ink3);font-weight:650;letter-spacing:.04em;margin:0 0 6px 2px}
+.nodes{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));gap:8px}
+
+/* 节点 */
+.node{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:10px 12px;
+ position:relative;overflow:hidden;cursor:pointer;transition:.13s}
+.node::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--sc)}
+.node:hover{border-color:var(--line2);transform:translateY(-1px)}
+.node.sel{border-color:var(--accent);box-shadow:0 0 0 1.5px var(--accent)}
+.node.dim{opacity:.24}
+.nh{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin-bottom:2px}
+.nn{font-weight:660;font-size:13.6px}
+.nst{font-size:9.5px;font-weight:800;padding:1px 5px;border-radius:3px;background:var(--scb);color:var(--sc);white-space:nowrap}
+.nkpi{font-family:ui-monospace,Menlo,monospace;font-size:10.8px;color:var(--sc);font-weight:700;margin-bottom:5px}
+.pr{display:flex;gap:5px;align-items:flex-start;font-size:11.2px;line-height:1.45;margin-top:3px}
+.pr .f{flex:0 0 20px;font-size:11px;padding-top:1px}
+.pr.c .v{color:var(--cn)} .pr.o .v{color:var(--ov)}
+.pr .v{flex:1}
+.det{display:none;margin-top:8px;padding-top:7px;border-top:1px solid var(--line);
+ font-size:11.8px;color:var(--ink2);line-height:1.55}
+.node.sel .det{display:block}
+.det b{color:var(--ink)}
+
+/* 流向箭头 */
+.flow{display:flex;align-items:center;gap:12px;margin:14px 0 12px;padding:0 4px}
+.flow .ln{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--line2),transparent)}
+.flow .tx{font-size:11.5px;color:var(--ink3);white-space:nowrap;background:var(--bg);padding:0 4px}
+.flow .ar{font-size:13px;color:var(--line2)}
+
+.sum{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:14px 16px;margin-top:14px}
+.sum h4{margin:0 0 5px;font-size:14.5px}
+.sum p{margin:0;font-size:12.6px;color:var(--ink2);line-height:1.65}
+.sum p+p{margin-top:7px}
+.hl{background:color-mix(in srgb,var(--leadb) 70%,transparent);border-color:color-mix(in srgb,var(--lead) 30%,transparent)}
+.hl h4{color:var(--lead)}
+.rd{background:color-mix(in srgb,var(--blockb) 70%,transparent);border-color:color-mix(in srgb,var(--block) 30%,transparent)}
+.rd h4{color:var(--block)}
+.stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:8px;margin-top:12px}
+.st{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px;text-align:center}
+.st .v{font-size:22px;font-weight:750;letter-spacing:-.02em}
+.st .l{font-size:11px;color:var(--ink3);margin-top:1px}
+footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink3);line-height:1.75}
+@media(max-width:700px){.wrap{padding:18px 11px 60px}h1{font-size:19px}.nodes{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>全产业链流程图 · 上中下游</h1>
+<p class="sub">从 EDA 到自动驾驶的完整链路 · 每个环节标注中国与海外代表公司 · 按国产状态着色</p>
+<p class="meta">编制日期 2026-08-11 ｜ 汇总 01–05 号文件的全部结论 ｜ 点击任一节点展开说明，顶部可按链路与状态筛选</p>
+
+<div class="warn">
+<b>声明</b>　本页不是投资建议，我不是投资顾问。代表公司为各环节的典型玩家，不构成推荐，也不代表该公司是最优选择。份额与状态数据的口径、时点与局限见 01–05 号文件的对应章节。
+</div>
+
+<div class="ctrl">
+  <div class="row">
+    <span style="font-size:12px;color:var(--ink3);margin-right:2px">链路</span>
+    <button class="chip on" data-c="all">全链路</button>
+    <button class="chip" data-c="ai">AI 算力链</button>
+    <button class="chip" data-c="auto">智能汽车链</button>
+    <button class="chip" data-c="robot">机器人链</button>
+    <span style="width:14px"></span>
+    <span style="font-size:12px;color:var(--ink3);margin-right:2px">状态</span>
+    <button class="chip on" data-s="all">全部</button>
+    <button class="chip" data-s="lead">中国领先</button>
+    <button class="chip" data-s="brk">已突围</button>
+    <button class="chip" data-s="block">被卡死</button>
+  </div>
+  <div class="lg">
+    <span><i class="sw" style="background:var(--lead)"></i>中国领先 / 已超越海外</span>
+    <span><i class="sw" style="background:var(--brk)"></i>已突围（全球份额≥10% 或国内≥50%）</span>
+    <span><i class="sw" style="background:var(--near)"></i>接近突围</span>
+    <span><i class="sw" style="background:var(--chase)"></i>追赶中</span>
+    <span><i class="sw" style="background:var(--block)"></i>被卡死</span>
+    <span style="margin-left:auto;color:var(--ink3)">🇨🇳 中国代表 ｜ 🌍 海外代表</span>
+  </div>
+  <div class="lg" id="cnt" style="color:var(--ink3)"></div>
+</div>
+
+<div id="flow"></div>
+
+<div class="stat" id="stat"></div>
+
+<div class="sum hl" style="margin-top:22px">
+<h4>顺着这张图从上往下读，会看到三段完全不同的故事</h4>
+<p><b>上游（EDA · 设备 · 材料）：全红和橙。</b>光刻机、EUV 光刻胶、EDA、量测检测都是深红。这里是六个模型一致推荐的「卖铲子」区间，但量化后会发现——<b>卡得最狠恰恰等于替代尚未发生</b>。真正已经把铲子卖出规模的只有清洗（50–60%）、刻蚀（40%+）、靶材（38%）这三格。</p>
+<p><b>中游（制造 · 存储 · 封装）：绿红交错。</b>存储是整条链国产进展最快的一格（长鑫全球 DRAM 第四、长江存储 NAND 13%），但紧挨着的 HBM 和 CoWoS 先进封装是深红——<b>而这两格恰好是全球链利润最集中的位置</b>。国产 AI 芯片「设计得出、造不出来」的卡点就在这里。</p>
+<p><b>下游（硬件 · 平台 · 应用）：突然变绿。</b>光模块全球第一、激光雷达全球 80–95%、域控制器与整车中国主导。<b>越往下游中国越强，越往上游中国越弱</b>——这就是整张图最重要的形状。</p>
+</div>
+
+<div class="sum rd">
+<h4>但形状背后有个冷酷的换算：越绿的地方池子越小</h4>
+<p>激光雷达中国占全球 80–95%，全球市场 2025 年才刚破 10 亿美元。光模块中国全球第一，全球光互联约 248 亿美元。<b>而深红的那几格：AI 加速芯片约 2000 亿美元、HBM/存储约 3800 亿美元、晶圆代工约 1600 亿美元。</b></p>
+<p>换句话说：<b>中国赢下的每一格，规模都比输掉的那几格小一到两个数量级。</b>把「国产化率」当成投资标尺会系统性地高估下游、低估上游的重要性——因为国产化率不含权重，而利润池含权重。这是整个国产替代叙事里最容易被跳过的一步换算。</p>
+</div>
+
+<footer>
+<b>着色标准</b>　中国领先 = 全球份额已超越海外对标（激光雷达、光模块、智驾芯片全阶）；已突围 = 全球份额 ≥10% 或国内份额 ≥50% 且产品达国际主流水平；接近突围 = 国内 30–50%，成熟制程已替代；追赶中 = 国内 10–30%；被卡死 = 国内 &lt;10% 且存在明确代差。同一环节在成熟制程与先进制程可能不同色，图中取主力出货节点。<br>
+<b>代表公司的选取</b>　按该环节的份额或代表性选取 2–4 家，<b>不代表推荐，也不代表是最优标的</b>。未上市公司（长江存储、上海微电子、华为海思、宇树等）同样列入，因为产业链的完整性比可投资性更重要。<br>
+<b>已知局限</b>　（1）流程图是简化的，实际产业链存在大量交叉供应与反馈回路，本图只画主干。（2）「上游→中游→下游」的分层是按加工顺序而非价值顺序——价值分布见 05 号文件的利润池地图，两者形状几乎相反。（3）份额与国产化率数据取自 2025 年报至 2026Q2 的不同时点，跨环节比较仅作数量级参考。（4）AI 与汽车两条链在芯片设计、先进封装等环节共用产能，筛选时会同时出现。<br>
+<b>数据来源</b>　汇总自本文件夹 01–05 号文件，原始来源包括 SEMI、TrendForce/CFM 闪存市场、Yole、高工智能汽车研究院、LightCounting、Bernstein、中国信通院、麦姆斯咨询，及各公司年报与交易所披露（2026 年 8 月检索）。
+</footer>
+</div>
+
+<script>
+const ST={
+ lead:['中国领先','--lead','--leadb'],
+ brk:['已突围','--brk','--brkb'],
+ near:['接近','--near','--nearb'],
+ chase:['追赶中','--chase','--chaseb'],
+ block:['被卡死','--block','--blockb']
+};
+const TIER={
+ up:['上游','--up','工具与原料 —— 决定「能不能造」'],
+ mid:['中游','--mid','设计与制造 —— 决定「造得出多好」'],
+ down:['下游','--down','系统与应用 —— 决定「卖给谁、赚多少」']
+};
+
+// c: 所属链路 all=通用底座, ai, auto, robot
+const DATA=[
+{tier:'up',stage:'第 1 级 · 设计工具与 IP',flowNote:'EDA 决定芯片能不能被设计出来 —— 全链条起点',nodes:[
+ {n:'EDA 工具',st:'block',kpi:'国产国内约 20%，支撑到 14nm',c:['ai','auto','robot'],
+  cn:['华大九天','概伦电子','广立微','芯华章'],ov:['Synopsys 32%','Cadence 23%','Siemens 14%'],
+  d:'全球集中度最高的一格，三家合计 69%，毛利率约 85%。<b>市场规模最小（133 亿美元）却利润率最高。</b>模拟全流程华大九天已可用，数字先进节点全流程仍是空白。壁垒是数十年工艺库与设计习惯，属于生态型壁垒，<b>不随时间自然收敛</b>。'},
+ {n:'半导体 IP',st:'chase',kpi:'Arm 生态主导',c:['ai','auto','robot'],
+  cn:['芯原股份','平头哥（自研）'],ov:['Arm','Synopsys IP','Cadence IP'],
+  d:'芯原更接近 IP 平台与设计服务，不是传统全流程 EDA。RISC-V 是国产绕开 Arm 授权的主要路径，但生态成熟度仍有差距。'}
+]},
+{tier:'up',stage:'第 2 级 · 半导体设备',flowNote:'设备决定产线能建到什么制程 —— 全球 1333 亿美元，利润率约 50%',nodes:[
+ {n:'光刻机',st:'block',kpi:'国产化率个位数 · 代差约 8 年',c:['ai','auto','robot'],
+  cn:['上海微电子（未上市）','芯上微装（拟2027 IPO）'],ov:['ASML 53%毛利','尼康','佳能'],
+  d:'⚠ <b>全链条差距最大的一格。</b>SSA800 28nm 浸没式 DUV 已于 2026 年初交付中芯上机测试，良率超 90%、国产化率超 85%，可支持 7nm 多重曝光。但<b>产能 10 片/小时 vs ASML 170 片/小时</b>，EUV 无产品。ASML 在 EUV 上是全球唯一供应商。'},
+ {n:'刻蚀设备',st:'brk',kpi:'成熟 50–60% · 先进 <15%',c:['ai','auto','robot'],
+  cn:['中微公司 全球7.7%','北方华创'],ov:['Lam Research','AMAT','TEL'],
+  d:'<b>国产化最成功的前道设备。</b>中微 5nm CCP 刻蚀机已达国际水平并进入台积电验证流程——这是国产前道设备最实质的技术认可。受益于 3D NAND 层数增加与长鑫长存扩产。'},
+ {n:'薄膜沉积',st:'chase',kpi:'CVD/ALD 仅 5–10%',c:['ai','auto','robot'],
+  cn:['拓荆科技','北方华创'],ov:['AMAT','Lam','ASM International'],
+  d:'<b>市场第二大（282 亿美元）但渗透率最低</b>的一格。拓荆 PECVD 国内第一，ALD 与高深宽比填充仍是硬骨头。市场大×渗透低，空间与难度同样大。'},
+ {n:'量测检测',st:'chase',kpi:'国产化率低两位数',c:['ai','auto','robot'],
+  cn:['中科飞测','精测电子'],ov:['KLA','Onto Innovation','AMAT'],
+  d:'KLA 垄断度最高的环节之一。<b>先进节点的套刻精度量测与电子束检测基本空白。</b>制程越先进，量测设备价值量占比越高，这一格的长期空间常被低估。'},
+ {n:'清洗设备',st:'brk',kpi:'国产化率 50–60%',c:['ai','auto','robot'],
+  cn:['盛美上海 全球14.3%','至纯科技','北方华创'],ov:['SCREEN','TEL','Lam'],
+  d:'<b>已实质突围。</b>盛美 SAPS/TEBO 兆声波清洗是差异化技术路径而非模仿，2025 营收 67.86 亿、国内第三。母体 ACM Research 在纳斯达克上市（ACMR）。'},
+ {n:'CMP 设备',st:'chase',kpi:'成熟 15–25% · 先进 <10%',c:['ai','auto','robot'],
+  cn:['华海清科'],ov:['AMAT','荏原 Ebara'],
+  d:'华海清科国内第一。逻辑、存储、先进封装都需要多次平坦化，先进封装扩产会拉动需求。'},
+ {n:'涂胶显影',st:'chase',kpi:'成熟 10–15%',c:['ai','auto','robot'],
+  cn:['芯源微'],ov:['TEL 超 85%'],
+  d:'东京电子全球份额超 85%，垄断度极高。难点在于<b>必须与光刻机联机验证</b>——光刻机不突破，track 也难独立突破。'},
+ {n:'离子注入 / 测试设备',st:'chase',kpi:'离子注入成熟 10–20%',c:['ai','auto','robot'],
+  cn:['万业企业/凯世通','长川科技','华峰测控'],ov:['AMAT','Axcelis','Advantest','Teradyne'],
+  d:'高能注入机基本空白。测试端 Advantest 与 Teradyne 双寡头，华峰测控在模拟与功率测试机国内领先，SoC 与 HBM 测试仍是短板。'}
+]},
+{tier:'up',stage:'第 3 级 · 半导体材料',flowNote:'材料是产线的持续性弹药 —— 全球 732 亿美元，国产化率整体不足 20%',nodes:[
+ {n:'大硅片',st:'chase',kpi:'8寸 55% · 12寸仅 10%',c:['ai','auto','robot'],
+  cn:['沪硅产业','立昂微','中欣晶圆'],ov:['信越','SUMCO','环球晶圆'],
+  d:'<b>两极分化格。</b>8 英寸已实质替代，12 英寸仅 10%，且价格战下沪硅 2025 年净亏 15.08 亿——<b>份额追上不等于盈利追上</b>的最直接例证。'},
+ {n:'光刻胶',st:'block',kpi:'ArF 仅 2% · EUV 研发中',c:['ai','auto','robot'],
+  cn:['南大光电','彤程新材','晶瑞电材'],ov:['JSR','东京应化','信越'],
+  d:'⚠ <b>材料端差距最大、分层最陡的一格。</b>g/i 线 30%、KrF 10%、ArF 2%、EUV 研发阶段。2025 年底南大光电成为国内首家 ArF 量产企业并通过中芯与长江存储验证——0 到 1 已完成，1 到 N 需要时间。'},
+ {n:'电子特气',st:'near',kpi:'国产化率约 30%',c:['ai','auto','robot'],
+  cn:['华特气体','金宏气体','中船特气'],ov:['林德','液化空气','空气化工'],
+  d:'认证周期 2–3 年/品种 × 数十个品种，<b>时间由流程决定而非技术</b>。大宗气体国产化率高，超纯氨、六氟化钨等高端品种仍依赖进口。'},
+ {n:'CMP 抛光材料',st:'chase',kpi:'国产化率 <30%',c:['ai','auto','robot'],
+  cn:['安集科技','鼎龙股份'],ov:['Entegris','Fujimi','杜邦'],
+  d:'鼎龙抛光垫实现替代并<b>维持 35–45% 高毛利</b>——高毛利本身说明壁垒真实、竞争尚未充分。'},
+ {n:'溅射靶材',st:'brk',kpi:'江丰晶圆制造靶材 38%',c:['ai','auto','robot'],
+  cn:['江丰电子 38%','有研新材'],ov:['JX金属','霍尼韦尔'],
+  d:'<b>材料端国产化最成功的一格</b>，已进入全球主流晶圆厂供应链。制约是天花板——全球市场仅约 20 亿美元。'},
+ {n:'湿电子化学品 / 掩膜版 / 封装基板',st:'chase',kpi:'高端等级与 ABF 载板仍依赖进口',c:['ai','auto','robot'],
+  cn:['江化微','格林达','清溢光电','深南电路','兴森科技'],ov:['关东化学','巴斯夫','Photronics','揖斐电','欣兴'],
+  d:'通用湿化学品国产化率高，G4/G5 超高纯等级仍依赖进口。高端半导体掩膜版基本空白。AI 芯片带动 ABF 载板需求暴增，但高层数仍由揖斐电、新光、欣兴主导。'}
+]},
+{tier:'mid',stage:'第 4 级 · 芯片设计',flowNote:'拿到 EDA 与 IP 后开始设计 —— 这一层决定产品定义，也是利润最集中的地方',nodes:[
+ {n:'AI 加速芯片',st:'near',kpi:'国产在华 52.3% · 全球个位数',c:['ai','robot'],
+  cn:['华为昇腾 37%','寒武纪','海光信息','摩尔线程','沐曦','壁仞'],ov:['NVIDIA >80% 全球','AMD','Google TPU','Broadcom'],
+  d:'⭐ <b>全球链最大的单一利润池，英伟达毛利率 75%。</b>2026Q1 国产在华份额首破 52.3%，昇腾 37%、英伟达降至 15–20%。<b>但利润来源是 CUDA 不是硅片</b>——行政力量能改变采购决策，改变不了已经写好的代码。国产全球份额仍是个位数。'},
+ {n:'服务器 CPU',st:'near',kpi:'信创市场已成规模',c:['ai'],
+  cn:['海光信息','飞腾信息','龙芯中科'],ov:['Intel Xeon','AMD EPYC','Ampere'],
+  d:'海光走 x86 授权路线，生态兼容是优势也是风险；龙芯自主指令集自主度最高但生态最小。<b>这是两种权衡，不是优劣。</b>'},
+ {n:'智驾芯片',st:'lead',kpi:'全阶 地平线 31.94% 第一',c:['auto'],
+  cn:['地平线 31.94%','华为 8.74%','黑芝麻智能'],ov:['英伟达 29.38%','Mobileye 9.17%'],
+  d:'⭐ <b>中国已在全阶市场领先。</b>地平线累计出货超 1100 万套，征程 6M 订单超 250 万颗。<b>但城区 NOA 高阶市场英伟达 39.43% 反超、地平线仅 22.82%</b>——量在国产手上，高价位利润在英伟达手上。'},
+ {n:'内存接口芯片',st:'brk',kpi:'澜起为全球三强之一',c:['ai'],
+  cn:['澜起科技'],ov:['Rambus','瑞萨（原IDT）'],
+  d:'国产芯片设计里全球竞争力最强的环节之一。DDR5 代际升级与服务器内存扩容直接拉动需求，受益于存储超级周期。'}
+]},
+{tier:'mid',stage:'第 5 级 · 晶圆制造与存储',flowNote:'设计图纸在这里变成硅片 —— 需要第 1–3 级的全部投入',nodes:[
+ {n:'晶圆代工',st:'near',kpi:'中芯全球 4.8–6% 第三',c:['ai','auto','robot'],
+  cn:['中芯国际','华虹公司','晶合集成'],ov:['台积电 64%毛利','三星代工','格芯','联电'],
+  d:'台积电毛利率 62–66%，中芯约 20%——<b>差距来自没有 EUV，只能靠 DUV 多重曝光</b>，成本结构天然更差。N+2（7nm 级）已实现，但 5nm 以下不是时间问题而是路径问题。成熟制程是真实优势，8 英寸产能利用率超 90%。'},
+ {n:'DRAM',st:'brk',kpi:'长鑫全球 7.85% 第四',c:['ai','auto','robot'],
+  cn:['长鑫科技 688825'],ov:['三星','SK海力士 29.6%','美光 19.9%'],
+  d:'⭐ <b>国产进展最快的一格。</b>份额从 2025Q1 的 3% 升到 2026Q1 的 7.7–8%，2026Q1 DRAM 收入 73.09 亿美元、环比 +115%。2026-07-27 上市首日 +465%，市值 3.28 万亿。'},
+ {n:'NAND Flash',st:'brk',kpi:'长江存储全球 13%',c:['ai','auto','robot'],
+  cn:['长江存储（未上市）'],ov:['三星 29%','SK海力士 18%','铠侠 14%','美光 13%'],
+  d:'份额从 8% 升到 13%，与美光、闪迪并列。Xtacking 架构提供独立技术路径。<b>收敛快是因为不依赖 EUV。</b>2026-05 启动 IPO 辅导，估值预期约 3000 亿。'},
+ {n:'HBM 高带宽内存',st:'block',kpi:'海力士 >70% · 营业利润率 76%',c:['ai'],
+  cn:['长鑫（追赶中）'],ov:['SK海力士 >70%','三星 35–40%','美光 5–10%'],
+  d:'⚠ <b>中国链最大的单一缺口，也是全球链利润最集中的位置。</b>SK 海力士 2026Q2 营业利润率 76%——超过英伟达 75% 的毛利率。HBM 占其 DRAM 收入约 42%。需要先进封装 + 极高良率 + 与 GPU 厂商联合认证，不是扩产能解决的。'}
+]},
+{tier:'mid',stage:'第 6 级 · 封装与测试',flowNote:'芯片与 HBM 在这里被封在一起 —— AI 芯片最硬的物理瓶颈',nodes:[
+ {n:'传统封装测试',st:'brk',kpi:'长电全球 12.2% 第三',c:['ai','auto','robot'],
+  cn:['长电科技 12.2%','通富微电','华天科技'],ov:['日月光','安靠 Amkor','力成'],
+  d:'<b>传统封装替代已完成。</b>全球前三合计超 52%。通富微电是 AMD 主要封测合作方，CPU/GPU 封测经验是差异化优势。'},
+ {n:'先进封装 CoWoS 级',st:'block',kpi:'台积电垄断 · 订满至 2026',c:['ai'],
+  cn:['长电、通富（追赶中）'],ov:['台积电 CoWoS/SoIC'],
+  d:'⚠ <b>AI 芯片的实际物理瓶颈。</b>所有高端 AI 芯片都要经过这一道，产能扩张受设备与良率限制。<b>这是国产 AI 芯片「设计得出、造不出来」的卡点</b>——在瓶颈缓解前，拿到 CoWoS 配额比芯片设计更好更重要。长电 2026 年固投约 100 亿投向先进封装。'}
+]},
+{tier:'down',stage:'第 7 级 · 硬件与基础设施',flowNote:'芯片被组装成算力系统 —— 从这里开始中国明显变强',nodes:[
+ {n:'光模块 / 光互联',st:'lead',kpi:'中际旭创全球 23.4–27% 第一',c:['ai'],
+  cn:['中际旭创 第一','新易盛','天孚通信','光迅科技'],ov:['Coherent 约16%','Lumentum','Marvell'],
+  d:'⭐ <b>半导体链唯一全球第一。</b>800G 市占超 40%、1.6T 达 50–70%，技术已无代差。2026Q1 营收 195 亿元（+192%）、净利 57 亿元（+262%）。<b>风险不在技术在结构：90% 以上收入来自境外，美国 FCC 正讨论禁止中国产光模块。</b>'},
+ {n:'CPO 共封装光学',st:'lead',kpi:'中国占全球订单 >65%',c:['ai'],
+  cn:['中际旭创','新易盛','天孚通信'],ov:['Broadcom','Coherent'],
+  d:'🔮 <b>未来生态位候选。</b>2026 年全球约 80 亿美元（+433%），2027 年预计 400 亿。可降低数据中心功耗超 40%——电力成为瓶颈时省电即省钱。<b>证伪条件：良率可能把量产推迟到 2028–29；若 LPO 等方案解决功耗，CPO 紧迫性下降。</b>'},
+ {n:'网络与交换',st:'chase',kpi:'国产主要在国内市场',c:['ai'],
+  cn:['中兴通讯','锐捷网络','新华三'],ov:['Broadcom','Arista','Cisco','NVIDIA NVLink'],
+  d:'Arista、Broadcom 毛利率 62–77%，<b>是被低估的高利润环节</b>——集群规模越大网络成本占比越高。国产在国内市场可替代，全球市场基本无份额。'},
+ {n:'AI 服务器 / 整机',st:'near',kpi:'毛利率仅约 8–12%',c:['ai'],
+  cn:['浪潮信息','工业富联','中科曙光','联想'],ov:['Dell','HPE','超微 Supermicro'],
+  d:'<b>规模巨大、利润极薄的典型陷阱。</b>AI 服务器的价值几乎全部由内部 GPU 与 HBM 决定，整机厂只赚组装与集成费。国内竞争更充分，毛利率比海外还低。'},
+ {n:'电力设备与液冷',st:'brk',kpi:'变压器交期 128 周（全球）',c:['ai'],
+  cn:['英维克','科华数据','中恒电气','申菱环境'],ov:['Vertiv','Eaton','施耐德','GE Vernova'],
+  d:'🔮 <b>正在成为全球新瓶颈。</b>已宣布的 2026 年 16GW 中仅约 5GW 在建，30–50% 管道面临延期——<b>原因是电力设备而非 GPU</b>。美国市场 2026 约 200 亿美元 → 2030 年 650 亿。<b>中国不缺电，所以这在国产链里是出口机会而非内需机会。</b>'},
+ {n:'激光雷达',st:'lead',kpi:'中国占全球车载 80–95%',c:['auto','robot'],
+  cn:['禾赛 全球43%','速腾聚创','华为'],ov:['Luminar（2025-12 破产）','Valeo'],
+  d:'⭐ <b>全清单中国优势最彻底的一格——海外龙头已经破产。</b>禾赛全球 ADAS 主雷达 43% 第一、中国 55%，出货指引 300–350 万台。速腾 2026Q1 机器人激光雷达出货 18.55 万台（+1458.8%）。<b>但全球市场 2025 年才刚破 10 亿美元，赢的是小池子。</b>'},
+ {n:'机器人零部件',st:'near',kpi:'丝杠国产良率 60%（海外 85%）',c:['robot'],
+  cn:['减速器/丝杠/电机国产厂商','速腾（传感器）'],ov:['哈默纳科','纳博特斯克','THK'],
+  d:'🔮 中国 2025 出货约 1.8 万台（+650%），2026 预计 6.25 万台。<b>成本曲线与激光雷达高度相似</b>——宇树单价从 2023 年 59.34 万元降到 2026 年中 2.99 万元。但传感器海外定价仍是国产 3 倍以上，丝杠良率仍有差距。'}
+]},
+{tier:'down',stage:'第 8 级 · 平台与系统',flowNote:'硬件被组织成可用的算力与整车平台',nodes:[
+ {n:'智算中心与云',st:'chase',kpi:'2026 中国智能算力 1460 EFLOPS',c:['ai'],
+  cn:['阿里云 35.8%','华为云','腾讯云','三大运营商'],ov:['AWS','Azure','GCP','CoreWeave'],
+  d:'全球六大买方 2026 年资本开支超 <b>7600 亿美元</b>（2025 年 4100 亿），<b>既是最大买方也是利润池的最终定价者</b>。中国 2025H1 AI 云市场 223 亿元，阿里云一家超过第 2–4 名之和——<b>需求端集中度风险高于美国。</b>'},
+ {n:'操作系统 / 数据库',st:'chase',kpi:'信创高、商业市场低',c:['ai'],
+  cn:['麒麟软件','统信软件','达梦数据','东方通'],ov:['微软','Red Hat','Oracle','IBM'],
+  d:'⚠ 党政与金融信创已成规模，商业市场仍由 Oracle、微软主导。<b>差距在生态不在功能</b>：迁移成本、第三方软件兼容、开发者规模——不是年限能解决的类型。'},
+ {n:'智驾域控制器',st:'lead',kpi:'中国 Tier1 主导',c:['auto'],
+  cn:['德赛西威','经纬恒润','华为'],ov:['博世','大陆','安波福'],
+  d:'绑定本土车企的迭代速度。<b>海外 Tier1 的开发节奏跟不上中国车企的年度改款周期</b>，这是中国在这一格领先的结构性原因。'},
+ {n:'算法与数据闭环',st:'near',kpi:'路况复杂度是中国优势',c:['auto'],
+  cn:['华为 ADS','小鹏','蔚来','Momenta','地平线'],ov:['Tesla FSD','Mobileye','Waymo'],
+  d:'<b>硬件商品化后，价值会向这一层转移。</b>中国优势是路况复杂度与数据规模，劣势是数据出境限制与训练算力受限。'}
+]},
+{tier:'down',stage:'第 9 级 · 应用与终端',flowNote:'最终变现的地方 —— 也是整条链估值的最终依据',nodes:[
+ {n:'大模型',st:'near',kpi:'两边都未形成稳定利润池',c:['ai'],
+  cn:['DeepSeek','通义','豆包','智谱','Kimi'],ov:['OpenAI','Anthropic','Google DeepMind','xAI'],
+  d:'⚠ <b>整条链最大的单一系统性风险。</b>7600 亿美元资本开支的最终依据是这些算力能产生足够下游收入，但模型层多数仍在亏损。中国价格战比美国更激烈，开源模型进一步压缩闭源定价空间。<b>这是唯一一个「上游判断全对、结论仍可能错」的变量。</b>'},
+ {n:'AI 应用与 Agent',st:'near',kpi:'商业模式仍在验证',c:['ai'],
+  cn:['字节','阿里','腾讯','各垂直应用'],ov:['Microsoft Copilot','Anthropic','OpenAI'],
+  d:'决定整条链能否闭环。2026 年 7 月底全球芯片股的大幅回调，本质上就是市场开始对「AI 收入能否追上 AI 投入」打问号。'},
+ {n:'智能汽车 / 自动驾驶',st:'lead',kpi:'2026 城区 NOA 预计 650 万辆',c:['auto'],
+  cn:['比亚迪','理想','小鹏','蔚来','小米'],ov:['Tesla','传统车企'],
+  d:'⭐ 2026H1 中国城区 NOA 交付 204.69 万辆（同比 +约70%）。<b>整车环节利润率普遍薄，价值捕获在于能否把智驾变成品牌溢价而非成本项。</b>'},
+ {n:'人形机器人',st:'lead',kpi:'中国 2026 预计出货 6.25 万台',c:['robot'],
+  cn:['宇树科技（已过会）','优必选','众多创业公司'],ov:['特斯拉 Optimus','Figure','1X'],
+  d:'🔮 宇树 2025 年全球出货第一、<b>毛利率超 60%</b>，2026-07 科创板过会拟募 42 亿+。特斯拉 Optimus Gen3 2026 年目标约 1.5 万台。<b>证伪条件：若 2027 年前仍无规模化真实商业场景，这就只是一场制造业内卷。</b>'}
+]}
+];
+
+let fc='all', fs='all', sel=null;
+
+function render(){
+  const html=[];
+  let cur=null, first=true;
+  DATA.forEach(function(g){
+    const vis=g.nodes.filter(n=> (fc==='all'||n.c.indexOf(fc)>=0) );
+    if(!vis.length) return;
+    if(cur!==g.tier){
+      if(cur!==null) html.push('</div>');   // 关闭上一个 tier
+      cur=g.tier;const t=TIER[g.tier];
+      html.push('<div class="tier"><div class="tierhead">'
+        +'<span class="tierbadge" style="background:var('+t[1]+')">'+t[0]+'</span>'
+        +'<span class="tiername">'+t[2].split(' —— ')[0]+'</span>'
+        +'<span class="tierdesc">'+t[2].split(' —— ')[1]+'</span></div>');
+    } else if(!first){
+      html.push('<div class="flow"><span class="ln"></span><span class="ar">▼</span>'
+        +'<span class="tx">'+g.flowNote+'</span><span class="ar">▼</span><span class="ln"></span></div>');
+    }
+    first=false;
+    html.push('<div class="stage"><div class="stagelbl">'+g.stage+'</div><div class="nodes">');
+    vis.forEach(function(n){
+      const s=ST[n.st];
+      const dim=(fs!=='all'&&n.st!==fs)?' dim':'';
+      const id=g.stage+'|'+n.n;
+      html.push('<div class="node'+dim+(sel===id?' sel':'')+'" data-id="'+id+'" style="--sc:var('+s[1]+');--scb:var('+s[2]+')">'
+       +'<div class="nh"><span class="nn">'+n.n+'</span><span class="nst">'+s[0]+'</span></div>'
+       +'<div class="nkpi">'+n.kpi+'</div>'
+       +'<div class="pr c"><span class="f">🇨🇳</span><span class="v">'+n.cn.join('、')+'</span></div>'
+       +'<div class="pr o"><span class="f">🌍</span><span class="v">'+n.ov.join('、')+'</span></div>'
+       +'<div class="det">'+n.d+'</div></div>');
+    });
+    html.push('</div></div>');
+  });
+  if(cur!==null) html.push('</div>');
+  document.getElementById('flow').innerHTML=html.join('');
+  Array.prototype.forEach.call(document.querySelectorAll('.node'),function(el){
+    el.onclick=function(){ sel = (sel===el.dataset.id) ? null : el.dataset.id; render(); };
+  });
+  // 统计
+  const all=[];DATA.forEach(g=>g.nodes.forEach(n=>{if(fc==='all'||n.c.indexOf(fc)>=0) all.push(n);}));
+  const cnt=all.reduce(function(a,n){a[n.st]=(a[n.st]||0)+1;return a;},{});
+  document.getElementById('cnt').innerHTML='<span>当前视图共 <b>'+all.length+'</b> 个环节'
+   +'　中国领先 '+(cnt.lead||0)+' ｜ 已突围 '+(cnt.brk||0)+' ｜ 接近 '+(cnt.near||0)
+   +' ｜ 追赶中 '+(cnt.chase||0)+' ｜ 被卡死 '+(cnt.block||0)+'</span>';
+  const order=['lead','brk','near','chase','block'];
+  document.getElementById('stat').innerHTML=order.map(function(k){
+    const s=ST[k];
+    return '<div class="st"><div class="v" style="color:var('+s[1]+')">'+(cnt[k]||0)+'</div>'
+     +'<div class="l">'+s[0]+'</div></div>';}).join('')
+   +'<div class="st"><div class="v">'+all.length+'</div><div class="l">环节总数</div></div>';
+}
+
+Array.prototype.forEach.call(document.querySelectorAll('.chip'),function(b){
+  b.onclick=function(){
+    if(b.dataset.c!==undefined){
+      Array.prototype.forEach.call(document.querySelectorAll('[data-c]'),x=>x.classList.remove('on'));
+      b.classList.add('on');fc=b.dataset.c;
+    }else{
+      Array.prototype.forEach.call(document.querySelectorAll('[data-s]'),x=>x.classList.remove('on'));
+      b.classList.add('on');fs=b.dataset.s;
+    }
+    sel=null;render();
+  };
+});
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>下游价值链 · 利润池 · 生态位</title>
+<style>
+:root{
+ --bg:#faf9f7;--panel:#fff;--ink:#1f1e1c;--ink2:#57534e;--ink3:#8a8480;
+ --line:#e5e1dc;--line2:#d6d1ca;
+ --mono:#7b4397;--monob:#f4edf8;
+ --dark:#b8860b;--darkb:#fbf4e0;
+ --fut:#2b7a8c;--futb:#e6f2f5;
+ --thin:#8a8480;--thinb:#f2f0ee;
+ --cn:#b8492e;--cnb:#fdf1ed;
+ --ov:#41608c;--ovb:#eef2f8;
+ --g1:#2f7d4f;--g1b:#e8f3ec;--g4:#a83232;--g4b:#fbeaea;
+ --accent:#1f1e1c;
+}
+@media(prefers-color-scheme:dark){:root{
+ --bg:#191817;--panel:#221f1d;--ink:#f0ece7;--ink2:#b6afa8;--ink3:#857d76;
+ --line:#332f2c;--line2:#443e3a;
+ --mono:#b98cd4;--monob:#251d2b; --dark:#d9b45c;--darkb:#2a2416;
+ --fut:#6cc0d1;--futb:#152528; --thin:#98918b;--thinb:#26231f;
+ --cn:#e08a6d;--cnb:#2e211c; --ov:#89aad6;--ovb:#1b222c;
+ --g1:#63b585;--g1b:#1a271f;--g4:#e07070;--g4b:#2c1919;
+ --accent:#f0ece7;}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.65;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:1300px;margin:0 auto;padding:34px 22px 80px}
+h1{font-size:26px;margin:0 0 6px;letter-spacing:-.01em}
+.sub{color:var(--ink2);font-size:14px;margin:0 0 3px}
+.meta{color:var(--ink3);font-size:12.5px;margin:0 0 22px}
+h2{font-size:19px;margin:50px 0 6px;letter-spacing:-.01em}
+h2 .n{color:var(--ink3);font-weight:400;font-size:13.5px;margin-left:8px}
+h3{font-size:15.5px;margin:28px 0 8px}
+.lead{color:var(--ink2);font-size:13.5px;margin:0 0 16px;max-width:920px}
+.warn{background:var(--g4b);border:1px solid color-mix(in srgb,var(--g4) 28%,transparent);
+ border-radius:8px;padding:12px 15px;font-size:12.5px;color:var(--ink2);margin:0 0 16px;line-height:1.65}
+.warn b{color:var(--g4)}
+.note{background:var(--ovb);border:1px solid color-mix(in srgb,var(--ov) 28%,transparent);
+ border-radius:8px;padding:13px 16px;font-size:12.8px;color:var(--ink2);margin:15px 0;line-height:1.7}
+.note b{color:var(--ov)}
+.hot{background:var(--darkb);border:1px solid color-mix(in srgb,var(--dark) 34%,transparent);
+ border-radius:9px;padding:15px 17px;margin:16px 0}
+.hot h4{margin:0 0 6px;font-size:15px;color:var(--dark)}
+.hot p{margin:0;font-size:13px;color:var(--ink2);line-height:1.7}.hot p+p{margin-top:8px}
+.win{background:var(--g1b);border:1px solid color-mix(in srgb,var(--g1) 34%,transparent);
+ border-radius:9px;padding:15px 17px;margin:16px 0}
+.win h4{margin:0 0 6px;font-size:15px;color:var(--g1)}
+.win p{margin:0;font-size:13px;color:var(--ink2);line-height:1.7}.win p+p{margin-top:8px}
+.tabs{display:flex;gap:7px;margin:14px 0 6px;flex-wrap:wrap}
+.tab{padding:7px 16px;border:1px solid var(--line2);border-radius:22px;background:var(--panel);
+ color:var(--ink2);font-size:13.5px;cursor:pointer;font-family:inherit;font-weight:600;transition:.13s}
+.tab:hover{border-color:var(--ink3)}
+.tab.on{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.legend{display:flex;gap:15px;flex-wrap:wrap;font-size:11.5px;color:var(--ink2);margin:12px 0 10px}
+.legend span{display:flex;align-items:center;gap:5px}
+.sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+.chain{margin-top:6px}
+.lay{background:var(--panel);border:1px solid var(--line);border-radius:9px;
+ padding:11px 14px;margin-bottom:7px;position:relative;overflow:hidden;cursor:pointer;transition:.14s}
+.lay:hover{border-color:var(--line2)}
+.lay.open{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.lay::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--nc)}
+.lh{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.lname{font-weight:650;font-size:14.5px;min-width:150px}
+.ntag{font-size:10px;font-weight:700;padding:1.5px 6px;border-radius:4px;background:var(--ncb);color:var(--nc);white-space:nowrap}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:8px;align-items:center}
+.mt{font-size:10px;color:var(--ink3);letter-spacing:.03em;margin-bottom:2px}
+.bar{height:14px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:4px}
+.bv{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--ink2);margin-top:2px}
+.det{display:none;margin-top:10px;padding-top:9px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink2);line-height:1.65}
+.lay.open .det{display:block}
+.det b{color:var(--ink)}
+.players{display:flex;gap:8px;flex-wrap:wrap;margin-top:7px}
+.pl{font-size:11.5px;padding:2.5px 8px;border-radius:5px;white-space:nowrap}
+.pl.o{background:var(--ovb);color:var(--ov)} .pl.c{background:var(--cnb);color:var(--cn)}
+.chartbox{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;margin-top:12px;overflow-x:auto}
+svg{display:block;max-width:100%;height:auto}
+.tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);padding:8px 11px;
+ border-radius:7px;font-size:11.5px;line-height:1.55;max-width:280px;opacity:0;transition:opacity .12s;z-index:99}
+table{width:100%;border-collapse:collapse;font-size:12.7px;margin-top:8px}
+th{text-align:left;font-size:11px;font-weight:650;color:var(--ink3);letter-spacing:.03em;
+ padding:8px 7px;border-bottom:1px solid var(--line2);white-space:nowrap;vertical-align:bottom}
+td{padding:8px 7px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:hover td{background:color-mix(in srgb,var(--panel) 72%,transparent)}
+tr.lead1 td{background:color-mix(in srgb,var(--g1b) 55%,transparent)}
+.cnm{font-weight:620;white-space:nowrap}
+.num{font-family:ui-monospace,Menlo,monospace;white-space:nowrap;font-size:12.2px}
+.tg{font-size:10.5px;font-weight:700;padding:1.5px 6px;border-radius:4px;white-space:nowrap;display:inline-block}
+.tgc{background:var(--cnb);color:var(--cn)} .tgo{background:var(--ovb);color:var(--ov)}
+.tgw{background:var(--g1b);color:var(--g1)} .tgl{background:var(--g4b);color:var(--g4)}
+.niche{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--nc);
+ border-radius:8px;padding:13px 15px;margin-bottom:9px}
+.niche .t{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:3px}
+.niche .nm{font-weight:660;font-size:14.5px}
+.niche .kpi{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--nc);font-weight:700}
+.niche p{margin:5px 0 0;font-size:12.6px;color:var(--ink2);line-height:1.65}
+.niche p b{color:var(--ink)}
+footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink3);line-height:1.75}
+@media(max-width:840px){.wrap{padding:20px 12px 60px}h1{font-size:20px}.grid3{grid-template-columns:1fr}
+ table{font-size:11.5px}th,td{padding:6px 4px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>下游价值链 · 利润池 · 生态位</h1>
+<p class="sub">全球与中国两套价值链 · 市场规模与利润分配 · 三类生态位与未来预判 · AI 与自动驾驶详细展开</p>
+<p class="meta">编制日期 2026-08-11 ｜ 承接 01–04 号文件，本页把范围从半导体上游扩展到全下游 ｜ 数据来源见页脚</p>
+
+<div class="warn">
+<b>声明</b>　本页不是投资建议，我不是投资顾问。「未来生态位」一节是<b>推演，不是预测</b>，明确标注了推理依据与证伪条件——如果依据不成立，结论就不成立。利润率数据口径不一（毛利率 / 营业利润率混用，已逐项标注），跨环节比较仅作数量级参考。
+</div>
+
+<h2>一、两套价值链<span class="n">全球与中国的结构不一样，不能套用同一张图</span></h2>
+<p class="lead">同一个 AI 产业，全球和中国的利润分配结构差异极大：<b>全球链的利润高度集中在少数几个技术垄断点；中国链的利润被政策定价、国资投入和激烈内卷重新分配</b>。下面两张图请分开看，切换后每一层的市场规模、利润率和玩家都会变。点击任一层展开细节。</p>
+
+<div class="tabs">
+  <button class="tab on" data-v="G">🌍 全球价值链</button>
+  <button class="tab" data-v="C">🇨🇳 中国价值链</button>
+</div>
+<div class="legend">
+  <span><i class="sw" style="background:var(--mono)"></i>垄断型高利润生态位</span>
+  <span><i class="sw" style="background:var(--dark)"></i>周期性紧缺黑马</span>
+  <span><i class="sw" style="background:var(--fut)"></i>未来可能兴起的生态位</span>
+  <span><i class="sw" style="background:var(--thin)"></i>薄利环节</span>
+  <span style="margin-left:auto;color:var(--ink3)">条形：市场规模 · 利润率 · 利润池 = 规模×利润率</span>
+</div>
+<div class="chain" id="chain"></div>
+<div class="note" id="chainnote"></div>
+
+<h2>二、利润池地图<span class="n">规模 × 利润率 = 谁真正赚到钱</span></h2>
+<p class="lead">横轴是市场规模（对数刻度），纵轴是利润率，<b>气泡面积 = 利润池（规模 × 利润率）</b>。右上角的大气泡就是整个产业的钱去了哪里。悬停查看细节，切换上方按钮可对比全球与中国。</p>
+<div class="chartbox"><div id="bubble"></div></div>
+
+<div class="hot">
+<h4>本图最反直觉的一点：2026 年利润率最高的不是英伟达，是 SK 海力士</h4>
+<p>英伟达毛利率 75%（非 GAAP），台积电 62–66%，ASML 53%——这些是大家熟悉的垄断利润。但 <b>SK 海力士 2026Q2 营收 79.32 万亿韩元、营业利润 60.54 万亿韩元，营业利润率 76%</b>（Q1 为 72%）。注意口径差异：76% 是<b>营业利润率</b>，英伟达的 75% 是<b>毛利率</b>——换成同口径，海力士已经把英伟达甩在后面。</p>
+<p>HBM 占其 DRAM 收入约 42%，HBM 全球份额超 70%。<b>一个三年前还被视为「周期性大宗商品、活该低估值」的环节，在 AI 周期里变成了全链条利润率最高的位置。</b>这就是「周期性紧缺黑马」的完整形态：需求突变 + 产能刚性 + 技术门槛意外提高（HBM 需要先进封装与极高良率），三者叠加把定价权从买方转到卖方。</p>
+</div>
+
+<h2>三、三类生态位<span class="n">垄断型 · 黑马型 · 未来型</span></h2>
+
+<h3><span style="color:var(--mono)">◆</span> 第一类：垄断型高利润生态位 —— 已经形成，难以撼动</h3>
+<p class="lead">共同特征：<b>技术上没有第二个可行解</b>，且切换成本极高。这类位置的利润率不随周期波动，是结构性的。</p>
+<div id="n1"></div>
+
+<h3><span style="color:var(--dark)">◆</span> 第二类：周期性紧缺黑马 —— 已经发生，正在兑现</h3>
+<p class="lead">共同特征：<b>平时是配角，需求突变时因为产能刚性变成瓶颈，定价权瞬间反转</b>。风险也在这里——周期会回头。</p>
+<div id="n2"></div>
+
+<h3><span style="color:var(--fut)">◆</span> 第三类：未来可能兴起的生态位 —— 推演，不是预测</h3>
+<p class="lead">下面每一条都标注了<b>推理依据</b>和<b>证伪条件</b>。如果证伪条件出现，推论就不成立——这比给一个笃定的判断更有用。</p>
+<div id="n3"></div>
+
+<div class="hot">
+<h4>如果只记一件事：瓶颈正在从「芯片造不出来」转向「电送不进去」</h4>
+<p>2026 年电力变压器平均交期约 <b>128 周</b>，发电机升压机组约 <b>144 周</b>，高容量机组报价排到四到五年后。已宣布的 2026 年 16GW 数据中心产能中<b>只有约 5GW 真正在建</b>，分析机构估计 30–50% 的管道会延期或取消，原因是电力接入、变压器和开关设备短缺——而不是缺 GPU。</p>
+<p>这件事的投资含义是：<b>AI 资本开支的边际增量正在从算力硬件流向电力基础设施</b>。美国数据中心电气设备市场从 2026 年约 200 亿美元预计增至 2030 年 650 亿美元。中国因为电网规划与产能都更充裕，这个瓶颈显著更弱——<b>这是全球链和中国链最大的结构差异之一，也意味着这个机会在中国链里主要体现为出口而非内需</b>。</p>
+</div>
+
+<h2>四、AI 下游详细展开<span class="n">国产 vs 海外</span></h2>
+<p class="lead">从芯片往下到云和模型层。<b>关键结论先说：中国在「能自己造」这件事上进展很快，在「造出来能赚多少钱」这件事上差距很大</b>——因为利润集中在生态和垄断位置，而那正是国产最薄弱的地方。</p>
+
+<table>
+<thead><tr><th>环节</th><th>全球格局</th><th>中国格局</th><th>利润率对比</th><th>国产状态</th><th>关键差异</th></tr></thead>
+<tbody id="tbAI"></tbody>
+</table>
+
+<div class="note">
+<b>中国 AI 链的三个结构性特点</b>　（1）<b>算力规模不缺，单卡效率缺。</b>2025 年中国智能算力 1037.3 EFlops（+43%），2026 年预计 1460 EFLOPS（+41%）——总量增长很快，但同等算力需要更多卡、更多电、更多机房。（2）<b>云市场集中度高于美国。</b>2025H1 中国 AI 云市场 223 亿元，阿里云一家 35.8%，超过第 2–4 名之和。（3）<b>投入由少数几家主导。</b>阿里未来三年技术与基础设施投入超 3800 亿元，腾讯 2026 年 AI 投入同比翻倍——这意味着国产 AI 链的需求端高度依赖少数几个客户的资本开支决策，<b>集中度风险显著高于美国的六大买方结构</b>。
+</div>
+
+<h2>五、自动驾驶详细展开<span class="n">这一格中国是领先方，不是追赶方</span></h2>
+<p class="lead">与半导体链完全相反：<b>在自动驾驶硬件上，中国不是在做国产替代，而是在被别人替代</b>。这是全清单里逻辑最需要反转的一节。</p>
+
+<table>
+<thead><tr><th>环节</th><th>市场规模</th><th>中国玩家与份额</th><th>海外玩家与份额</th><th>格局</th><th>说明</th></tr></thead>
+<tbody id="tbAD"></tbody>
+</table>
+
+<div class="win">
+<h4>激光雷达：海外龙头已经破产，中国厂商拿下全球 80–95%</h4>
+<p>2025 年 12 月，<b>美国 Luminar Technologies 申请 Chapter 11 破产保护</b>。同期禾赛以 <b>43% 的全球 ADAS 主激光雷达出货份额位列第一</b>（Yole 数据），中国市场份额 55%、约为第二名的三倍，年度出货指引上调至 300–350 万台、产能 400 万台。2025 年全球车载激光雷达出货约 250 万颗（+150%），<b>中国厂商占 80% 以上</b>，另一口径称中国企业占全球车载市场约 95%。</p>
+<p>这不是「国产替代」，是<b>中国厂商用成本曲线把一个海外开创的品类重新定义了</b>——激光雷达单价从早期数万美元降到千元人民币量级，海外玩家的商业模式在这个价格上根本不成立。速腾聚创 2026Q1 机器人激光雷达出货 18.55 万台，同比增长 1458.8%，说明这条成本曲线正在外溢到车以外的场景。</p>
+<p><b>但要注意规模：</b>2025 年全球车载激光雷达市场首次突破 10 亿美元。拿下 95% 份额的市场，总盘子还不到英伟达一个季度数据中心收入的零头。<b>赢了一个小池子，和输了一个大池子，在组合层面完全不是一回事。</b></p>
+</div>
+
+<div class="hot">
+<h4>智驾芯片：中国赢了走量的那一半，输了赚钱的那一半</h4>
+<p>2026 上半年自主品牌乘用车智驾芯片<b>全阶市场</b>：地平线 <b>31.94% 第一</b>，英伟达 29.38%，Mobileye 9.17%，华为 8.74%。看起来国产已经领先。</p>
+<p>但拆到<b>城区 NOA 高阶市场</b>，格局反转：<b>英伟达 39.43% 第一</b>，地平线 22.82%，华为 16.89%。高阶芯片单价是低阶的数倍，<b>份额第一在低价位段，利润第一在高价位段</b>——这与半导体链的「卖铲子」结构是同一个道理，只是主角换了。</p>
+<p>需求侧在爆发：2026 上半年中国市场支持城区 NOA 的乘用车交付 204.69 万辆（同比增长近 70%），全年预计 650 万辆。地平线累计出货已超 1100 万套，征程 6M 订单超 250 万颗。<b>接下来两年的关键观察点是地平线能否把城区 NOA 份额从 22.82% 往上推</b>——这决定它是「低阶走量厂商」还是「能吃到高价位利润的平台」。</p>
+</div>
+
+<h2>六、三年后利润池可能长什么样<span class="n">推演，附证伪条件</span></h2>
+<p class="lead">下面是我对 2029 年前后利润分配的推演。<b>每一条都可能错</b>，所以重点在于我列出了「什么情况出现说明我错了」。</p>
+<div id="fut"></div>
+
+<footer>
+<b>方法说明</b>　「利润池」= 环节市场规模 × 该环节代表公司的利润率，是数量级估算而非精确计算：（1）同一环节内不同公司利润率差异巨大，本页取龙头公司数据，会系统性高估行业平均；（2）毛利率与营业利润率两种口径混用，已逐项标注，跨环节比较请注意；（3）市场规模的统计口径不统一（出货额 / 产值 / 服务收入），加总会重复计算；（4）中国链的部分环节缺乏公开利润率数据，用行业估算填补并标注。<br>
+<b>推演的性质</b>　第三类生态位与第六节是<b>推演不是预测</b>。推演基于当前可观测的瓶颈（电力交期、CoWoS 产能、HBM 供给）和已宣布的资本开支，但产业拐点常来自当前不可观测的变量。每条都附了证伪条件，请把它当作观察清单而非结论。<br>
+<b>已知局限</b>　（1）2026 年 7 月底全球芯片股大幅回调，市场对 AI 资本开支持续性的定价已经变化，本页多数数据取自回调前。（2）SK 海力士 76% 营业利润率处于存储超级周期峰值，不可外推。（3）中国 AI 云与算力数据的统计口径与美国不可直接比较。（4）自动驾驶份额数据限于「自主品牌乘用车」口径，纳入合资与进口车结论会变化。（5）人形机器人出货量数据各家统计差异极大。（6）中国链的市场规模单位为亿元人民币、全球链为亿美元，两张图不可直接比较绝对值。<br>
+<b>主要来源</b>　SK hynix 2026 Q1/Q2 财报、NVIDIA 与 TSMC 财报、Yole《2026 车载激光雷达报告》、高工智能汽车研究院、LightCounting、麦姆斯咨询《光电共封装（CPO）技术及市场-2026版》、中国信通院《先进计算暨算力发展指数蓝皮书》、Sightline Climate、新华网《2026 人形机器人产业展望》、IDC、东方财富、新浪财经、21世纪经济报道（2026 年 8 月检索）。
+</footer>
+</div>
+<div class="tip" id="tip"></div>
+
+<script>
+const NT={mono:['垄断型','--mono','--monob'],dark:['黑马型','--dark','--darkb'],
+          fut:['未来型','--fut','--futb'],thin:['薄利','--thin','--thinb']};
+
+const GLOBAL=[
+{n:'EDA / 半导体 IP',mkt:133,mg:85,mt:'g',t:'mono',
+ d:'Synopsys 32% + Cadence 23% + Siemens 14% = 全球 69%。<b>市场规模在整条链里最小，利润率却最高</b>——软件模式加数十年工艺库积累，是典型的「小池子、深水位」。',
+ ov:['Synopsys','Cadence','Siemens EDA','Arm'],cn:['华大九天','概伦电子','芯原']},
+{n:'半导体设备',mkt:1333,mg:50,mt:'g',t:'mono',
+ d:'ASML 毛利率 53%，在 EUV 上是<b>全球唯一供应商</b>。AMAT、Lam、KLA、TEL 各自在细分环节接近垄断。光刻 338 亿、薄膜沉积 282 亿、刻蚀 226 亿合计占前道六成以上。',
+ ov:['ASML','AMAT','Lam','KLA','TEL'],cn:['北方华创','中微','拓荆','盛美']},
+{n:'半导体材料',mkt:732,mg:38,mt:'g',t:'thin',
+ d:'晶圆制造材料 458 亿加封装材料 274 亿。<b>单个品类规模小、认证周期长、利润率中等</b>——壁垒真实但天花板明确。',
+ ov:['信越','SUMCO','JSR','Entegris','默克'],cn:['沪硅产业','南大光电','江丰','安集']},
+{n:'晶圆代工',mkt:1600,mg:64,mt:'g',t:'mono',
+ d:'台积电毛利率 62.3–66%，在重资产行业里是异常值。<b>CoWoS 与 SoIC 先进封装产能已订满至 2026 年</b>——这是当前 AI 芯片最硬的物理瓶颈之一。',
+ ov:['TSMC','三星代工','Intel Foundry'],cn:['中芯国际','华虹']},
+{n:'HBM / 存储',mkt:3800,mg:76,mt:'o',t:'dark',
+ d:'<b>2026 年整条链利润率最高的环节。</b>SK 海力士 Q2 营收 79.32 万亿韩元、营业利润 60.54 万亿韩元，营业利润率 76%（Q1 为 72%）。HBM 全球份额超 70%，占其 DRAM 收入约 42%。三星 35–40%、美光 5–10%。',
+ ov:['SK海力士','三星','美光'],cn:['长鑫科技','长江存储']},
+{n:'AI 加速芯片',mkt:2000,mg:75,mt:'g',t:'mono',
+ d:'英伟达毛利率 75%（非 GAAP），全球份额超 80%。<b>利润来源不是硅片而是 CUDA</b>——软件生态让客户的迁移成本远高于换一块卡的价差。这是整条链最大的单一利润池。',
+ ov:['NVIDIA','AMD','Google TPU','Broadcom ASIC'],cn:['华为昇腾','寒武纪','海光','摩尔线程']},
+{n:'网络 / 交换',mkt:500,mg:70,mt:'g',t:'mono',
+ d:'Arista、Broadcom 毛利率 62–77%。<b>集群规模越大，网络在总成本中占比越高</b>，是 AI 训练从单机走向万卡集群后被重估的环节。',
+ ov:['Broadcom','Arista','Cisco','NVIDIA NVLink'],cn:['中兴','锐捷','新华三']},
+{n:'光模块 / 光互联',mkt:248,mg:40,mt:'g',t:'dark',
+ d:'<b>中国主导的唯一全球第一环节。</b>中际旭创全球 23.4–27%，800G 超 40%、1.6T 达 50–70%。2026Q1 营收 195 亿元（+192%）、净利 57 亿元（+262%）。风险是美国 FCC 正讨论禁止中国产光模块。',
+ ov:['Coherent','Lumentum','Marvell'],cn:['中际旭创','新易盛','天孚','光迅']},
+{n:'电力设备',mkt:200,mg:25,mt:'o',t:'fut',
+ d:'<b>正在成为新瓶颈。</b>变压器交期约 128 周、发电机升压机组约 144 周，高容量机组排到四到五年后。已宣布 2026 年 16GW 中仅约 5GW 在建，30–50% 管道面临延期。美国市场 2026 年约 200 亿美元，2030 年预计 650 亿美元。',
+ ov:['Eaton','Schneider','Vertiv','GE Vernova','Caterpillar'],cn:['科华数据','中恒电气','英维克']},
+{n:'服务器 / 整机',mkt:3000,mg:12,mt:'g',t:'thin',
+ d:'<b>规模巨大、利润极薄</b>——AI 服务器的价值几乎全部由内部的 GPU 和 HBM 决定，整机厂只赚组装与集成费。这是「高营收低利润」的典型陷阱。',
+ ov:['Dell','HPE','Supermicro','Quanta'],cn:['工业富联','浪潮信息','联想','中科曙光']},
+{n:'云服务',mkt:7600,mg:32,mt:'o',t:'mono',
+ d:'微软、亚马逊、谷歌、Meta、Oracle、CoreWeave 六家 2026 年资本开支超 <b>7600 亿美元</b>（2025 年为 4100 亿）。<b>他们既是整条链最大的买方，也是利润池的最终定价者</b>——如果他们的投资回报不达预期，上游所有环节的估值同时承压。',
+ ov:['AWS','Azure','GCP','Oracle','CoreWeave'],cn:['阿里云','华为云','腾讯云']},
+{n:'模型层',mkt:600,mg:-20,mt:'o',t:'fut',
+ d:'OpenAI、Anthropic 等。<b>收入高速增长但多数仍在亏损</b>——训练成本与推理成本同时上升。这一层是否最终能形成稳定利润池，是整个 AI 资本开支叙事能否闭环的关键。',
+ ov:['OpenAI','Anthropic','Google DeepMind','xAI'],cn:['DeepSeek','阿里通义','字节豆包','智谱']}
+];
+
+const CHINA=[
+{n:'EDA / IP',mkt:185,mg:60,mt:'g',t:'thin',
+ d:'中国 EDA 市场 184.9 亿元、占全球 18.1%，但<b>国产工具国内份额仅约 20%，工艺支撑停在 14nm</b>。利润率低于海外三巨头，因为缺少全流程定价权。<b>这是中国链利润最薄弱的起点。</b>',
+ ov:['Synopsys 32%','Cadence 23%','Siemens 14%'],cn:['华大九天 约7%','概伦电子','广立微']},
+{n:'半导体设备',mkt:2800,mg:40,mt:'g',t:'dark',
+ d:'国产设备在中国 WFE 市场份额 <b>2020 年 10%、2024 年 17%、2025 年跃升至 26%</b>，爬升速度超市场预期。长鑫与长存扩产直接拉动订单，头部厂商 Q2–Q3 订单同比增速预计 40–50% 以上。<b>这是中国链目前最确定的利润增长点。</b>',
+ ov:['AMAT / Lam / TEL 仍占 74%'],cn:['北方华创','中微','拓荆','盛美','华海清科']},
+{n:'半导体材料',mkt:1100,mg:30,mt:'g',t:'thin',
+ d:'中国大陆市场约 156 亿美元（同比 +12.5%）。<b>国产化率整体不足 20%</b>，且 12 英寸硅片因价格战导致龙头亏损（沪硅 2025 年净亏 15.08 亿元）——<b>份额上升不等于利润上升</b>，这是中国链最典型的内卷格。',
+ ov:['信越','SUMCO','JSR'],cn:['沪硅（亏损）','南大光电','江丰 38%','鼎龙 毛利35–45%']},
+{n:'晶圆代工',mkt:900,mg:20,mt:'g',t:'thin',
+ d:'中芯 2025 年营收 673.23 亿元、净利 50.41 亿元。<b>毛利率远低于台积电，因为缺 EUV 只能靠 DUV 多重曝光，成本结构天然更差</b>。8 英寸产能利用率超 90%，成熟制程是真实优势。',
+ ov:['TSMC 毛利 62–66%'],cn:['中芯国际','华虹','晶合集成']},
+{n:'存储制造',mkt:2500,mg:60,mt:'o',t:'dark',
+ d:'<b>中国链利润率最高的环节，与全球链一致。</b>长鑫 2026H1 营收 1100–1200 亿元、净利 660–750 亿元，全球 DRAM 份额 7.85%（第四）。长江存储 NAND 全球 13%。<b>剩余缺口是 HBM，也正是全球链利润最集中的地方。</b>',
+ ov:['三星','SK海力士','美光'],cn:['长鑫科技 688825','长江存储（未上市）']},
+{n:'AI 加速芯片',mkt:1500,mg:45,mt:'g',t:'dark',
+ d:'<b>国产在华份额 2026Q1 首破 52.3%</b>，昇腾 37%（占国产总量 70%），英伟达降至 15–20%。Bernstein 预计 2026 全年华为达 50%、英伟达 8%。<b>但全球份额仍是个位数——行政力量能替代本土市场，替代不了 CUDA 生态。</b>',
+ ov:['NVIDIA 15–20%','AMD 10–12%'],cn:['昇腾 37%','寒武纪 7–9%','海光','摩尔线程','沐曦','壁仞']},
+{n:'光模块',mkt:1800,mg:35,mt:'g',t:'mono',
+ d:'<b>中国链唯一的全球垄断位置。</b>中际旭创全球第一，800G 超 40%、1.6T 达 50–70%。但 90% 以上收入来自境外，<b>本质是全球 AI 资本开支链而非国产自主可控链</b>——FCC 若禁令落地，这个位置会被直接切断。',
+ ov:['Coherent 约16%','Lumentum'],cn:['中际旭创 23.4–27%','新易盛','天孚通信']},
+{n:'智驾芯片',mkt:400,mg:40,mt:'g',t:'dark',
+ d:'<b>自主品牌全阶市场地平线 31.94% 第一</b>，超过英伟达 29.38%。但城区 NOA 高阶市场英伟达 39.43% 反超，地平线 22.82%。<b>量在国产手上，高价位利润仍在英伟达手上。</b>',
+ ov:['英伟达 全阶29.38% / 高阶39.43%','Mobileye 9.17%'],cn:['地平线 31.94%','华为 8.74%','黑芝麻智能']},
+{n:'激光雷达',mkt:80,mg:20,mt:'g',t:'dark',
+ d:'<b>中国厂商占全球车载市场 80–95%，海外龙头 Luminar 已于 2025 年 12 月破产。</b>禾赛全球 ADAS 主雷达 43% 第一。<b>但全球市场规模 2025 年才刚突破 10 亿美元</b>——赢下的是一个小池子，且价格战使利润率偏低。',
+ ov:['Luminar（已破产）','Valeo'],cn:['禾赛 43%','速腾聚创','华为']},
+{n:'服务器 / 整机',mkt:2200,mg:8,mt:'g',t:'thin',
+ d:'<b>比全球链更薄。</b>国内 AI 服务器竞争充分、政企招标压价，整机厂利润率普遍个位数。营收规模大但对利润贡献有限。',
+ ov:['Dell','HPE','Supermicro'],cn:['浪潮信息','工业富联','中科曙光','联想']},
+{n:'智能算力 / 云',mkt:3000,mg:15,mt:'o',t:'fut',
+ d:'2025 年中国智能算力 1037.3 EFlops（+43%），2026 年预计 1460 EFLOPS（+41%）。2025H1 中国 AI 云市场 223 亿元，<b>阿里云 35.8% 超过第 2–4 名之和</b>。阿里未来三年投入超 3800 亿元，腾讯 2026 年 AI 投入翻倍。<b>需求端集中在少数几家，客户集中度风险高于美国六大买方结构。</b>',
+ ov:['AWS 营业利润率 30–37%'],cn:['阿里云 35.8%','华为云','腾讯云','三大运营商','地方国资智算中心']},
+{n:'大模型 / 应用',mkt:500,mg:-15,mt:'o',t:'fut',
+ d:'价格战比美国更激烈，API 价格已多轮下调。<b>多数厂商仍在亏损，且开源模型进一步压缩了闭源模型的定价空间</b>。这一层能否形成利润池，直接决定上游算力投入的可持续性。',
+ ov:['OpenAI','Anthropic'],cn:['DeepSeek','通义','豆包','智谱','Kimi']}
+];
+
+let view='G';
+function renderChain(){
+  const D = view==='G' ? GLOBAL : CHINA;
+  const unit = view==='G' ? '亿美元' : '亿元';
+  const maxM=Math.max.apply(null,D.map(x=>x.mkt));
+  const maxP=Math.max.apply(null,D.map(x=>x.mkt*Math.max(0,x.mg)/100));
+  document.getElementById('chain').innerHTML=D.map(function(x){
+    const t=NT[x.t], pool=x.mkt*Math.max(0,x.mg)/100;
+    const mlab = x.mt==='g' ? '毛利率' : '营业利润率';
+    const poolTxt = x.mg<0 ? '亏损' : Math.round(pool).toLocaleString()+' '+unit;
+    return '<div class="lay" style="--nc:var('+t[1]+');--ncb:var('+t[2]+')">'
+     +'<div class="lh"><span class="lname">'+x.n+'</span><span class="ntag">'+t[0]+'</span>'
+     +'<span style="margin-left:auto;font-size:11px;color:var(--ink3)">点击展开</span></div>'
+     +'<div class="grid3">'
+     +'<div><div class="mt">市场规模</div><div class="bar"><i style="width:'+Math.max(2,x.mkt/maxM*100)+'%;background:var(--ov)"></i></div><div class="bv">'+x.mkt.toLocaleString()+' '+unit+'</div></div>'
+     +'<div><div class="mt">利润率（'+mlab+'）</div><div class="bar"><i style="width:'+Math.max(2,Math.abs(x.mg))+'%;background:var('+(x.mg<0?'--g4':t[1])+')"></i></div><div class="bv">'+x.mg+'%</div></div>'
+     +'<div><div class="mt">利润池 = 规模×利润率</div><div class="bar"><i style="width:'+Math.max(1,pool/maxP*100)+'%;background:var('+t[1]+')"></i></div><div class="bv">'+poolTxt+'</div></div>'
+     +'</div>'
+     +'<div class="det">'+x.d+'<div class="players">'
+     + x.ov.map(p=>'<span class="pl o">'+p+'</span>').join('')
+     + x.cn.map(p=>'<span class="pl c">'+p+'</span>').join('')
+     +'</div></div></div>';
+  }).join('');
+  Array.prototype.forEach.call(document.querySelectorAll('.lay'),function(l){
+    l.onclick=function(){l.classList.toggle('open');};});
+  document.getElementById('chainnote').innerHTML = view==='G'
+   ? '<b>全球链的结构：利润集中在五个咽喉点。</b>芯片设计（英伟达 75% 毛利）、代工（台积电 64%）、光刻（ASML 53%）、存储（海力士 76% 营业利润率）、网络（62–77%）。<b>六大买方 2026 年投入超 7600 亿美元资本开支，绝大部分最终沉淀到这五个位置</b>，中间的服务器整机（12% 毛利）几乎不留下什么。这就是「卖铲子」最纯粹的形态——但铲子也分三六九等，整机厂就是那个只赚加工费的铲子。'
+   : '<b>中国链的结构：利润分布更平但高点更低。</b>没有 EUV 意味着代工毛利率只有约 20%（台积电 64%）；EDA 只有 20% 国内份额；材料因内卷出现龙头亏损。<b>真正赚到钱的只有三处：存储（长鑫 2026H1 净利率约 60%）、设备（国产化率从 10% 升到 26% 的红利）、光模块（全球第一）</b>。而这三处里，光模块的收入其实来自海外，存储刚上市且估值已高，只有设备是纯粹的国内替代红利。';
+}
+Array.prototype.forEach.call(document.querySelectorAll('.tab'),function(b){
+  b.onclick=function(){
+    Array.prototype.forEach.call(document.querySelectorAll('.tab'),x=>x.classList.remove('on'));
+    b.classList.add('on');view=b.dataset.v;renderChain();renderBubble();};
+});
+
+const tip=document.getElementById('tip');
+function renderBubble(){
+  const D=(view==='G'?GLOBAL:CHINA).filter(x=>x.mg>0);
+  const unit = view==='G' ? '亿美元' : '亿元';
+  const W=940,H=460,PL=62,PR=24,PT=22,PB=48;
+  const xs=D.map(d=>Math.log(d.mkt)/Math.LN10);
+  const x0=Math.min.apply(null,xs)-0.25, x1=Math.max.apply(null,xs)+0.25;
+  const X=v=>PL+((Math.log(v)/Math.LN10)-x0)/(x1-x0)*(W-PL-PR);
+  const Y=v=>H-PB-(v/90)*(H-PT-PB);
+  const maxPool=Math.max.apply(null,D.map(d=>d.mkt*d.mg/100));
+  const R=p=>6+Math.sqrt(p/maxPool)*40;
+  let g='';
+  for(let m=0;m<=90;m+=15){
+    g+='<line x1="'+PL+'" y1="'+Y(m)+'" x2="'+(W-PR)+'" y2="'+Y(m)+'" stroke="var(--line)" stroke-width="1"/>'
+     + '<text x="'+(PL-8)+'" y="'+(Y(m)+4)+'" text-anchor="end" font-size="10" fill="var(--ink3)">'+m+'%</text>';}
+  for(let e=Math.ceil(x0);e<=Math.floor(x1);e++){
+    const v=Math.pow(10,e);
+    g+='<line x1="'+X(v)+'" y1="'+PT+'" x2="'+X(v)+'" y2="'+(H-PB)+'" stroke="var(--line)" stroke-width="1"/>'
+     + '<text x="'+X(v)+'" y="'+(H-PB+16)+'" text-anchor="middle" font-size="10" fill="var(--ink3)">'+v.toLocaleString()+'</text>';}
+  const sorted=D.slice().sort((a,b)=>(b.mkt*b.mg)-(a.mkt*a.mg));
+  const bub=sorted.map(function(d){
+    const pool=d.mkt*d.mg/100, r=R(pool), t=NT[d.t];
+    const label=(d.n.length>7&&r<30)?d.n.slice(0,5)+'…':d.n;
+    return '<g class="bb" data-n="'+d.n+'" data-m="'+d.mkt+'" data-g="'+d.mg+'" data-p="'+Math.round(pool)
+     +'" data-t="'+t[0]+'" data-mt="'+(d.mt==='g'?'毛利率':'营业利润率')+'" style="cursor:pointer">'
+     +'<circle cx="'+X(d.mkt)+'" cy="'+Y(d.mg)+'" r="'+r+'" fill="var('+t[1]+')" opacity="0.34"/>'
+     +'<circle cx="'+X(d.mkt)+'" cy="'+Y(d.mg)+'" r="'+r+'" fill="none" stroke="var('+t[1]+')" stroke-width="1.8"/>'
+     +'<text x="'+X(d.mkt)+'" y="'+(Y(d.mg)+3.5)+'" text-anchor="middle" font-size="'+(r>26?11:9.5)+'" font-weight="650" fill="var(--ink)">'+label+'</text></g>';
+  }).join('');
+  document.getElementById('bubble').innerHTML='<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">'
+   + g + bub
+   + '<text x="'+(W/2)+'" y="'+(H-8)+'" text-anchor="middle" font-size="11" fill="var(--ink3)">市场规模（'+unit+'，对数刻度）</text>'
+   + '<text x="14" y="'+((H-PB+PT)/2)+'" text-anchor="middle" font-size="11" fill="var(--ink3)" transform="rotate(-90 14 '+((H-PB+PT)/2)+')">利润率</text></svg>';
+  Array.prototype.forEach.call(document.querySelectorAll('.bb'),function(el){
+    el.onmousemove=function(e){
+      const d=el.dataset;
+      tip.innerHTML='<b>'+d.n+'</b><br>类型：'+d.t+'<br>市场规模：'+Number(d.m).toLocaleString()+' '+unit
+        +'<br>'+d.mt+'：'+d.g+'%<br><b>利润池 = '+Number(d.p).toLocaleString()+' '+unit+'</b>';
+      tip.style.opacity=1;
+      tip.style.left=Math.min(window.innerWidth-290,e.clientX+14)+'px';
+      tip.style.top=(e.clientY+14)+'px';};
+    el.onmouseleave=function(){tip.style.opacity=0;};});
+}
+
+const N1=[
+{n:'英伟达 GPU 与 CUDA',k:'75% 毛利率 · 全球 >80%',
+ p:'<b>整条链最大的单一利润池。</b>护城河不在硅片而在软件——CUDA 让客户的迁移成本远高于换卡的价差。这是为什么昇腾在中国拿下 37% 份额、却几乎无法出口的根本原因：<b>行政力量能改变采购决策，改变不了已经写好的代码。</b>'},
+{n:'台积电 CoWoS 与 SoIC 先进封装',k:'64% 毛利率 · 产能订满至 2026',
+ p:'AI 芯片的<b>实际物理瓶颈</b>。所有高端 AI 芯片都要经过这一道，而产能扩张受设备与良率限制。国内封测（长电全球 12.2%）已替代传统封装，但 CoWoS 级仍完全依赖台积电——<b>这是国产 AI 芯片即使设计出来也可能造不出来的卡点。</b>'},
+{n:'ASML EUV',k:'53% 毛利率 · 全球唯一',
+ p:'全链条唯一的<b>单点绝对垄断</b>。没有替代方案，没有第二供应商。这一格决定了 5nm 以下的入场券——国产链在此的差距不是年限问题，是路径问题。'},
+{n:'EDA 三巨头',k:'约 85% 毛利率 · 合计 69%',
+ p:'<b>市场规模最小（133 亿美元），利润率最高。</b>壁垒是数十年积累的工艺库与设计习惯。国产 EDA 国内份额约 20%、工艺支撑停在 14nm——这是最容易被低估的卡点，因为它不像光刻机那样有实体，很难被「国产突破」的新闻覆盖。'}
+];
+const N2=[
+{n:'HBM 高带宽内存',k:'SK海力士 76% 营业利润率 · 份额 >70%',
+ p:'<b>本轮最彻底的黑马。</b>三年前 DRAM 还被视为周期性大宗商品，现在营业利润率超过英伟达的毛利率。成因是三重叠加：AI 需求突变、产能刚性（扩产周期 18–24 个月）、技术门槛意外提高（HBM 需要先进封装和极高良率）。<b>风险同样明确：这是周期峰值，76% 不可外推。</b>'},
+{n:'光模块 800G 与 1.6T',k:'中际旭创全球 23.4–27% · 1.6T 达 50–70%',
+ p:'从通信配件变成 AI 集群的关键成本项。集群规模越大，光互联占总成本比重越高。<b>中国厂商靠制造能力拿下全球第一，但也因此暴露在 FCC 制裁风险下</b>——它的紧缺是全球性的，它的风险是地缘性的。'},
+{n:'先进封装产能',k:'CoWoS 订满至 2026',
+ p:'与 HBM 同源的瓶颈：AI 芯片需要把 GPU 与 HBM 封在一起，产能扩不动，价格就有话语权。<b>在这个瓶颈缓解之前，谁能拿到 CoWoS 配额比谁的芯片设计更好更重要。</b>'},
+{n:'服务器电源与液冷',k:'单机柜功率密度跃升',
+ p:'机柜功率从十几千瓦跃升到上百千瓦，风冷失效、液冷成为刚需。国内英维克、申菱环境、科华数据在这一格有真实产品力，<b>且不涉及先进制程，是国产链里少见的没有卡脖子的高增长环节</b>。'}
+];
+const N3=[
+{n:'电力设备与自建发电',k:'变压器交期 128 周 · 美国市场 200亿→650亿美元',
+ p:'<b>推理依据：</b>2026 年宣布的 16GW 数据中心产能中仅约 5GW 在建，30–50% 管道面临延期，原因是变压器、开关设备和电网接入——<b>不是缺 GPU</b>。头部开发商已开始自建燃气发电绕过电网排队。<br><b>证伪条件：</b>若变压器产能在 2027 年前显著扩张、交期回落到 60 周以内，或 AI 资本开支整体放缓使电力需求同步下降，这个瓶颈就不成立。<br><b>中国差异：</b>中国电网与变压器产能都更充裕，这个瓶颈显著更弱——<b>对国产厂商而言这主要是出口机会而非内需机会。</b>'},
+{n:'CPO 共封装光学',k:'2026 全球约 80 亿美元（+433%）· 中国占全球订单 >65%',
+ p:'<b>推理依据：</b>CPO 把光引擎与交换 ASIC 封装在同一基板上，可降低数据中心功耗超 40%——在电力成为瓶颈的前提下，省电就是省钱。中国厂商在全产业链有优势，占全球订单 65% 以上、产能 40–50%，龙头订单能见度已到 2027 年二季度。2027 年全球市场预计跃升至 400 亿美元。<br><b>证伪条件：</b>系统良率问题可能把量产推迟到 2028–2029 年。若可插拔光模块通过升级（如线性驱动 LPO）解决了功耗问题，CPO 的紧迫性会大幅下降——<b>这会同时利好现有光模块厂商、利空 CPO 押注。</b>'},
+{n:'推理专用芯片与定制 ASIC',k:'谷歌 TPU · 博通定制 · 推理占比上升',
+ p:'<b>推理依据：</b>随着模型进入大规模部署，推理算力需求增速超过训练。推理对通用性要求低、对单位成本敏感，<b>这正是定制 ASIC 相对通用 GPU 的优势区间</b>。云厂商有强烈动机自研以摆脱英伟达定价。<br><b>证伪条件：</b>若模型架构继续快速迭代，ASIC 的开发周期（18–24 个月）会跟不上，通用 GPU 的灵活性重新占优。<br><b>对国产链的含义：推理是国产 AI 芯片最可能真正站住的场景</b>，因为生态迁移成本在推理侧远低于训练侧。'},
+{n:'人形机器人与具身智能',k:'中国 2026 出货约 6.25 万台 · 宇树毛利率 >60%',
+ p:'<b>推理依据：</b>中国 2025 年出货约 1.8 万台（+650%），2026 年预计 6.25 万台。宇树 2025 年全球出货第一、毛利率超 60%，单价从 2023 年 59.34 万元降到 2026 年中 2.99 万元，<b>成本曲线的下降速度与激光雷达高度相似</b>——而激光雷达最终由中国厂商拿下 80–95%。特斯拉 Optimus Gen3 已于 2026 年 7–8 月投产，全年目标约 1.5 万台。<br><b>证伪条件：</b>出货量统计口径各家差异极大，且当前出货以科研与展示为主，<b>若 2027 年前仍未出现规模化的真实商业场景，这就只是一场制造业内卷</b>。零部件端丝杠国产良率约 60%（海外 85%），仍有实质差距。'},
+{n:'端侧与边缘 AI',k:'推理下沉 · 功耗与成本约束',
+ p:'<b>推理依据：</b>云端推理成本高企，加上隐私与延迟需求，会把一部分推理推向终端。这一格对先进制程的依赖低于数据中心 GPU，<b>是国产芯片受制程限制影响最小的方向</b>。<br><b>证伪条件：</b>若云端推理成本因 ASIC 与能效提升快速下降，端侧的经济性理由就消失了。目前这一格尚未出现清晰的利润池，属于观察而非配置。'}
+];
+const FUT=[
+{n:'预判一：利润池会从算力供给向电力供给迁移一部分',
+ p:'<b>逻辑：</b>当 30–50% 的数据中心管道因电力问题延期，边际资本开支必然流向解决瓶颈的环节。电气设备市场 2026 至 2030 年从 200 亿增至 650 亿美元的预测隐含年复合约 34%，快于多数算力环节。<br><b>如果我错了会看到：</b>变压器交期在 2027 年内显著回落，或 AI 资本开支整体见顶导致电力需求同步下降。<br><b>中国链含义：</b>国内不缺电，因此这主要是<b>出口逻辑</b>而非国产替代逻辑，需要评估的是出海能力而非国产化率。'},
+{n:'预判二：HBM 的 76% 营业利润率不可持续，但存储的估值重估可能是持续的',
+ p:'<b>逻辑：</b>76% 是周期峰值，三星、美光正在扩产，长鑫也在追。峰值利润率一定回落。但另一件事可能持久：<b>市场对存储「周期性大宗商品、活该低估值」的认知已被打破</b>——如果 AI 使存储需求的波动性结构性下降，估值中枢有理由抬升。这两件事方向相反，需要分开判断。<br><b>如果我错了会看到：</b>2027 年存储价格快速回落且各厂重回价格战，说明周期属性未变。'},
+{n:'预判三：国产 AI 芯片的机会窗口在推理，不在训练',
+ p:'<b>逻辑：</b>训练侧的壁垒是 CUDA 生态、HBM 供给、先进制程，三项国产都受限。推理侧对生态依赖弱得多、对单位成本更敏感，而中国最擅长的正是成本曲线。国产在华份额已达 52.3%，但要变成利润而非份额，<b>需要在推理场景形成真实的性价比优势而非行政采购</b>。<br><b>如果我错了会看到：</b>国产芯片在训练集群上跑通万卡规模并被商业客户自愿采购，那说明生态壁垒被高估了。'},
+{n:'预判四：自动驾驶的价值会从硬件转向数据与算法闭环',
+ p:'<b>逻辑：</b>激光雷达已经从数万美元降到千元人民币量级，海外龙头破产——<b>硬件正在快速商品化</b>。2026 上半年中国城区 NOA 交付 204.69 万辆、全年预计 650 万辆，规模效应会把硬件利润进一步压薄。真正稀缺的会是数据规模与算法迭代速度。<br><b>如果我错了会看到：</b>某个新硬件品类（如 4D 毫米波、新型传感器）重新建立起硬件壁垒，或车企普遍选择自研而非采购，使供应商无法积累数据资产。<br><b>这一格对国产的含义与半导体相反：中国是领先方，问题是如何守住而非如何追上。</b>'},
+{n:'预判五：模型层若长期不盈利，整条链的估值前提就不成立',
+ p:'<b>逻辑：</b>六大买方 2026 年 7600 亿美元资本开支的最终依据，是这些算力能产生足够的下游收入。目前模型层多数仍在亏损，中国的价格战比美国更激烈，开源模型进一步压缩闭源定价空间。<b>这是整条链最大的单一系统性风险，也是唯一一个「上游全对、结论仍可能错」的变量。</b><br><b>如果我错了会看到：</b>模型层出现清晰的规模化盈利路径，或 AI 应用收入增速持续超过算力投入增速。2026 年 7 月底全球芯片股的大幅回调，本质上就是市场开始对这个问题打问号。'}
+];
+function mkN(arr,cls){
+  return arr.map(function(x){
+    return '<div class="niche" style="--nc:var(--'+cls+')"><div class="t"><span class="nm">'+x.n
+     +'</span><span class="kpi">'+(x.k||'')+'</span></div><p>'+x.p+'</p></div>';}).join('');
+}
+document.getElementById('n1').innerHTML=mkN(N1,'mono');
+document.getElementById('n2').innerHTML=mkN(N2,'dark');
+document.getElementById('n3').innerHTML=mkN(N3,'fut');
+document.getElementById('fut').innerHTML=mkN(FUT,'fut');
+
+const AI=[
+{s:'AI 加速芯片',g:'英伟达全球 >80%，毛利率 75%',c:'国产在华 52.3%（昇腾 37%），全球个位数',m:'NVDA 75% 毛利 vs 国产约 45%',st:'接近',stg:'tgc',
+ d:'份额差距在缩小，<b>利润率差距没有</b>。原因是英伟达的定价权来自 CUDA，不来自硅片。'},
+{s:'HBM 内存',g:'SK海力士 >70%，营业利润率 76%',c:'长鑫 DRAM 全球 7.85%，HBM 仍在追赶',m:'76% vs 长鑫 2026H1 净利率约 60%',st:'缺口',stg:'tgl',
+ d:'<b>中国链最大的单一缺口。</b>HBM 需要先进封装、极高良率、与 GPU 厂商联合认证，不是单靠扩产能解决。'},
+{s:'先进封装',g:'台积电 CoWoS 垄断，订满至 2026',c:'长电全球 12.2%，传统封装已替代',m:'台积电 64% 毛利 vs 国内封测约 15%',st:'缺口',stg:'tgl',
+ d:'CoWoS 级仍完全依赖台积电，<b>是国产 AI 芯片设计得出、造不出来的实际卡点</b>。'},
+{s:'网络 / 交换',g:'Broadcom、Arista 毛利 62–77%',c:'中兴、锐捷、新华三，主要国内市场',m:'70% vs 国产约 30%',st:'追赶',stg:'tgc',
+ d:'万卡集群后网络成本占比上升，<b>是被低估的高利润环节</b>。国产在国内市场可替代，全球市场无份额。'},
+{s:'光模块',g:'Coherent 约 16%',c:'中际旭创 23.4–27% 全球第一',m:'旭创 PE 61x vs COHR 前瞻 49x',st:'领先',stg:'tgw',
+ d:'<b>中国链唯一全球第一。</b>但 90% 以上收入来自境外，FCC 若禁令落地会被直接切断。'},
+{s:'AI 服务器',g:'Dell、HPE、超微，毛利约 12%',c:'浪潮、工业富联，毛利约 8%',m:'两边都薄，中国更薄',st:'薄利',stg:'tgo',
+ d:'<b>营收大、利润薄的典型。</b>AI 服务器的价值几乎全部由内部 GPU 与 HBM 决定。'},
+{s:'电力与散热',g:'Vertiv、Eaton、施耐德；变压器交期 128 周',c:'英维克、科华、中恒；国内不缺电',m:'海外约 25% 营业利润率',st:'机会',stg:'tgw',
+ d:'<b>国产链里少见的没有卡脖子的高增长环节</b>，但国内瓶颈弱，机会主要在出海。'},
+{s:'云服务',g:'六大买方 2026 资本开支 >7600 亿美元，营业利润率 30–37%',c:'阿里云 AI 云 35.8%，投入三年超 3800 亿元',m:'美国云利润率显著更高',st:'追赶',stg:'tgc',
+ d:'<b>中国云市场集中度更高</b>（阿里云超过第 2–4 名之和），意味着国产算力链的需求端客户集中度风险更大。'},
+{s:'模型层',g:'OpenAI、Anthropic，收入高增但多数亏损',c:'DeepSeek、通义、豆包，价格战更激烈',m:'两边都未形成稳定利润池',st:'未定',stg:'tgo',
+ d:'<b>整条链估值的最终依据。</b>开源模型压缩闭源定价空间，中国这一层的盈利难度高于美国。'}
+];
+document.getElementById('tbAI').innerHTML=AI.map(function(x){
+ return '<tr><td class="cnm">'+x.s+'</td><td style="color:var(--ink2)">'+x.g+'</td><td style="color:var(--ink2)">'+x.c
+  +'</td><td class="num">'+x.m+'</td><td><span class="tg '+x.stg+'">'+x.st+'</span></td>'
+  +'<td style="color:var(--ink2);font-size:12.2px">'+x.d+'</td></tr>';}).join('');
+
+const AD=[
+{lead:1,s:'激光雷达',mkt:'全球 2025 首破 10 亿美元（+60%）',c:'禾赛全球 43% 第一（Yole）、中国 55%；速腾聚创；华为。<b>中国厂商合计占全球车载 80–95%</b>',
+ o:'<b>Luminar 于 2025 年 12 月申请 Chapter 11 破产</b>；Valeo',st:'中国主导',stg:'tgw',
+ d:'中国厂商用成本曲线重新定义了品类，单价从数万美元降到千元人民币量级。<b>但全球市场总盘子仍不到 10 亿美元级</b>——赢的是小池子。'},
+{lead:1,s:'智驾芯片 · 全阶',mkt:'中国 2026 城区 NOA 交付预计 650 万辆',c:'<b>地平线 31.94% 第一</b>；华为 8.74%；黑芝麻智能',
+ o:'英伟达 29.38%；Mobileye 9.17%',st:'中国领先',stg:'tgw',
+ d:'地平线累计出货超 1100 万套，征程 6M 订单超 250 万颗。<b>但这是量的胜利。</b>'},
+{lead:0,s:'智驾芯片 · 城区 NOA 高阶',mkt:'2026H1 交付 204.69 万辆（同比 +约70%）',c:'地平线 22.82% 第二；华为 16.89% 第三',
+ o:'<b>英伟达 39.43% 第一</b>',st:'海外领先',stg:'tgl',
+ d:'<b>高阶单价是低阶数倍，利润集中在这一段。</b>地平线能否把这个 22.82% 往上推，决定它是走量厂商还是平台。'},
+{lead:0,s:'域控制器',mkt:'随高阶渗透率同步放量',c:'德赛西威、经纬恒润、华为等',o:'博世、大陆、安波福',st:'中国主导',stg:'tgw',
+ d:'绑定本土车企的迭代速度，海外 Tier1 的开发节奏跟不上中国车企的年度改款周期。'},
+{lead:0,s:'算法与数据闭环',mkt:'—',c:'华为 ADS、小鹏、蔚来、Momenta、地平线',o:'Tesla FSD、Mobileye、Waymo',st:'各有路线',stg:'tgo',
+ d:'<b>硬件商品化后，价值会向这一层转移。</b>中国的优势是路况复杂度与数据规模，劣势是数据出境与算力受限。'},
+{lead:0,s:'整车',mkt:'中国新能源渗透率全球最高',c:'比亚迪、理想、小鹏、蔚来、小米',o:'Tesla、传统车企',st:'中国主导',stg:'tgw',
+ d:'整车环节利润率普遍薄，<b>价值捕获在于能否把智驾变成品牌溢价而非成本项</b>。'}
+];
+document.getElementById('tbAD').innerHTML=AD.map(function(x){
+ return '<tr class="'+(x.lead?'lead1':'')+'"><td class="cnm">'+x.s+'</td><td class="num" style="white-space:normal">'+x.mkt
+  +'</td><td style="color:var(--ink2)">'+x.c+'</td><td style="color:var(--ink2)">'+x.o
+  +'</td><td><span class="tg '+x.stg+'">'+x.st+'</span></td>'
+  +'<td style="color:var(--ink2);font-size:12.2px">'+x.d+'</td></tr>';}).join('');
+
+renderChain();renderBubble();
+</script>
+</body>
+</html>

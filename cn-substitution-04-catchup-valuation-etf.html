@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>国产替代 · 追赶时间 / 估值对比 / ETF</title>
+<style>
+:root{
+ --bg:#faf9f7;--panel:#fff;--ink:#1f1e1c;--ink2:#57534e;--ink3:#8a8480;
+ --line:#e5e1dc;--line2:#d6d1ca;
+ --g1:#2f7d4f;--g1b:#e8f3ec; --g2:#8a8a1f;--g2b:#f5f5e4;
+ --g3:#b8722e;--g3b:#fbf0e5; --g4:#a83232;--g4b:#fbeaea;
+ --blue:#41608c;--blueb:#eef2f8; --gold:#9a7112;--goldb:#fbf4e2;
+ --accent:#1f1e1c;
+}
+@media(prefers-color-scheme:dark){:root{
+ --bg:#191817;--panel:#221f1d;--ink:#f0ece7;--ink2:#b6afa8;--ink3:#857d76;
+ --line:#332f2c;--line2:#443e3a;
+ --g1:#63b585;--g1b:#1a271f; --g2:#c3c35c;--g2b:#26260f;
+ --g3:#dd9a5e;--g3b:#2b2117; --g4:#e07070;--g4b:#2c1919;
+ --blue:#89aad6;--blueb:#1b222c; --gold:#d9b45c;--goldb:#2a2416;
+ --accent:#f0ece7;}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.65;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:1280px;margin:0 auto;padding:34px 22px 80px}
+h1{font-size:26px;margin:0 0 6px;letter-spacing:-.01em}
+.sub{color:var(--ink2);font-size:14px;margin:0 0 3px}
+.meta{color:var(--ink3);font-size:12.5px;margin:0 0 22px}
+h2{font-size:19px;margin:48px 0 6px;letter-spacing:-.01em}
+h2 .n{color:var(--ink3);font-weight:400;font-size:13.5px;margin-left:8px}
+h3{font-size:15px;margin:26px 0 8px}
+.lead{color:var(--ink2);font-size:13.5px;margin:0 0 16px;max-width:900px}
+.warn{background:var(--g4b);border:1px solid color-mix(in srgb,var(--g4) 28%,transparent);
+ border-radius:8px;padding:12px 15px;font-size:12.5px;color:var(--ink2);margin:0 0 14px;line-height:1.65}
+.warn b{color:var(--g4)}
+.note{background:var(--blueb);border:1px solid color-mix(in srgb,var(--blue) 28%,transparent);
+ border-radius:8px;padding:12px 15px;font-size:12.5px;color:var(--ink2);margin:14px 0;line-height:1.65}
+.note b{color:var(--blue)}
+.gold{background:var(--goldb);border:1px solid color-mix(in srgb,var(--gold) 32%,transparent);
+ border-radius:9px;padding:15px 17px;margin:16px 0}
+.gold h4{margin:0 0 6px;font-size:15px;color:var(--gold)}
+.gold p{margin:0;font-size:13px;color:var(--ink2);line-height:1.7}
+.gold p+p{margin-top:8px}
+
+table{width:100%;border-collapse:collapse;font-size:12.8px;margin-top:8px}
+th{text-align:left;font-size:11px;font-weight:650;color:var(--ink3);letter-spacing:.03em;
+ padding:8px 7px;border-bottom:1px solid var(--line2);white-space:nowrap;vertical-align:bottom}
+td{padding:8px 7px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:hover td{background:color-mix(in srgb,var(--panel) 72%,transparent)}
+.cn{font-weight:620;white-space:nowrap}
+.cd{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--ink3);font-weight:400;display:block}
+.num{font-family:ui-monospace,Menlo,monospace;white-space:nowrap;font-size:12.3px}
+.na{color:var(--ink3);font-size:11px;font-style:italic}
+.tag{font-size:10.5px;font-weight:700;padding:1.5px 6px;border-radius:4px;white-space:nowrap;display:inline-block}
+.t1{background:var(--g1b);color:var(--g1)} .t2{background:var(--g2b);color:var(--g2)}
+.t3{background:var(--g3b);color:var(--g3)} .t4{background:var(--g4b);color:var(--g4)}
+.tg{background:var(--goldb);color:var(--gold)} .tb{background:var(--blueb);color:var(--blue)}
+.bar{height:14px;background:var(--line);border-radius:4px;overflow:hidden;min-width:80px;position:relative}
+.bar i{display:block;height:100%;border-radius:4px}
+.barlbl{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--ink2);margin-top:2px}
+tr.win td{background:color-mix(in srgb,var(--g1b) 60%,transparent)}
+tr.win:hover td{background:var(--g1b)}
+.vs{font-size:11px;color:var(--ink3);text-align:center;font-weight:600}
+.sec{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:14px 16px;margin-bottom:9px}
+.sec h4{margin:0 0 4px;font-size:14.5px}
+.sec p{margin:0;font-size:12.6px;color:var(--ink2);line-height:1.6}
+.etf{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--blue);
+ border-radius:8px;padding:13px 15px;margin-bottom:9px}
+.etf .h{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:4px}
+.etf .nm{font-weight:650;font-size:14.5px}
+.etf .cdx{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--ink3)}
+.etf p{margin:4px 0 0;font-size:12.5px;color:var(--ink2);line-height:1.6}
+.mix{display:flex;height:18px;border-radius:4px;overflow:hidden;margin:7px 0 3px;font-size:9.5px;
+ font-weight:700;color:#fff;line-height:18px;text-align:center}
+.mix span{white-space:nowrap;overflow:hidden}
+footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink3);line-height:1.75}
+@media(max-width:820px){.wrap{padding:20px 12px 60px}h1{font-size:20px}table{font-size:11.5px}
+ th,td{padding:6px 4px}.hs{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>国产替代 · 追赶时间 / 估值对比 / ETF</h1>
+<p class="sub">追赶年限估算 · 国产 vs 海外正面对比 · 上市与未上市估值 · 相对估值排序 · ETF 覆盖度</p>
+<p class="meta">编制日期 2026-08-11 ｜ 估值数据混合 2026年5月与7–8月来源，已逐项标注 ｜ 承接 01–03 号文件</p>
+
+<div class="warn">
+<b>重要声明</b>　本页不是投资建议，我不是投资顾问，<b>不对任何标的给出买入或卖出意见</b>。第四节的"排序"是把估值倍数、增速、份额、突围度摆在同一张表上的<b>筛选框架</b>，不是推荐名单——排名靠前只代表"相对海外对标的估值溢价较低"，不代表更值得买；估值低往往正因为市场在为某个风险定价（本页第二节的中际旭创就是典型）。<br>
+<b>时效性</b>　2026 年 7 月底全球芯片股经历大幅回调（英伟达、SK海力士、三星、美光、AMD、台积电单周各蒸发超 1000 亿美元），本页部分 PE 来自回调前的 5 月数据，已在每行标注取数时点。个股请以交易所实时数据为准。
+</div>
+
+<div class="note" style="margin-top:0">
+<b>2026-08 补充</b>　本页范围为半导体上游。下游（AI 应用、自动驾驶、机器人）的价值链、利润分配与生态位分析见 <b>05 号文件</b>。两处结论需要连起来读：<b>本页第二节说"已超越海外的只有中际旭创一家"，那是在半导体口径下；把范围扩展到下游后，激光雷达才是中国优势最彻底的一格</b>——海外龙头 Luminar 已于 2025-12 破产，中国厂商占全球车载 80–95%。但激光雷达全球市场 2025 年才刚破 10 亿美元，池子远小于半导体任一环节。
+</div>
+
+<h2>一、各环节追平海外需要多久<span class="n">估算，非事实</span></h2>
+<p class="lead">下面的年限是<b>我的估算</b>，依据是：国产化率的历史爬升斜率、验证周期长度、是否存在设备/材料的外部封锁、以及生态壁垒的性质。<b>技术路线已经跑通、只差产能与份额的环节收敛快；生态型壁垒（EDA、CUDA、操作系统）几乎不随时间自然收敛</b>——那不是年限问题，是转换成本问题。带 ⚠ 的环节存在"可能永远追不平"的结构性理由。</p>
+
+<table>
+<thead><tr>
+<th>环节</th><th>当前国产化率</th><th style="width:120px">追平年限估算</th><th>收敛速度</th><th>依据与关键变量</th>
+</tr></thead>
+<tbody id="tb1"></tbody>
+</table>
+
+<div class="note">
+<b>为什么把 EDA、AI 芯片全球化、基础软件单独标 ⚠</b>　这三者的壁垒不是"技术做不出来"，而是<b>转换成本</b>。EDA 的壁垒是数十年的工艺库与设计习惯；AI 芯片的壁垒是 CUDA 生态与已有代码资产；操作系统与数据库的壁垒是第三方软件兼容。这类壁垒在封闭市场里可以靠行政力量快速突破（国产 AI 芯片在中国市场份额 2026Q1 已达 52.3%），但在开放市场里几乎不随时间自然收敛。<b>把"国内替代完成"误读为"追平海外"是这类环节最常见的判断错误。</b>
+</div>
+
+<h2>二、国产 vs 海外正面对比<span class="n">份额 · 收入 · 市值 · 市盈率</span></h2>
+<p class="lead">只对比已突围与接近突围的公司。绿色高亮行 = <b>在全球市场份额上已经超越海外对标</b>。注意最后一列"PE 相对倍数"——它揭示了一个反直觉的结构。</p>
+
+<table>
+<thead><tr>
+<th>国产公司</th><th>全球份额</th><th>收入</th><th>市值</th><th>PE</th>
+<th class="vs">vs</th>
+<th>海外对标</th><th>全球份额</th><th>收入</th><th>市值</th><th>PE</th><th>PE 相对倍数</th>
+</tr></thead>
+<tbody id="tb2"></tbody>
+</table>
+
+<div class="gold">
+<h4>已超越海外对标的只有一家：中际旭创 —— 而它的 PE 反而更低</h4>
+<p>全球光模块出货份额：<b>中际旭创 23.4–27%（连续三年全球第一），Coherent 约 16%</b>，Lumentum 更低。800G 市占 42%、1.6T 超 50%。2026Q1 营收 195 亿元（+192%）、净利 57 亿元（+262%）。这是本清单里唯一在全球范围内做到第一并把海外对标甩开的中国公司。</p>
+<p>但估值方向完全相反：<b>中际旭创 PE 约 61 倍，Coherent 前瞻 PE 49 倍（TTM 逾 180 倍），Lumentum 高达 159 倍</b>。在半导体链的其他每一格，国产公司都对海外对标有 4–8 倍的 PE 溢价（寒武纪 305x vs 英伟达约 45x；中芯 234x vs 台积电 20–30x；北方华创 90x vs AMAT 20–25x）。<b>唯独已经赢了的这一家，市场给了折价。</b></p>
+<p>折价的原因也很清楚：<b>美国 FCC 正在讨论禁止中国产光模块</b>，直接威胁其 27% 的全球份额，而其 90% 以上收入来自中国境外。这恰恰验证了六个模型"减配光模块"的判断——但也说明<b>市场已经在为这个风险定价了</b>。所以真正的问题不是"该不该回避"，而是"61 倍 vs 对标 159 倍的折价，是否已经充分反映 FCC 风险"。这个问题我无法替你回答，它取决于你对制裁概率的判断。</p>
+</div>
+
+<h2>三、估值总表<span class="n">已上市 PE/市值 · 未上市估值与融资</span></h2>
+
+<h3>已上市公司</h3>
+<table>
+<thead><tr>
+<th>公司</th><th>环节</th><th>市值</th><th>PE(TTM)</th><th>2026E PE</th><th>消化估值所需净利增速</th><th>数据时点</th>
+</tr></thead>
+<tbody id="tb3"></tbody>
+</table>
+
+<h3>未上市公司：估值与融资</h3>
+<table>
+<thead><tr>
+<th>公司</th><th>环节</th><th>最新估值</th><th>融资/上市进展</th><th>海外对标参照</th>
+</tr></thead>
+<tbody id="tb4"></tbody>
+</table>
+
+<div class="note">
+<b>未上市公司的估值口径要特别小心</b>　长江存储的 1600 亿（胡润独角兽榜）、3000 亿（IPO 辅导市场预期）、5000–8000 亿（券商上市后预测）是三个完全不同性质的数字：第一个是一级市场估值，第二个是发行定价预期，第三个是二级市场想象。上海微电子的 3000–6000 亿区间更是<b>没有任何官方数据支撑</b>，是市场按 ASML 市销率倒推再叠加国产溢价得出的——ASML 有 EUV 垄断，SMEE 产能 10 片/小时，用 PS 类比这件事本身就很勉强。
+</div>
+
+<h2>四、相对估值排序框架<span class="n">筛选工具，不是推荐名单</span></h2>
+<p class="lead">按<b>"相对海外对标的 PE 溢价倍数"</b>从低到高排序，并列出另外四个维度供你自己加权。<b>排名靠前 ≠ 更值得买</b>——低估值往往对应一个市场已识别的风险（见中际旭创的 FCC 风险、沪硅产业的亏损）。这张表的用途是让你看清"你为每一份增长预期付了多少钱"，以及"便宜的那些为什么便宜"。</p>
+
+<table>
+<thead><tr>
+<th>#</th><th>公司</th><th>PE</th><th>海外对标 PE</th><th>溢价倍数</th><th>全球份额</th><th>增速</th><th>突围度</th><th>关键风险 / 为什么是这个估值</th>
+</tr></thead>
+<tbody id="tb5"></tbody>
+</table>
+
+<div class="note">
+<b>这张表最该被读出来的一件事</b>　半导体链的国产龙头普遍对海外对标有 4–8 倍 PE 溢价，而中证半导指数整体估值已达 <b>177 倍</b>（2026年5月，Wind）。卖方的辩护理由是"在为 2026–2028 年的价值兑现提前定价"——这个说法可以成立，但它同时意味着：<b>如果国产化率提升的速度符合预期，你只是赚到了应得的；如果慢于预期，估值和业绩会双杀。</b>高估值不是看多的理由，它是对执行力零容错的要求。
+</div>
+
+<h2>五、ETF：最大公约数在哪里<span class="n">以及三个覆盖盲区</span></h2>
+<p class="lead">A 股目前有 <b>12 条半导体相关指数、40 余只 ETF、合计规模超 2215 亿元</b>。要找"最大公约数"，先要明确公约的是什么——是六个模型的共识（设备+材料"卖铲子"），还是本清单 103 家公司的最大覆盖。这两个答案不一样。</p>
+
+<h3>按六模型共识（设备+材料）：中证半导指数纯度最高的全市场选择</h3>
+<div id="etfs"></div>
+
+<div class="warn">
+<b>三个 ETF 覆盖不到的盲区 —— 这是"最大公约数"最重要的部分</b><br><br>
+<b>盲区一：唯一全球第一的公司不在任何半导体 ETF 里。</b>中际旭创属于通信/光模块板块，不进半导体指数。想要它必须单独买，或买通信/光模块主题 ETF。<br><br>
+<b>盲区二：三家最核心的标的还没上市。</b>长江存储（全球 NAND 13%）、上海微电子（光刻机唯一玩家）、华为海思（中国 AI 芯片 37%）都未上市，任何 A 股 ETF 都覆盖不到。长鑫科技 2026-07-27 才上市，按指数编制规则需等待观察期后才可能被纳入——<b>也就是说，此刻的半导体 ETF 里大概率还没有长鑫</b>，这是买 ETF 前必须自己去核对最新成分股的一点。<br><br>
+<b>盲区三：港股标的不在 A 股 ETF 里。</b>壁仞科技（06082.HK）、地平线（09660.HK）、黑芝麻智能（02533.HK）、金蝶国际（00268.HK）都在港股。<br><br>
+结论：<b>不存在一只能覆盖本清单的 ETF。</b>覆盖度最高的组合大致是「中证半导/半导体材料设备 ETF（吃设备材料）+ 单独持有已上市的存储与光模块标的」，而未上市的三家只能等 IPO。
+</div>
+
+<div class="gold">
+<h4>一个容易被忽略的矛盾：中韩半导体指数</h4>
+<p>12 条指数里，中韩半导体指数今年涨幅最高（超 121%），因为它约 50% 权重投向韩国的三星电子与 SK 海力士。但请注意这在逻辑上意味着什么：<b>如果你的投资论点是"国产存储会打下三星和海力士的定价权"，那么买这只指数等于同时押注命题的正反两面。</b></p>
+<p>它可以是个合理的选择——如果你的真实论点是"AI 存储超级周期"而不是"国产替代"，那么两边都拿反而更稳。但这两个论点常被混为一谈，值得先想清楚自己买的到底是哪一个。三星与 SK 海力士当前前瞻 PE 不到 6 倍、今年净利预计分别增长约 400% 和 300%，估值远低于任何一家国产同行。</p>
+</div>
+
+<footer>
+<b>追赶年限的估算方法</b>　以国产化率的历史爬升斜率外推（例如国产设备在中国 WFE 市场份额 2020 年 10% → 2024 年 17% → 2025 年 26%），叠加三项调整：验证周期长度（材料通常 2–3 年/品种）、是否存在外部设备封锁（光刻、EUV 相关环节大幅延长）、壁垒性质（生态型壁垒不随时间自然收敛，单独标 ⚠）。<b>这些是估算不是预测，误差可能很大，尤其在存在政策与制裁变量的环节。</b><br>
+<b>估值数据时点</b>　中际旭创、中芯国际、北方华创市值与 PE 为 2026 年 7–8 月数据；中微、拓荆、寒武纪、海光 PE 及 Wind 盈利预测为 2026 年 5 月 18–20 日数据（7 月底全球芯片股大幅回调后可能已显著变化）；海外公司 PE 为 2026 年 4–6 月数据。<b>混合时点的横向对比会产生偏差，使用前请自行更新。</b><br>
+<b>已知局限</b>　（1）PE 口径未统一（TTM / 前瞻 / 扣非），跨市场比较尤其粗糙。（2）中芯国际 234 倍 PE 受折旧与周期位置影响巨大，与台积电直接比 PE 意义有限，PB 或 EV/EBITDA 更合适。（3）未上市公司估值多为媒体或券商推测，无官方披露。（4）ETF 成分股按季度或半年调整，本页描述的权重结构会变化，实际持仓请以基金最新定期报告为准。（5）FCC 对中国光模块的限制仍在讨论阶段，尚未成为既定事实。<br>
+<b>主要来源</b>　21世纪经济报道/东方财富（半导体设备龙头估值全景扫描，2026-05-20）、新华网（12 条半导体指数对比，2026-05-08）、格隆汇/新浪财经（A股半导体主题ETF，2026-05-23）、LightCounting、CFM 闪存市场、Bernstein、大摩、高盛、胡润研究院《2025全球独角兽榜》、凤凰网/21经济网（长江存储与上海微电子估值）、wccftech（FCC 光模块讨论）、stockanalysis / 24-7 Wall St（Coherent、Lumentum 估值）。
+</footer>
+</div>
+
+<script>
+/* ============ 1. 追赶时间 ============ */
+const CATCH=[
+{s:"光模块 / 光互联",loc:"全球第一 23.4–27%",yr:"已超越",sp:0,note:"800G 市占 42%、1.6T 超 50%，技术无代差。<b>剩余风险不是技术追赶，是 FCC 可能禁止中国产光模块</b>。",g:"t1"},
+{s:"内存接口芯片",loc:"全球三强",yr:"已追平",sp:0,note:"澜起与 Rambus、瑞萨构成全球三强。DDR5 升级与服务器内存扩容直接受益。",g:"t1"},
+{s:"溅射靶材",loc:"晶圆制造靶材国内 38%",yr:"已基本追平",sp:5,note:"已进入全球主流晶圆厂供应链。<b>制约是市场天花板</b>——全球仅约 20 亿美元。",g:"t1"},
+{s:"清洗设备",loc:"50–60%",yr:"已基本追平",sp:8,note:"盛美 SAPS/TEBO 兆声波是<b>差异化技术路径而非模仿</b>，剩余差距在先进节点产能与全球客户覆盖。",g:"t1"},
+{s:"封装测试（传统）",loc:"长电全球 12.2%",yr:"已追平",sp:5,note:"全球第三，前三合计超 52%。传统封装替代已完成。",g:"t1"},
+{s:"NAND Flash",loc:"全球 13%",yr:"2–4 年",sp:20,note:"份额一年从 8% 升到 13%，Xtacking 架构提供独立路径。收敛快是因为<b>不依赖 EUV</b>。",g:"t1"},
+{s:"刻蚀设备",loc:"成熟 50–60%、先进 <15%",yr:"2–4 年（先进制程）",sp:22,note:"中微 5nm CCP 已达国际水平并进入台积电验证——<b>技术已跑通，缺的是量产份额</b>，这类差距收敛最快。",g:"t1"},
+{s:"DRAM（不含 HBM）",loc:"全球 7.7–8%",sp:28,yr:"3–5 年",note:"份额一年从 3% 到 8%，全球第四。制程落后 1–2 代但产能扩张激进。",g:"t2"},
+{s:"DRAM 之 HBM",loc:"追赶阶段",yr:"5–8 年",sp:55,note:"⚠ <b>这是存储环节唯一的实质缺口。</b>HBM 需要先进封装 + 极高良率 + 与 GPU 厂商的联合认证，三项都不是单靠扩产能解决的。海力士 HBM 全球 50–55%。",g:"t3"},
+{s:"热处理 / 炉管",loc:"30–40%",yr:"3–5 年",sp:35,note:"国产化率中等偏上，差距在先进制程的原子层级温控与均匀性。",g:"t2"},
+{s:"先进封装（CoWoS 级）",loc:"传统已替代",yr:"3–5 年",sp:40,note:"长电 2026 年固投约 100 亿投向先进封装。壁垒是台积电的产能与良率积累，非不可复制。",g:"t2"},
+{s:"湿电子化学品",loc:"中低端高、G4/G5 低",yr:"3–5 年",sp:38,note:"通用等级已替代，超高纯等级的金属离子控制是剩余难点。",g:"t2"},
+{s:"半导体硅片（12 英寸）",loc:"8 寸 55%、12 寸 10%",yr:"4–6 年",sp:45,note:"需求确定、技术路线清晰，缺的是良率与成本。但<b>沪硅 2025 净亏 15.08 亿</b>——价格战意味着追上份额不等于追上盈利。",g:"t3"},
+{s:"电子特气",loc:"约 30%",yr:"4–6 年",sp:45,note:"认证周期 2–3 年/品种 × 数十个品种，<b>时间由流程决定而非技术</b>，因此收敛速度稳定但不会突然加速。",g:"t3"},
+{s:"CMP 设备",loc:"成熟 15–25%、先进 <10%",yr:"4–6 年",sp:50,note:"华海清科国内第一，AMAT 与荏原主导。先进封装扩产会拉动需求。",g:"t3"},
+{s:"封装基板（ABF）",loc:"约 30%",yr:"4–6 年",sp:48,note:"AI 芯片带动 ABF 载板需求暴增，高层数良率是难点。",g:"t3"},
+{s:"薄膜沉积 CVD/PVD/ALD",loc:"CVD/ALD 5–10%",yr:"5–8 年",sp:62,note:"<b>市场第二大（282 亿美元）但渗透率最低</b>的一格。ALD 与高深宽比填充是硬骨头。空间大，难度同样大。",g:"t3"},
+{s:"涂胶显影",loc:"成熟 10–15%",yr:"5–8 年",sp:65,note:"东京电子全球超 85%。难点在于<b>必须与光刻机联机验证</b>——光刻机不突破，track 也难独立突破。",g:"t3"},
+{s:"离子注入",loc:"成熟 10–20%、先进 <5%",yr:"5–8 年",sp:65,note:"低能大束流有进展，高能注入机基本空白。",g:"t3"},
+{s:"光刻胶 ArF",loc:"2%",yr:"5–8 年",sp:70,note:"南大光电 2025 年底成为首家 ArF 量产企业并通过中芯、长存验证——<b>0 到 1 已完成，1 到 N 需要时间</b>。",g:"t3"},
+{s:"量测检测",loc:"低两位数",yr:"6–10 年",sp:75,note:"KLA 垄断度最高。<b>先进节点的套刻精度量测与电子束检测基本空白</b>，且制程越先进该环节价值量占比越高。",g:"t4"},
+{s:"掩膜版（高端）",loc:"约 15%",yr:"6–9 年",sp:72,note:"Photronics、Hoya、Toppan 主导，先进节点基本空白。",g:"t4"},
+{s:"晶圆代工（先进制程）",loc:"中芯全球 4.8–6%",yr:"5–10 年 ⚠",sp:80,note:"⚠ <b>强依赖 EUV。</b>N+2（7nm 级）靠 DUV 多重曝光实现，成本与良率劣势随节点推进放大。<b>没有 EUV，5nm 以下不是时间问题而是路径问题</b>。成熟制程另当别论——那里 2–3 年内可追平。",g:"t4"},
+{s:"光刻机 DUV",loc:"个位数",yr:"5–8 年",sp:82,note:"SSA800 28nm 浸没式 2026 年初交付中芯测试，良率超 90%、国产化率超 85%。但<b>产能 10 片/小时 vs ASML 170 片/小时</b>——差距在工程化与稼动率，不在原理。",g:"t4"},
+{s:"光刻机 EUV",loc:"无产品",yr:"10–15 年 ⚠",sp:95,note:"⚠ 全链条差距最大的一格。EUV 光源、多层膜反射镜、双工件台每一项都是独立的世界级难题，且供应链被完全封锁。",g:"t4"},
+{s:"光刻胶 EUV",loc:"研发阶段",yr:"10 年+ ⚠",sp:92,note:"⚠ 无 EUV 光刻机则无验证平台，与光刻机形成<b>互相锁死的依赖</b>。",g:"t4"},
+{s:"EDA",loc:"国内约 20%，支撑到 14nm",yr:"8–12 年 ⚠",sp:85,note:"⚠ <b>不是技术问题是生态问题。</b>Synopsys 32%+Cadence 23%+Siemens 14% = 全球 69%。数字先进节点全流程空白，工艺库与设计习惯积累了数十年，不随时间自然收敛。",g:"t4"},
+{s:"AI 芯片（中国市场）",loc:"52.3%（2026Q1）",yr:"基本完成",sp:15,note:"昇腾 37%、英伟达降至 15–20%。大摩预计自给率 2024 年 21% → 2030 年 86%。<b>在封闭市场里行政力量可以快速替代。</b>",g:"t1"},
+{s:"AI 芯片（全球市场）",loc:"个位数",yr:"8–12 年 ⚠",sp:88,note:"⚠ 英伟达全球份额仍超 80%。壁垒是 CUDA 生态与既有代码资产的迁移成本，<b>把国内份额 52% 读成「追平英伟达」是最常见的误读</b>。",g:"t4"},
+{s:"基础软件 OS/数据库",loc:"信创高、商业市场低",yr:"生态问题 ⚠",sp:85,note:"⚠ 党政金融信创已成规模，商业市场仍由 Oracle、微软主导。差距在迁移成本、第三方兼容与开发者规模，<b>不是年限能解决的类型</b>。",g:"t4"}
+];
+document.getElementById("tb1").innerHTML=CATCH.map(x=>`<tr>
+ <td class="cn">${x.s}</td>
+ <td class="num" style="color:var(--ink2)">${x.loc}</td>
+ <td><span class="tag ${x.g}">${x.yr}</span></td>
+ <td><div class="bar"><i style="width:${Math.max(3,x.sp)}%;background:var(--${x.g==='t1'?'g1':x.g==='t2'?'g2':x.g==='t3'?'g3':'g4'})"></i></div>
+     <div class="barlbl">差距 ${x.sp}</div></td>
+ <td style="color:var(--ink2)">${x.note}</td></tr>`).join("");
+
+/* ============ 2. 正面对比 ============ */
+const VS=[
+{win:1,cn:"中际旭创",cd:"300308.SZ",cs:"23.4–27%",cr:"382.4 亿元<br><span class='cd'>2025 · +60.25%</span>",cm:"1.4 万亿",cp:"61x",
+ fn:"Coherent",fc:"COHR",fs:"约 16%",fr:"$1.805B<br><span class='cd'>FQ3'26 · +21%</span>",fm:"未核实",fp:"49x 前瞻<br><span class='cd'>TTM >180x</span>",rel:"1.2x / 0.3x",relg:"t1"},
+{win:0,cn:"长鑫科技",cd:"688825.SH",cs:"7.85%（#4）",cr:"1150 亿元<br><span class='cd'>2026H1 预计</span>",cm:"3.28 万亿",cp:"约 22–25x<br><span class='cd'>2026E 推算</span>",
+ fn:"SK 海力士",fc:"000660.KS",fs:"29.6%（#2）",fr:"未核实",fm:"未核实",fp:"<6x 前瞻",rel:"约 4x",relg:"t3"},
+{win:0,cn:"长江存储",cd:"未上市",cs:"13%",cr:"未披露",cm:"约 3000 亿<br><span class='cd'>IPO 预期</span>",cp:"—",
+ fn:"铠侠 Kioxia",fc:"285A.T",fs:"14%",fr:"未核实",fm:"未核实",fp:"未核实",rel:"—",relg:"tb"},
+{win:0,cn:"长电科技",cd:"600584.SH",cs:"12.2%（#3）",cr:"未核实",cm:"未核实",cp:"未核实",
+ fn:"日月光 ASE",fc:"ASX",fs:"全球第一",fr:"未核实",fm:"未核实",fp:"未核实",rel:"—",relg:"tb"},
+{win:0,cn:"北方华创",cd:"002371.SZ",cs:"3.8%（#7）",cr:"393.53 亿元<br><span class='cd'>2025 · +30.85%</span>",cm:"5903 亿",cp:"90x",
+ fn:"应用材料 AMAT",fc:"AMAT",fs:"全球 #1",fr:"$7.012B<br><span class='cd'>Q1'26 单季</span>",fm:"$3181 亿<br><span class='cd'>2026-04</span>",fp:"约 20–25x",rel:"约 4x",relg:"t3"},
+{win:0,cn:"中微公司",cd:"688012.SH",cs:"7.7%（刻蚀）",cr:"123.85 亿元<br><span class='cd'>2025 · +36.62%</span>",cm:"未核实",cp:"110.5x<br><span class='cd'>2026-05</span>",
+ fn:"泛林 Lam Research",fc:"LRCX",fs:"刻蚀全球 #1",fr:"$5.841B<br><span class='cd'>Q1'26 单季</span>",fm:"未核实",fp:"约 25–30x",rel:"约 4x",relg:"t3"},
+{win:0,cn:"中芯国际",cd:"688981.SH",cs:"4.8–6%（#3）",cr:"673.23 亿元<br><span class='cd'>2025 · +16.5%</span>",cm:"1.27 万亿",cp:"234x",
+ fn:"台积电 TSMC",fc:"TSM",fs:"全球 #1",fr:"未核实",fm:"未核实",fp:"约 20–30x",rel:"约 8–10x",relg:"t4"},
+{win:0,cn:"寒武纪",cd:"688256.SH",cs:"中国 7–9%",cr:"64.97 亿元<br><span class='cd'>2025 · +453%</span>",cm:"8288 亿<br><span class='cd'>2026-05</span>",cp:"305x",
+ fn:"英伟达 NVIDIA",fc:"NVDA",fs:"全球 >80%",fr:"未核实",fm:"未核实",fp:"约 45x TTM<br><span class='cd'>22x 前瞻</span>",rel:"约 7x",relg:"t4"},
+{win:0,cn:"海光信息",cd:"688041.SH",cs:"未核实",cr:"未核实",cm:"未核实",cp:"266x<br><span class='cd'>2026-05</span>",
+ fn:"AMD",fc:"AMD",fs:"中国 10–12%",fr:"未核实",fm:"未核实",fp:"未核实",rel:"—",relg:"t4"},
+{win:0,cn:"拓荆科技",cd:"688072.SH",cs:"未核实",cr:"未核实",cm:"未核实",cp:"95.41x<br><span class='cd'>2026-05</span>",
+ fn:"AMAT / Lam / ASM",fc:"—",fs:"合计主导",fr:"未核实",fm:"未核实",fp:"约 20–30x",rel:"约 4x",relg:"t3"},
+{win:0,cn:"盛美上海",cd:"688082.SH",cs:"14.3%",cr:"67.86 亿元<br><span class='cd'>2025</span>",cm:"未核实",cp:"未核实",
+ fn:"SCREEN",fc:"7735.T",fs:"清洗全球 #1",fr:"未核实",fm:"未核实",fp:"未核实",rel:"—",relg:"tb"}
+];
+document.getElementById("tb2").innerHTML=VS.map(x=>`<tr class="${x.win?'win':''}">
+ <td class="cn">${x.win?'<span class="tag t1" style="margin-right:5px">已超越</span><br>':''}${x.cn}<span class="cd">${x.cd}</span></td>
+ <td class="num">${x.cs}</td><td class="num">${x.cr}</td><td class="num">${x.cm}</td>
+ <td class="num" style="font-weight:600">${x.cp}</td>
+ <td class="vs">vs</td>
+ <td class="cn" style="color:var(--ink2)">${x.fn}<span class="cd">${x.fc}</span></td>
+ <td class="num">${x.fs}</td><td class="num">${x.fr}</td><td class="num">${x.fm}</td>
+ <td class="num" style="font-weight:600">${x.fp}</td>
+ <td><span class="tag ${x.relg}">${x.rel}</span></td></tr>`).join("");
+
+/* ============ 3a. 已上市估值 ============ */
+const LISTED=[
+{n:"长鑫科技",c:"688825.SH",s:"DRAM",mc:"3.28 万亿",pe:"发行价对应 2025 PE 308.92x",pe26:"约 22–25x 推算",gr:"2026H1 净利 660–750 亿",d:"2026-07 上市首日"},
+{n:"中际旭创",c:"300308.SZ",s:"光模块",mc:"1.4 万亿",pe:"61x",pe26:"未核实",gr:"2026Q1 净利 +262%",d:"2026-07/08"},
+{n:"中芯国际",c:"688981.SH",s:"晶圆代工",mc:"1.27 万亿",pe:"234x",pe26:"未核实",gr:"2025 净利 +36.3%",d:"2026-07/08"},
+{n:"寒武纪",c:"688256.SH",s:"AI 芯片",mc:"8288 亿",pe:"305x",pe26:"154x",gr:"需连续两年净利翻倍（+96%/年）才能匹配",d:"2026-05-18"},
+{n:"北方华创",c:"002371.SZ",s:"半导体设备",mc:"5903 亿",pe:"90x（5月为 81x）",pe26:"56x",gr:"需 35–45%；Wind 预测 44%/37%/28%",d:"2026-07/08"},
+{n:"海光信息",c:"688041.SH",s:"服务器 CPU",mc:"未核实",pe:"266x",pe26:"未核实",gr:"隐含超高速增长押注",d:"2026-05-18"},
+{n:"中微公司",c:"688012.SH",s:"刻蚀设备",mc:"未核实",pe:"110.5x",pe26:"93.4x",gr:"需 30–40%；Wind 预测 53%/38%/33%",d:"2026-05-18"},
+{n:"拓荆科技",c:"688072.SH",s:"薄膜沉积",mc:"未核实",pe:"95.41x",pe26:"90.5x",gr:"<b>当前 PE 与 2026E 基本持平，几乎未透支未来</b>",d:"2026-05-18"},
+{n:"摩尔线程",c:"688795.SH",s:"AI 芯片",mc:"未核实",pe:"仍亏损",pe26:"—",gr:"2026H1 营收 +147%，亏损收窄",d:"2026-08"},
+{n:"沐曦股份",c:"688802.SH",s:"AI 芯片",mc:"未核实",pe:"未核实",pe26:"—",gr:"上市首日 +692.95%",d:"2025-12"},
+{n:"壁仞科技",c:"06082.HK",s:"AI 芯片",mc:"逾 1300 亿港元",pe:"未核实",pe26:"—",gr:"2026-01 上市",d:"2026-01"},
+{n:"沪硅产业",c:"688126.SH",s:"半导体硅片",mc:"未核实",pe:"<b>亏损，PE 不适用</b>",pe26:"—",gr:"2025 净亏 15.08 亿，300mm 销量 +27%",d:"2025 年报"},
+{n:"中证半导指数",c:"指数",s:"设备+材料 69%",mc:"—",pe:"<b>177x（整体估值）</b>",pe26:"—",gr:"年内涨超 60%（截至5月）",d:"2026-05-20 Wind"}
+];
+document.getElementById("tb3").innerHTML=LISTED.map(x=>`<tr>
+ <td class="cn">${x.n}<span class="cd">${x.c}</span></td>
+ <td style="color:var(--ink2);font-size:12px">${x.s}</td>
+ <td class="num">${x.mc}</td>
+ <td class="num" style="font-weight:600">${x.pe}</td>
+ <td class="num">${x.pe26}</td>
+ <td style="color:var(--ink2);font-size:12px">${x.gr}</td>
+ <td class="cd" style="display:table-cell">${x.d}</td></tr>`).join("");
+
+/* ============ 3b. 未上市估值 ============ */
+const UNLISTED=[
+{n:"长江存储 YMTC",s:"NAND（全球 13%）",v:"胡润独角兽榜 <b>1600 亿</b>（2025）<br>IPO 市场预期 <b>约 3000 亿</b><br>券商上市后预测 5000–8000 亿",
+ f:"2026-05-19 启动 IPO 辅导（中信证券+中信建投），拟募资 300–400 亿，预计 2026 下半年上市。前七大股东均为国资，合计持股约 93%，湖北国资超 44%。",o:"铠侠 14%、美光 13% 份额相当"},
+{n:"上海微电子 SMEE",s:"光刻机",v:"<b>无官方数据。</b>市场推测区间 3000–6000 亿<br><span class='cd'>按 ASML 市销率倒推约 2250 亿，叠加国产溢价约 3000 亿</span>",
+ f:"2024-10 主动撤回科创板辅导备案（董事长与核心高管变动 + 技术涉密）。母公司短期无上市计划。",o:"ASML 有 EUV 垄断，用 PS 类比勉强"},
+{n:"芯上微装",s:"后道光刻/先进封装",v:"<b>约 280 亿</b>（2026-01 融资后）",
+ f:"上海微电子分拆后道光刻及先进封装业务成立，2026-01 完成资产整合与新一轮融资，计划 <b>2027 年提交科创板 IPO</b>。这是目前唯一有明确上市路径的光刻资产。",o:"—"},
+{n:"华为海思 / 昇腾",s:"AI 芯片（中国 37%）",v:"<b>无公开估值。</b>注册资本 20 亿元，华为 100% 持股",
+ f:"无 IPO 时间表。作为华为全资子公司，短期上市可能性低。",o:"英伟达全球 >80%"},
+{n:"燧原科技",s:"AI 芯片",v:"拟募资 <b>60 亿</b>",
+ f:"2026-07-09 证监会同意注册，拟发行 6835 万股，预计 8 月中旬上市。腾讯贡献超八成营收为审核关注点。",o:"—"},
+{n:"飞腾信息",s:"服务器/桌面 CPU",v:"未核实",f:"未核实",o:"Intel、AMD、Ampere"},
+{n:"麒麟软件 / 统信软件",s:"操作系统",v:"未核实",f:"未核实",o:"微软、Red Hat"},
+{n:"芯华章",s:"EDA",v:"未核实",f:"未核实",o:"Synopsys、Cadence"},
+{n:"中欣晶圆",s:"半导体硅片",v:"未核实",f:"2025-10 办理北交所 IPO 辅导备案。2025 年营收 17.4 亿（+30.31%）。",o:"信越、SUMCO"}
+];
+document.getElementById("tb4").innerHTML=UNLISTED.map(x=>`<tr>
+ <td class="cn">${x.n}</td>
+ <td style="color:var(--ink2);font-size:12px">${x.s}</td>
+ <td style="font-size:12.3px">${x.v}</td>
+ <td style="color:var(--ink2);font-size:12.3px">${x.f}</td>
+ <td style="color:var(--ink3);font-size:12px">${x.o}</td></tr>`).join("");
+
+/* ============ 4. 排序框架 ============ */
+const RANK=[
+{n:"中际旭创",c:"300308.SZ",pe:"61x",fpe:"COHR 49x 前瞻 / LITE 159x",rel:0.4,relt:"0.4–1.2x",gs:"23.4–27% 全球第一",gr:"净利 +262%",bo:"已超越",bog:"t1",
+ risk:"<b>美国 FCC 正讨论禁止中国产光模块</b>，>90% 收入来自境外。低估值正是这个风险的定价，不是市场没看见。"},
+{n:"长鑫科技",c:"688825.SH",pe:"约 22–25x（2026E）",fpe:"三星/海力士 <6x 前瞻",rel:4,relt:"约 4x",gs:"7.85% 全球第四",gr:"2026H1 净利 660–750 亿",bo:"已突围",bog:"t1",
+ risk:"上市首日 +465%，市值 3.28 万亿已price in大量预期。HBM 缺口未补。存储处于超级周期高位，<b>周期股在盈利峰值时 PE 最低</b>——低 PE 可能是顶部信号而非便宜。"},
+{n:"拓荆科技",c:"688072.SH",pe:"95.41x",fpe:"AMAT/Lam 约 20–30x",rel:4,relt:"约 4x",gs:"未核实",gr:"—",bo:"追赶中",bog:"t3",
+ risk:"<b>当前 PE 95.41x 与 2026E 90.5x 基本持平，几乎未透支未来</b>——设备股里估值结构最干净的一个。但所处的薄膜沉积环节国产化率仅 5–10%，替代尚未真正发生。"},
+{n:"北方华创",c:"002371.SZ",pe:"90x（5月 81x）",fpe:"AMAT 约 20–25x",rel:4,relt:"约 4x",gs:"3.8% 全球第七",gr:"Wind 预测 44%/37%/28%",bo:"已突围",bog:"t1",
+ risk:"消化当前 PE 需 35–45% 净利增速，Wind 预测基本匹配。<b>但 2025 研发投入 72.77 亿、人员扩张导致费用前置，短期利润端受压</b>。"},
+{n:"中微公司",c:"688012.SH",pe:"110.5x",fpe:"Lam 约 25–30x",rel:4,relt:"约 4x",gs:"7.7%（刻蚀）",gr:"Wind 预测 53%/38%/33%",bo:"已突围",bog:"t1",
+ risk:"需 30–40% 复合增速消化估值，长鑫长存扩产直接拉动刻蚀订单，基本面支撑较实。5nm 已进台积电验证。风险在于扩产周期一旦转向，订单弹性反向同样剧烈。"},
+{n:"寒武纪",c:"688256.SH",pe:"305x",fpe:"NVDA 约 45x TTM",rel:7,relt:"约 7x",gs:"中国 7–9%",gr:"Wind 预测 161%/86%/57%",bo:"接近",bog:"t2",
+ risk:"<b>需连续两年净利翻倍（约 +96%/年）才能匹配当前估值。</b>高盛 5 月上调盈利预测与目标价至 2406 元（对应 2027E 102x）。一旦客户订单节奏放缓，估值承压剧烈。"},
+{n:"海光信息",c:"688041.SH",pe:"266x",fpe:"AMD 未核实",rel:7,relt:"约 7x",gs:"未核实",gr:"2025 净利 +31.66%",bo:"接近",bog:"t2",
+ risk:"x86 授权路线，生态兼容是优势也是风险（授权可持续性）。266x PE 隐含的增速预期与当前 +31.66% 的实际增速存在明显落差。"},
+{n:"中芯国际",c:"688981.SH",pe:"234x",fpe:"TSMC 约 20–30x",rel:9,relt:"约 8–10x",gs:"4.8–6% 全球第三",gr:"2025 净利 +36.3%",bo:"接近",bog:"t2",
+ risk:"<b>PE 口径本身失真</b>——代工是重资产周期股，折旧摊销吞噬利润，PE 234x 不代表贵到那个程度，应看 PB 或 EV/EBITDA。真实风险是无 EUV 导致 5nm 以下路径受阻。"},
+{n:"沪硅产业",c:"688126.SH",pe:"亏损",fpe:"信越/SUMCO 未核实",rel:99,relt:"不适用",gs:"未核实",gr:"2025 净亏 15.08 亿",bo:"追赶中",bog:"t3",
+ risk:"<b>12 英寸国产化率仅 10%，空间大；但价格战导致 2025 净亏 15.08 亿。</b>这是「份额追上不等于盈利追上」的最直接例证。"}
+];
+document.getElementById("tb5").innerHTML=RANK.map((x,i)=>`<tr>
+ <td class="num" style="font-weight:700;color:var(--ink3)">${i+1}</td>
+ <td class="cn">${x.n}<span class="cd">${x.c}</span></td>
+ <td class="num" style="font-weight:600">${x.pe}</td>
+ <td class="num" style="color:var(--ink2)">${x.fpe}</td>
+ <td><span class="tag ${x.rel<=1?'t1':x.rel<=4?'t3':x.rel>90?'tb':'t4'}">${x.relt}</span></td>
+ <td class="num">${x.gs}</td>
+ <td style="font-size:12px;color:var(--ink2)">${x.gr}</td>
+ <td><span class="tag ${x.bog}">${x.bo}</span></td>
+ <td style="font-size:12.2px;color:var(--ink2)">${x.risk}</td></tr>`).join("");
+
+/* ============ 5. ETF ============ */
+const ETFS=[
+{n:"中证半导指数",cd:"代表 ETF：半导体设备ETF招商 561980",
+ mix:[["设备",58,"var(--blue)"],["材料",11,"var(--g1)"],["其他",31,"var(--line2)"]],
+ p:"<b>最贴合六模型共识的全市场指数。</b>设备 58% + 材料 11% = 69%，是 8 条全产业链指数里唯一以材料设备为主的。全市场选不超过 40 只，前十大集中度 <b>76.11%</b>：北方华创、中微公司、中芯国际、海光信息、韦尔股份、华海清科、南大光电、拓荆科技、长川科技、中科飞测。2020 年以来累计上涨 416%，在 A 股主流半导体指数中居首。代表 ETF 规模约 37 亿（2026-05），日均成交约 3 亿。"},
+{n:"半导体材料设备指数 / 科创半导体材料设备指数",cd:"代表 ETF：半导体设备ETF易方达 159558 等",
+ mix:[["材料设备",86,"var(--blue)"],["其他",14,"var(--line2)"]],
+ p:"<b>纯度最高：材料设备权重 86%</b>，其他环节基本为 0。若你的论点严格是「卖铲子」，这是最纯粹的表达。科创板版本因个股涨跌幅 ±20%，波动显著更大——2026 上半年鹏华科创半导体设备 ETF 涨 177.30%，为全市场半导体 ETF 第一。"},
+{n:"中证全指半导体指数",cd:"范围最广的「半导体大集合」",
+ mix:[["设计",45,"var(--g3)"],["制造封测",30,"var(--g2)"],["材料设备",25,"var(--blue)"]],
+ p:"覆盖公司数量最多，与本清单 103 家的重合度最高。但代价是<b>数字芯片设计权重超 45%</b>——买它更多是买芯片设计，而不是六个模型推荐的设备材料。若你要的是「最大公约数覆盖「而非「最大共识纯度」，这是答案。"},
+{n:"中韩半导体指数",cd:"唯一跨境指数 · 2026 年内涨超 121%",
+ mix:[["韩国（三星/海力士）",50,"var(--g4)"],["A股半导体链",50,"var(--blue)"]],
+ p:"<b>涨幅最高，但逻辑上与「国产替代」论点冲突。</b>约 50% 权重投向三星电子与 SK 海力士——正是长鑫和长江存储要替代的对象。它适合的论点是「AI 存储超级周期」，不是「国产替代」。两者常被混为一谈。"},
+{n:"科创芯片指数",cd:"代表 ETF：科创芯片ETF嘉实 588200（规模最大）",
+ mix:[["设计",50,"var(--g3)"],["制造封测",25,"var(--g2)"],["材料设备",25,"var(--blue)"]],
+ p:"只投科创板芯片公司，全产业链覆盖。科创板 ±20% 涨跌幅使其弹性最大。<b>注意长鑫科技（688825）也在科创板</b>——它未来最可能被这一类指数纳入，但需等待观察期，当前成分股请自行核对。"}
+];
+document.getElementById("etfs").innerHTML=ETFS.map(x=>`<div class="etf">
+ <div class="h"><span class="nm">${x.n}</span><span class="cdx">${x.cd}</span></div>
+ <div class="mix">${x.mix.map(m=>`<span style="width:${m[1]}%;background:${m[2]}">${m[1]>=12?m[0]+' '+m[1]+'%':''}</span>`).join("")}</div>
+ <p>${x.p}</p></div>`).join("");
+</script>
+</body>
+</html>
