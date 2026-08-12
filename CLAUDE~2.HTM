@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude 生态读取关系图谱 · Chat / Cowork / Project / Claude Code</title>
+<meta name="description" content="Chat、Cowork、Project、Claude Code 之间的记忆、指令与读取边界，附实测验证与更正日志。">
+<style>
+:root{
+  --bg:#faf9f5; --card:#fff;
+  --tp:#1a1a18; --ts:#5c5b57; --tm:#8f8d85; --tf:#b5b2a9;
+  --ac:#c15f3c; --ac-soft:#f3e6e0;
+  --b1:#e8e5dd; --b2:#d6d3ca; --b3:#b8b5ab;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; padding:0; background:var(--bg); color:var(--tp);
+  font-family:ui-sans-serif,system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  line-height:1.7; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1000px;margin:0 auto;padding:56px 28px 88px}
+header{border-bottom:1px solid var(--b2);padding-bottom:28px;margin-bottom:8px}
+h1{font-size:27px;font-weight:700;margin:0 0 10px;letter-spacing:-.01em}
+.lede{font-size:14px;color:var(--ts);margin:0 0 14px;max-width:70ch}
+.meta{font-size:11.5px;color:var(--tm)}
+nav{margin:30px 0 42px;padding:18px 22px;background:var(--card);border:1px solid var(--b1);border-radius:10px}
+nav h2{font-size:11px;font-weight:700;color:var(--tm);margin:0 0 10px;letter-spacing:.06em;text-transform:uppercase}
+nav ol{margin:0;padding-left:20px;columns:2;column-gap:36px}
+nav li{font-size:12.5px;margin-bottom:5px;break-inside:avoid}
+nav a{color:var(--tp);text-decoration:none;border-bottom:1px solid transparent}
+nav a:hover{border-bottom-color:var(--ac);color:var(--ac)}
+section{margin-bottom:56px;scroll-margin-top:20px}
+h2{font-size:19px;font-weight:700;margin:0 0 6px;letter-spacing:-.005em}
+h2 .num{color:var(--ac);font-size:14px;margin-right:9px;font-weight:700}
+.sub{font-size:12.5px;color:var(--tm);margin:0 0 20px;max-width:74ch}
+figure{margin:0 0 18px;padding:20px;background:var(--card);border:1px solid var(--b1);border-radius:10px}
+svg{width:100%;height:auto;display:block}
+p{font-size:13.5px;color:var(--ts);max-width:74ch;margin:0 0 13px}
+p strong{color:var(--tp);font-weight:600}
+.key{border-left:2.5px solid var(--ac);padding:2px 0 2px 14px;margin:18px 0;font-size:13.5px;color:var(--tp)}
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin:16px 0 6px;background:var(--card)}
+th,td{padding:8px 11px;text-align:left;border-bottom:1px solid var(--b1);vertical-align:top}
+th{font-size:11.5px;font-weight:600;color:var(--ts);border-bottom:1.5px solid var(--b2);background:#fcfbf8}
+td.c,th.c{text-align:center}
+.y{color:var(--ac);font-weight:600}
+.n{color:var(--tf)}
+code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:11.5px;background:#f2efe9;padding:1.5px 5px;border-radius:3px;color:var(--tp)}
+.legend{font-size:11.5px;color:var(--tm);margin-top:10px;line-height:1.85}
+.log{background:var(--card);border:1px solid var(--b1);border-radius:10px;padding:22px 24px}
+.log h3{font-size:13px;font-weight:700;margin:0 0 12px}
+.log ul{margin:0;padding-left:19px}
+.log li{font-size:12.5px;color:var(--ts);margin-bottom:9px}
+.log li b{color:var(--tp)}
+.tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;margin-right:7px;vertical-align:1px}
+.tag.fix{background:var(--ac-soft);color:var(--ac)}
+.tag.test{background:#e9eee9;color:#4a6b4a}
+footer{margin-top:64px;padding-top:22px;border-top:1px solid var(--b2);font-size:11.5px;color:var(--tm)}
+footer a{color:var(--tm)}
+@media (max-width:720px){
+  .wrap{padding:34px 17px 60px}
+  nav ol{columns:1}
+  h1{font-size:22px}
+}
+@media print{
+  body{background:#fff}
+  nav{display:none}
+  section{break-inside:avoid;page-break-inside:avoid}
+  figure{border-color:#ddd}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Claude 生态读取关系图谱</h1>
+  <p class="lede">Chat、Cowork、Project、Claude Code 之间的记忆、指令与读取边界。全部结论经实机验证，与官方文档冲突处以实测为准并标注。项目名与文件内容已做脱敏处理。</p>
+  <p class="meta">2026-08 整理 · 实测环境：Windows 桌面端 + Web + 浏览器扩展</p>
+</header>
+
+<nav>
+  <h2>目录</h2>
+  <ol>
+    <li><a href="#s1">一个核心区分：注入面 vs 可达面</a></li>
+    <li><a href="#s2">三条互不相通的上下文栈</a></li>
+    <li><a href="#s3">Instruction 与 Memory 的关系</a></li>
+    <li><a href="#s4">Project 的真实作用</a></li>
+    <li><a href="#s5">实例：多项目下的可达范围</a></li>
+    <li><a href="#s6">项目文件夹：指定 vs 未指定</a></li>
+    <li><a href="#s7">终端：云端跟人走，本地跟机器走</a></li>
+    <li><a href="#s8">外部 agent 的边界</a></li>
+    <li><a href="#s9">实测记录与更正日志</a></li>
+  </ol>
+</nav>
+
+<!-- ============ 1 ============ -->
+<section id="s1">
+<h2><span class="num">01</span>一个核心区分：注入面 vs 可达面</h2>
+<p class="sub">整份文档最重要的一条。把这两件事混为一谈，会产生错误的"隔离感"。</p>
+
+<figure>
+<svg viewBox="0 0 880 428" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="注入面与可达面分层图">
+<defs>
+<marker id="p1" markerWidth="11" markerHeight="11" refX="10" refY="5.5" orient="auto"><path d="M0,1 L11,5.5 L0,10 z" fill="#c15f3c"/></marker>
+</defs>
+<text x="20" y="18" font-size="12.5" font-weight="700" fill="#1a1a18">① 注入面 —— 开局自动进上下文</text>
+
+<rect x="20" y="28" width="390" height="180" rx="9" fill="none" stroke="#c15f3c" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text x="34" y="48" font-size="11.5" font-weight="700" fill="#c15f3c">Instruction　层层叠加</text>
+<rect x="34" y="56" width="362" height="38" rx="5" fill="none" stroke="#d6d3ca" stroke-width="1.1"/>
+<text x="46" y="72" font-size="11" font-weight="600" fill="#1a1a18">账户级「Instructions for Claude」</text>
+<text x="384" y="72" text-anchor="end" font-size="9.5" fill="#c15f3c">Chat + Cowork</text>
+<text x="46" y="87" font-size="9.5" fill="#8f8d85">设置 › General，字段说明写明覆盖两者</text>
+<rect x="34" y="100" width="362" height="38" rx="5" fill="none" stroke="#d6d3ca" stroke-width="1.1"/>
+<text x="46" y="116" font-size="11" font-weight="600" fill="#1a1a18">Cowork 全局指令</text>
+<text x="384" y="116" text-anchor="end" font-size="9.5" fill="#5c5b57">仅 Cowork</text>
+<text x="46" y="131" font-size="9.5" fill="#8f8d85">只存在于桌面应用，Web 端设置里没有这一栏</text>
+<rect x="34" y="144" width="362" height="42" rx="5" fill="none" stroke="#c15f3c" stroke-width="1.9"/>
+<text x="46" y="161" font-size="11" font-weight="700" fill="#c15f3c">★ Project 指令</text>
+<text x="384" y="161" text-anchor="end" font-size="9.5" font-weight="600" fill="#c15f3c">该项目的 Chat + Cowork</text>
+<text x="46" y="177" font-size="9.5" fill="#c15f3c">唯一横跨两种会话的可靠通道</text>
+
+<rect x="450" y="28" width="390" height="180" rx="9" fill="none" stroke="#8f8d85" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text x="464" y="48" font-size="11.5" font-weight="700" fill="#8f8d85">Memory　格格隔离</text>
+<rect x="464" y="56" width="178" height="42" rx="5" fill="none" stroke="#d6d3ca" stroke-width="1.1"/>
+<text x="553" y="74" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1a1a18">Chat 全局记忆</text>
+<text x="553" y="89" text-anchor="middle" font-size="9.5" fill="#8f8d85">仅项目外聊天</text>
+<rect x="656" y="56" width="178" height="42" rx="5" fill="none" stroke="#d6d3ca" stroke-width="1.1"/>
+<text x="745" y="74" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1a1a18">Chat 项目记忆</text>
+<text x="745" y="89" text-anchor="middle" font-size="9.5" fill="#8f8d85">每个项目一份</text>
+<rect x="464" y="106" width="178" height="42" rx="5" fill="none" stroke="#d6d3ca" stroke-width="1.1"/>
+<text x="553" y="124" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1a1a18">Cowork 项目记忆</text>
+<text x="553" y="139" text-anchor="middle" font-size="9.5" fill="#8f8d85">每个项目一份</text>
+<rect x="656" y="106" width="178" height="42" rx="5" fill="none" stroke="#8f8d85" stroke-width="1.1" stroke-dasharray="4 3"/>
+<text x="745" y="124" text-anchor="middle" font-size="10.5" font-weight="600" fill="#8f8d85">Cowork 非项目</text>
+<text x="745" y="139" text-anchor="middle" font-size="9.5" fill="#8f8d85">无记忆</text>
+<line x1="644" y1="70" x2="654" y2="84" stroke="#8f8d85" stroke-width="1.8"/><line x1="654" y1="70" x2="644" y2="84" stroke="#8f8d85" stroke-width="1.8"/>
+<line x1="644" y1="120" x2="654" y2="134" stroke="#8f8d85" stroke-width="1.8"/><line x1="654" y1="120" x2="644" y2="134" stroke="#8f8d85" stroke-width="1.8"/>
+<text x="649" y="172" text-anchor="middle" font-size="10" fill="#8f8d85">四格互不注入，也没有优先级</text>
+<text x="649" y="190" text-anchor="middle" font-size="10" fill="#8f8d85">Chat 的历史搜索同样受这条边界限制</text>
+
+<line x1="20" y1="234" x2="840" y2="234" stroke="#8f8d85" stroke-width="2.4" stroke-dasharray="9 6"/>
+<text x="20" y="252" font-size="11" font-weight="600" fill="#8f8d85">Project 边界　—　只拦得住"自动注入"</text>
+
+<line x1="640" y1="316" x2="640" y2="222" stroke="#c15f3c" stroke-width="3.4" marker-end="url(#p1)"/>
+<text x="656" y="262" font-size="11" font-weight="700" fill="#c15f3c">主动调工具 → 直接穿过</text>
+<text x="656" y="280" font-size="10" fill="#5c5b57">拦不住</text>
+
+<text x="20" y="300" font-size="12.5" font-weight="700" fill="#c15f3c">② 可达面 —— 主动查就能拿到</text>
+<rect x="20" y="312" width="600" height="46" rx="8" fill="none" stroke="#c15f3c" stroke-width="2"/>
+<text x="320" y="332" text-anchor="middle" font-size="12" font-weight="700" fill="#c15f3c">任意一个 Cowork 会话</text>
+<text x="320" y="349" text-anchor="middle" font-size="10" fill="#5c5b57">包括不属于任何 project 的</text>
+
+<text x="20" y="382" font-size="10.5" fill="#5c5b57">▸ 全部 Cowork 会话逐字稿　—　session_info 返回扁平列表，压根不带 project 字段</text>
+<text x="20" y="400" font-size="10.5" fill="#5c5b57">▸ 全部定时任务与 Artifacts　—　都堆在同一个目录下，无项目分区</text>
+<text x="20" y="418" font-size="10.5" fill="#5c5b57">▸ 本地文件夹　·　浏览器可打开任意 chat 页面读内容　·　Cowork project 还能主动链接 chat project</text>
+</svg>
+</figure>
+
+<div class="key"><strong>Project 隔离的是"自动想起"，不是"能不能查到"。</strong>记忆不会跨项目注入——这条成立。但只要主动调工具，跨项目的内容全都拿得到。</div>
+
+<p>这个区分有实际后果：如果你原本指望把敏感内容放进单独的 project 就能与其他会话隔离开，<strong>那是不成立的</strong>。目前真正做到不留痕的只有 Chat 侧的隐身对话（不写入历史、不进记忆），Cowork 这边没有对等机制。</p>
+</section>
+
+<!-- ============ 2 ============ -->
+<section id="s2">
+<h2><span class="num">02</span>三条互不相通的上下文栈</h2>
+<p class="sub">Claude Code 不是第三种模式，是完全另一套状态系统——共用的只有账号、额度和硬盘。</p>
+
+<figure>
+<svg viewBox="0 0 880 516" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Chat、Cowork、Claude Code 三栏上下文对比">
+<defs>
+<marker id="c1" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0.5 L9,4.5 L0,8.5 z" fill="#c15f3c"/></marker>
+</defs>
+
+<rect x="14" y="18" width="272" height="348" rx="9" fill="none" stroke="#d6d3ca" stroke-width="1.3"/>
+<text x="150" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a18">Chat</text>
+<text x="150" y="55" text-anchor="middle" font-size="9.5" fill="#8f8d85">云端 · 逐轮对话</text>
+<text x="28" y="76" font-size="9.5" font-weight="700" fill="#c15f3c">开局读的 Instruction</text>
+<rect x="28" y="82" width="244" height="34" rx="5" fill="none" stroke="#e8e5dd" stroke-width="1"/>
+<text x="40" y="96" font-size="10.5" font-weight="600" fill="#1a1a18">账户级 Instructions for Claude</text>
+<text x="40" y="109" font-size="9" fill="#8f8d85">设置 › General</text>
+<rect x="28" y="120" width="244" height="34" rx="5" fill="none" stroke="#c15f3c" stroke-width="1.4"/>
+<text x="40" y="134" font-size="10.5" font-weight="600" fill="#c15f3c">★ Project 指令</text>
+<text x="40" y="147" font-size="9" fill="#c15f3c">项目级角色与口径设定</text>
+<text x="28" y="188" font-size="9.5" font-weight="700" fill="#8f8d85">开局读的 Memory</text>
+<rect x="28" y="194" width="244" height="32" rx="5" fill="none" stroke="#e8e5dd" stroke-width="1"/>
+<text x="40" y="214" font-size="10.5" fill="#1a1a18">全局记忆（项目外聊天）</text>
+<rect x="28" y="230" width="244" height="32" rx="5" fill="none" stroke="#e8e5dd" stroke-width="1"/>
+<text x="40" y="250" font-size="10.5" fill="#1a1a18">项目记忆（项目内）</text>
+<rect x="28" y="266" width="244" height="32" rx="5" fill="none" stroke="#e8e5dd" stroke-width="1"/>
+<text x="40" y="286" font-size="10.5" fill="#1a1a18">历史对话搜索（受项目边界）</text>
+<text x="150" y="326" text-anchor="middle" font-size="9.5" fill="#8f8d85">状态全在云端</text>
+<text x="150" y="344" text-anchor="middle" font-size="9.5" fill="#8f8d85">读不到本地文件</text>
+
+<rect x="304" y="18" width="272" height="348" rx="9" fill="none" stroke="#d6d3ca" stroke-width="1.3"/>
+<text x="440" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a18">Cowork</text>
+<text x="440" y="55" text-anchor="middle" font-size="9.5" fill="#8f8d85">云端跑 · 可伸手到本机</text>
+<text x="318" y="76" font-size="9.5" font-weight="700" fill="#c15f3c">开局读的 Instruction</text>
+<rect x="318" y="82" width="244" height="34" rx="5" fill="none" stroke="#e8e5dd" stroke-width="1"/>
+<text x="330" y="96" font-size="10.5" font-weight="600" fill="#1a1a18">账户级 Instructions for Claude</text>
+<text x="330" y="109" font-size="9" fill="#8f8d85">与 Chat 同一份</text>
+<rect x="318" y="120" width="244" height="34" rx="5" fill="none" stroke="#e8e5dd" stroke-width="1"/>
+<text x="330" y="134" font-size="10.5" font-weight="600" fill="#1a1a18">Cowork 全局指令</text>
+<text x="330" y="147" font-size="9" fill="#8f8d85">桌面应用独有</text>
+<rect x="318" y="158" width="244" height="30" rx="5" fill="none" stroke="#c15f3c" stroke-width="1.4"/>
+<text x="330" y="177" font-size="10.5" font-weight="600" fill="#c15f3c">★ Project 指令（同一份）</text>
+<rect x="318" y="192" width="244" height="30" rx="5" fill="none" stroke="#e8e5dd" stroke-width="1"/>
+<text x="330" y="211" font-size="10.5" fill="#1a1a18">Folder 指令（绑文件夹时）</text>
+<text x="318" y="242" font-size="9.5" font-weight="700" fill="#8f8d85">开局读的 Memory</text>
+<rect x="318" y="248" width="244" height="32" rx="5" fill="none" stroke="#e8e5dd" stroke-width="1"/>
+<text x="330" y="268" font-size="10.5" fill="#1a1a18">项目记忆（仅项目内会话）</text>
+<rect x="318" y="284" width="244" height="32" rx="5" fill="none" stroke="#8f8d85" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="330" y="304" font-size="10.5" fill="#8f8d85">非项目会话 = 无记忆</text>
+<text x="440" y="336" text-anchor="middle" font-size="9.5" fill="#c15f3c">状态在云端 · 经桌面 app 够到本机</text>
+
+<rect x="594" y="18" width="272" height="348" rx="9" fill="none" stroke="#c15f3c" stroke-width="1.7"/>
+<text x="730" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#c15f3c">Claude Code</text>
+<text x="730" y="55" text-anchor="middle" font-size="9.5" fill="#8f8d85">纯本地 · 按工作目录组织</text>
+<text x="608" y="76" font-size="9.5" font-weight="700" fill="#c15f3c">开局读的 Instruction</text>
+<rect x="608" y="82" width="244" height="30" rx="5" fill="none" stroke="#e8e5dd" stroke-width="1"/>
+<text x="620" y="101" font-size="10.5" fill="#1a1a18">~/.claude/CLAUDE.md（用户级）</text>
+<rect x="608" y="116" width="244" height="30" rx="5" fill="none" stroke="#e8e5dd" stroke-width="1"/>
+<text x="620" y="135" font-size="10.5" fill="#1a1a18">CLAUDE.md（工作目录）</text>
+<rect x="608" y="150" width="244" height="30" rx="5" fill="none" stroke="#e8e5dd" stroke-width="1"/>
+<text x="620" y="169" font-size="10.5" fill="#1a1a18">CLAUDE.local.md · settings.json</text>
+<rect x="608" y="184" width="244" height="34" rx="5" fill="none" stroke="#8f8d85" stroke-width="1.3" stroke-dasharray="5 4"/>
+<text x="620" y="198" font-size="10.5" font-weight="700" fill="#8f8d85">✕ 不支持 Project</text>
+<text x="620" y="211" font-size="9" fill="#8f8d85">官方称计划支持 · 也不读上面两栏任何指令</text>
+<text x="608" y="242" font-size="9.5" font-weight="700" fill="#8f8d85">开局读的 Memory</text>
+<rect x="608" y="248" width="244" height="32" rx="5" fill="none" stroke="#e8e5dd" stroke-width="1"/>
+<text x="620" y="262" font-size="10.5" fill="#1a1a18">Auto memory（Claude 自己写）</text>
+<text x="620" y="274" font-size="8.5" fill="#8f8d85">~/.claude/projects/&lt;repo&gt;/memory/</text>
+<rect x="608" y="284" width="244" height="32" rx="5" fill="none" stroke="#e8e5dd" stroke-width="1"/>
+<text x="620" y="298" font-size="10.5" fill="#1a1a18">会话历史 .jsonl</text>
+<text x="620" y="310" font-size="8.5" fill="#8f8d85">按工作目录分组存放</text>
+<text x="730" y="336" text-anchor="middle" font-size="9.5" fill="#c15f3c">状态 100% 在本机硬盘上</text>
+<text x="730" y="352" text-anchor="middle" font-size="9.5" fill="#8f8d85">没写 CLAUDE.md 就等于每次白纸开局</text>
+
+<line x1="150" y1="368" x2="330" y2="424" stroke="#c15f3c" stroke-width="1.6" marker-end="url(#c1)"/>
+<line x1="440" y1="368" x2="440" y2="424" stroke="#c15f3c" stroke-width="1.6" marker-end="url(#c1)"/>
+<line x1="730" y1="368" x2="550" y2="424" stroke="#c15f3c" stroke-width="1.6" marker-end="url(#c1)"/>
+<text x="150" y="392" text-anchor="middle" font-size="9" fill="#8f8d85">仅经浏览器</text>
+
+<rect x="14" y="428" width="852" height="50" rx="8" fill="none" stroke="#c15f3c" stroke-width="2"/>
+<text x="440" y="449" text-anchor="middle" font-size="12" font-weight="700" fill="#c15f3c">你的硬盘　—　三者唯一真正共用的东西</text>
+<text x="440" y="466" text-anchor="middle" font-size="10" fill="#5c5b57">Cowork 能读 ~/.claude/（已实测）　·　Claude Code 能读 Cowork 的产出　·　两边都能读你的项目文件夹</text>
+
+<text x="440" y="504" text-anchor="middle" font-size="10.5" fill="#8f8d85">三种分组维度互不可译：Chat 按项目分　·　Cowork 按会话分（扁平）　·　Claude Code 按工作目录分</text>
+</svg>
+</figure>
+
+<table>
+<thead><tr><th>这三者之间</th><th class="c">Chat</th><th class="c">Cowork</th><th class="c">Claude Code</th></tr></thead>
+<tbody>
+<tr><td>账户级 Instructions for Claude</td><td class="c y">读</td><td class="c y">读</td><td class="c n">不读</td></tr>
+<tr><td>Project（指令 + 知识库 + 记忆）</td><td class="c y">支持</td><td class="c y">支持</td><td class="c n">不支持</td></tr>
+<tr><td>云端记忆</td><td class="c y">有</td><td class="c">仅项目内</td><td class="c n">没有</td></tr>
+<tr><td>CLAUDE.md / auto memory</td><td class="c n">无关</td><td class="c n">无关</td><td class="c y">这是它的全部</td></tr>
+<tr><td>技能与插件（SKILL.md 格式）</td><td class="c">部分</td><td class="c y">通用</td><td class="c y">通用</td></tr>
+<tr><td>MCP 连接器</td><td class="c y">共用账号配置</td><td class="c y">共用账号配置</td><td class="c">本地各配各的</td></tr>
+<tr><td>用量额度</td><td class="c y">同一份</td><td class="c y">同一份</td><td class="c y">同一份</td></tr>
+<tr><td>换台电脑还在吗</td><td class="c y">在</td><td class="c y">在</td><td class="c n">不在</td></tr>
+</tbody>
+</table>
+
+<p>想让 Claude Code 的上下文跟着你走，只有一个办法：把 <code>CLAUDE.md</code> 放进被 Git 或云盘同步的目录。它在 Claude Code 里扮演的角色，正好等于 Project 指令在 Chat / Cowork 里的角色。</p>
+</section>
+
+<!-- ============ 3 ============ -->
+<section id="s3">
+<h2><span class="num">03</span>Instruction 与 Memory 的关系</h2>
+<p class="sub">一个是每次开局必读的合同，一个是可能被想起的笔记。</p>
+
+<figure>
+<svg viewBox="0 0 880 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Instruction 与 Memory 的两条注入路径">
+<defs>
+<marker id="i1" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,1 L10,5 L0,9 z" fill="#c15f3c"/></marker>
+<marker id="i2" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,1 L10,5 L0,9 z" fill="#8f8d85"/></marker>
+</defs>
+<rect x="14" y="26" width="226" height="66" rx="7" fill="none" stroke="#c15f3c" stroke-width="1.6"/>
+<text x="127" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a18">Instruction</text>
+<text x="127" y="72" text-anchor="middle" font-size="10.5" fill="#5c5b57">你写的规则</text>
+<line x1="246" y1="59" x2="304" y2="59" stroke="#c15f3c" stroke-width="2.6" marker-end="url(#i1)"/>
+<text x="275" y="42" text-anchor="middle" font-size="10" font-weight="600" fill="#c15f3c">必然注入</text>
+<text x="275" y="80" text-anchor="middle" font-size="9.5" fill="#8f8d85">确定性</text>
+<rect x="312" y="26" width="196" height="66" rx="7" fill="none" stroke="#b8b5ab" stroke-width="1.6"/>
+<text x="410" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a18">本次会话上下文</text>
+<text x="410" y="72" text-anchor="middle" font-size="10.5" fill="#5c5b57">Claude 实际看到的东西</text>
+<line x1="574" y1="59" x2="516" y2="59" stroke="#8f8d85" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#i2)"/>
+<text x="545" y="42" text-anchor="middle" font-size="10" font-weight="600" fill="#8f8d85">判断相关才取</text>
+<text x="545" y="80" text-anchor="middle" font-size="9.5" fill="#8f8d85">非确定性</text>
+<rect x="580" y="26" width="226" height="66" rx="7" fill="none" stroke="#8f8d85" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text x="693" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a18">Memory</text>
+<text x="693" y="72" text-anchor="middle" font-size="10.5" fill="#5c5b57">Claude 自动写的事实</text>
+<text x="410" y="118" text-anchor="middle" font-size="10.5" fill="#8f8d85">记忆本质上是 instruction 的弱版本 —— 内容相似，但不保证生效</text>
+</svg>
+</figure>
+
+<table>
+<thead><tr><th></th><th>Instruction</th><th>Memory</th></tr></thead>
+<tbody>
+<tr><td>谁来写</td><td>你手写（Folder 指令 Claude 可自更新）</td><td>Claude 边聊边自动写</td></tr>
+<tr><td>回答什么</td><td>该怎么做 —— 口径、格式、禁忌</td><td>你是谁、发生过什么 —— 角色、偏好、项目进展</td></tr>
+<tr><td>是否保证生效</td><td class="y">是，每次开局注入</td><td>否，Claude 觉得相关才调</td></tr>
+<tr><td>跨 Chat / Cowork</td><td class="y">Project 指令通</td><td>完全不通</td></tr>
+<tr><td>跨 Claude Code</td><td class="n">不通，它只读 CLAUDE.md</td><td class="n">不通</td></tr>
+<tr><td>你怎么改</td><td>直接编辑对应层级的指令框</td><td>Settings › Memory 里查看 / 编辑 / 删除</td></tr>
+</tbody>
+</table>
+
+<div class="key">凡是"必须每次都生效"的东西，写进指令，不要指望记忆。</div>
+</section>
+
+<!-- ============ 4 ============ -->
+<section id="s4">
+<h2><span class="num">04</span>Project 的真实作用</h2>
+<p class="sub">同一个 Project 里，Chat 会话和 Cowork 会话共享的是指令与知识库，不是记忆。</p>
+
+<figure>
+<svg viewBox="0 0 880 296" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Project 内部结构与读写方向">
+<defs>
+<marker id="a1" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0.5 L9,4.5 L0,8.5 z" fill="#c15f3c"/></marker>
+</defs>
+<rect x="14" y="26" width="546" height="252" rx="12" fill="none" stroke="#c15f3c" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text x="30" y="18" font-size="12.5" font-weight="700" fill="#c15f3c">Project</text>
+<rect x="34" y="46" width="506" height="56" rx="6" fill="none" stroke="#b8b5ab" stroke-width="1.4"/>
+<text x="287" y="70" text-anchor="middle" font-size="13" font-weight="600" fill="#1a1a18">项目共享层</text>
+<text x="287" y="88" text-anchor="middle" font-size="10.5" fill="#5c5b57">知识库　·　指令　·　项目记忆</text>
+<line x1="160" y1="102" x2="160" y2="142" stroke="#c15f3c" stroke-width="1.8" marker-end="url(#a1)"/>
+<line x1="414" y1="102" x2="414" y2="142" stroke="#c15f3c" stroke-width="1.8" marker-end="url(#a1)"/>
+<text x="152" y="126" text-anchor="end" font-size="10" fill="#c15f3c">读</text>
+<text x="406" y="126" text-anchor="end" font-size="10" fill="#c15f3c">读</text>
+<rect x="34" y="146" width="252" height="52" rx="6" fill="none" stroke="#b8b5ab" stroke-width="1.4"/>
+<text x="160" y="168" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1a1a18">Chat 会话</text>
+<text x="160" y="186" text-anchor="middle" font-size="10.5" fill="#5c5b57">对话式，逐轮往返</text>
+<rect x="288" y="146" width="252" height="52" rx="6" fill="none" stroke="#b8b5ab" stroke-width="1.4"/>
+<text x="414" y="168" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1a1a18">Cowork 会话</text>
+<text x="414" y="186" text-anchor="middle" font-size="10.5" fill="#5c5b57">代理式，多步执行</text>
+<text x="160" y="222" text-anchor="middle" font-size="10.5" fill="#c15f3c">→　写回项目记忆</text>
+<text x="414" y="222" text-anchor="middle" font-size="10.5" fill="#8f8d85">✕　不改动项目内容</text>
+<text x="414" y="238" text-anchor="middle" font-size="10" fill="#8f8d85">想留存要自己加进项目</text>
+<text x="287" y="266" text-anchor="middle" font-size="10.5" fill="#8f8d85">⚠ 项目记忆是否在两种会话间完全打通，官方文档未明说</text>
+
+<rect x="584" y="46" width="282" height="232" rx="10" fill="none" stroke="#d6d3ca" stroke-width="1.2"/>
+<text x="600" y="70" font-size="11.5" font-weight="700" fill="#1a1a18">混用时的硬规则</text>
+<text x="600" y="98" font-size="10.5" fill="#5c5b57">① 绑了本地文件夹的 Project，</text>
+<text x="600" y="114" font-size="10.5" fill="#5c5b57">　 Cowork 会话只能在桌面端跑</text>
+<text x="600" y="140" font-size="10.5" fill="#5c5b57">② Cowork 产出不自动进项目，</text>
+<text x="600" y="156" font-size="10.5" fill="#5c5b57">　 下次 Chat 会话看不到</text>
+<text x="600" y="188" font-size="10.5" fill="#c15f3c">四端都能进同一个 Project</text>
+<text x="600" y="212" font-size="10.5" fill="#8f8d85">Claude Code 完全不支持 Project</text>
+<text x="600" y="240" font-size="10" fill="#8f8d85">跨 Project 的记忆不互通，</text>
+<text x="600" y="256" font-size="10" fill="#8f8d85">但逐字稿层面全部可读（见 01）</text>
+</svg>
+</figure>
+
+<div class="key"><strong>记忆不通，为什么还要放同一个 Project？</strong>图的就是共享层：Project 指令 + 知识库，两种会话都读得到，而且是确定性读到。Project 让你把"希望 Claude 每次都知道的东西"，从不可靠的记忆里搬进可靠的指令和知识库里。</div>
+</section>
+
+<!-- ============ 5 ============ -->
+<section id="s5">
+<h2><span class="num">05</span>实例：多项目下的可达范围</h2>
+<p class="sub">上半层隔离成立，下半层隔离不成立——同一批项目，两种结论。（项目名已脱敏）</p>
+
+<figure>
+<svg viewBox="0 0 880 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="六个项目的结构与实测可达范围">
+<defs>
+<marker id="r1" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0.5 L9,4.5 L0,8.5 z" fill="#c15f3c"/></marker>
+</defs>
+<text x="20" y="18" font-size="12.5" font-weight="700" fill="#8f8d85">6 个 Project　—　记忆互不注入（隔离成立）</text>
+
+<rect x="14" y="30" width="132" height="140" rx="7" fill="none" stroke="#d6d3ca" stroke-width="1.2"/>
+<text x="80" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="#1a1a18">项目 A</text>
+<line x1="26" y1="62" x2="134" y2="62" stroke="#e8e5dd" stroke-width="1"/>
+<text x="80" y="82" text-anchor="middle" font-size="9.5" fill="#8f8d85">Chat 会话 ×0</text>
+<text x="80" y="99" text-anchor="middle" font-size="9.5" fill="#5c5b57">Cowork 会话 ×1</text>
+<text x="80" y="126" text-anchor="middle" font-size="9" fill="#8f8d85">绑定本地文件夹</text>
+<text x="80" y="158" text-anchor="middle" font-size="9" fill="#8f8d85">独立记忆</text>
+
+<rect x="156" y="30" width="132" height="140" rx="7" fill="none" stroke="#d6d3ca" stroke-width="1.2"/>
+<text x="222" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="#1a1a18">项目 B</text>
+<line x1="168" y1="62" x2="276" y2="62" stroke="#e8e5dd" stroke-width="1"/>
+<text x="222" y="82" text-anchor="middle" font-size="9.5" fill="#8f8d85">Chat 会话 ×4</text>
+<text x="222" y="99" text-anchor="middle" font-size="9.5" fill="#5c5b57">Cowork 会话 ×2</text>
+<text x="222" y="126" text-anchor="middle" font-size="9" fill="#8f8d85">纯云端 Files</text>
+<text x="222" y="158" text-anchor="middle" font-size="9" fill="#8f8d85">独立记忆</text>
+
+<rect x="298" y="30" width="132" height="140" rx="7" fill="none" stroke="#d6d3ca" stroke-width="1.2"/>
+<text x="364" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="#1a1a18">项目 C</text>
+<line x1="310" y1="62" x2="418" y2="62" stroke="#e8e5dd" stroke-width="1"/>
+<text x="364" y="82" text-anchor="middle" font-size="9.5" fill="#8f8d85">Chat 会话 ×4</text>
+<text x="364" y="99" text-anchor="middle" font-size="9.5" fill="#5c5b57">Cowork 会话 ×0</text>
+<text x="364" y="126" text-anchor="middle" font-size="9" fill="#8f8d85">纯云端 Files</text>
+<text x="364" y="158" text-anchor="middle" font-size="9" fill="#8f8d85">独立记忆</text>
+
+<rect x="440" y="30" width="132" height="140" rx="7" fill="none" stroke="#d6d3ca" stroke-width="1.2"/>
+<text x="506" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="#1a1a18">项目 D</text>
+<line x1="452" y1="62" x2="560" y2="62" stroke="#e8e5dd" stroke-width="1"/>
+<text x="506" y="82" text-anchor="middle" font-size="9.5" fill="#8f8d85">Chat 会话 ×5</text>
+<text x="506" y="99" text-anchor="middle" font-size="9.5" fill="#5c5b57">Cowork 会话 ×3</text>
+<text x="506" y="126" text-anchor="middle" font-size="9" fill="#8f8d85">纯云端 · Memory 已积累</text>
+<text x="506" y="158" text-anchor="middle" font-size="9" fill="#8f8d85">独立记忆</text>
+
+<rect x="582" y="30" width="132" height="140" rx="7" fill="none" stroke="#d6d3ca" stroke-width="1.2"/>
+<text x="648" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="#1a1a18">项目 E</text>
+<line x1="594" y1="62" x2="702" y2="62" stroke="#e8e5dd" stroke-width="1"/>
+<text x="648" y="82" text-anchor="middle" font-size="9.5" fill="#8f8d85">Chat 会话 ×2</text>
+<text x="648" y="99" text-anchor="middle" font-size="9.5" fill="#5c5b57">Cowork 会话 ×3</text>
+<text x="648" y="126" text-anchor="middle" font-size="9" fill="#8f8d85">绑定本地文件夹</text>
+<text x="648" y="158" text-anchor="middle" font-size="9" fill="#8f8d85">独立记忆</text>
+
+<rect x="724" y="30" width="132" height="140" rx="7" fill="none" stroke="#8f8d85" stroke-width="1.1" stroke-dasharray="5 4"/>
+<text x="790" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="#8f8d85">示例项目</text>
+<line x1="736" y1="62" x2="844" y2="62" stroke="#e8e5dd" stroke-width="1"/>
+<text x="790" y="88" text-anchor="middle" font-size="9.5" fill="#8f8d85">系统自带</text>
+<text x="790" y="105" text-anchor="middle" font-size="9.5" fill="#8f8d85">未使用</text>
+
+<g stroke="#8f8d85" stroke-width="1.6">
+<line x1="147" y1="94" x2="155" y2="106"/><line x1="155" y1="94" x2="147" y2="106"/>
+<line x1="289" y1="94" x2="297" y2="106"/><line x1="297" y1="94" x2="289" y2="106"/>
+<line x1="431" y1="94" x2="439" y2="106"/><line x1="439" y1="94" x2="431" y2="106"/>
+<line x1="573" y1="94" x2="581" y2="106"/><line x1="581" y1="94" x2="573" y2="106"/>
+<line x1="715" y1="94" x2="723" y2="106"/><line x1="723" y1="94" x2="715" y2="106"/>
+</g>
+
+<line x1="14" y1="196" x2="856" y2="196" stroke="#8f8d85" stroke-width="2.2" stroke-dasharray="9 6"/>
+<text x="14" y="214" font-size="10.5" font-weight="600" fill="#8f8d85">Project 边界</text>
+<text x="856" y="214" text-anchor="end" font-size="10.5" fill="#8f8d85">拦得住记忆，拦不住工具</text>
+
+<line x1="80" y1="320" x2="80" y2="186" stroke="#c15f3c" stroke-width="1.7" marker-end="url(#r1)"/>
+<line x1="200" y1="320" x2="222" y2="186" stroke="#c15f3c" stroke-width="1.7" marker-end="url(#r1)"/>
+<line x1="330" y1="320" x2="364" y2="186" stroke="#c15f3c" stroke-width="1.7" marker-end="url(#r1)"/>
+<line x1="470" y1="320" x2="506" y2="186" stroke="#c15f3c" stroke-width="1.7" marker-end="url(#r1)"/>
+<line x1="600" y1="320" x2="648" y2="186" stroke="#c15f3c" stroke-width="1.7" marker-end="url(#r1)"/>
+<line x1="740" y1="320" x2="790" y2="186" stroke="#c15f3c" stroke-width="1.7" marker-end="url(#r1)"/>
+
+<rect x="14" y="324" width="842" height="52" rx="8" fill="none" stroke="#c15f3c" stroke-width="2.2"/>
+<text x="435" y="346" text-anchor="middle" font-size="12.5" font-weight="700" fill="#c15f3c">任意一个不属于 Project 的 Cowork 会话</text>
+<text x="435" y="364" text-anchor="middle" font-size="10.5" fill="#5c5b57">无记忆、无项目指令、无知识库　·　却读得到上面全部六格的内容</text>
+
+<text x="14" y="408" font-size="11.5" font-weight="700" fill="#1a1a18">实测结果</text>
+<text x="14" y="430" font-size="10.5" fill="#5c5b57">在一个不属于任何 project 的 Cowork 会话里，一次 session_info 调用返回了全部 22 个 Cowork 会话，逐字稿全文可读。</text>
+<text x="14" y="448" font-size="10.5" fill="#5c5b57">其中 9 个分属上述五个项目，13 个不属于任何项目 —— 返回时混在同一个列表里，没有任何分组标记。</text>
+
+<text x="14" y="480" font-size="10.5" font-weight="600" fill="#c15f3c">最刺眼的一条：上面的"项目归属"是按会话标题推断的 —— 工具返回的数据里根本没有 project 字段</text>
+<text x="14" y="498" font-size="10.5" fill="#8f8d85">从工具的视角看，这六个项目在 Cowork 层面从来就不存在，只有一个扁平的会话池</text>
+</svg>
+</figure>
+
+<p><strong>这件事的实际后果：</strong>如果你把不同性质的内容（比如健康记录和财务分析）分到不同 project，指望它们互相看不见——在记忆层面确实互不串门，但<strong>任何一个 Cowork 会话，包括随手开的"帮我整理下载文件夹"，都能把两边逐字稿一起读出来</strong>。</p>
+</section>
+
+<!-- ============ 6 ============ -->
+<section id="s6">
+<h2><span class="num">06</span>项目文件夹：指定 vs 未指定</h2>
+<p class="sub">两种路由对应两种完全不同的知识来源与能力边界。</p>
+
+<figure>
+<svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="指定文件夹与纯云端项目的文件来源对比">
+<defs>
+<marker id="s1" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0.5 L9,4.5 L0,8.5 z" fill="#c15f3c"/></marker>
+<marker id="s1b" markerWidth="9" markerHeight="9" refX="1" refY="4.5" orient="auto"><path d="M9,0.5 L0,4.5 L9,8.5 z" fill="#c15f3c"/></marker>
+</defs>
+<rect x="14" y="14" width="404" height="308" rx="10" fill="none" stroke="#d6d3ca" stroke-width="1.3"/>
+<text x="30" y="38" font-size="12.5" font-weight="700" fill="#1a1a18">未指定文件夹（纯云端）</text>
+<text x="30" y="55" font-size="9.5" fill="#8f8d85">路由 /cowork/project/…</text>
+<rect x="30" y="68" width="372" height="52" rx="6" fill="none" stroke="#c15f3c" stroke-width="1.5"/>
+<text x="216" y="89" text-anchor="middle" font-size="11.5" font-weight="700" fill="#c15f3c">云端 Files　知识的唯一来源</text>
+<text x="216" y="106" text-anchor="middle" font-size="10" fill="#5c5b57">有容量上限，界面上有进度条</text>
+<line x1="216" y1="120" x2="216" y2="152" stroke="#c15f3c" stroke-width="1.8" marker-end="url(#s1)"/>
+<text x="228" y="140" font-size="9.5" fill="#c15f3c">单向同步</text>
+<rect x="30" y="156" width="372" height="52" rx="6" fill="none" stroke="#8f8d85" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="216" y="176" text-anchor="middle" font-size="11" font-weight="600" fill="#8f8d85">本地只读缓存镜像</text>
+<text x="216" y="193" text-anchor="middle" font-size="9" fill="#8f8d85">AppData\…\.project-cache\&lt;项目ID&gt;\docs\</text>
+<rect x="30" y="224" width="372" height="42" rx="6" fill="none" stroke="#e8e5dd" stroke-width="1.1"/>
+<text x="216" y="250" text-anchor="middle" font-size="10.5" fill="#5c5b57">Web / 手机可正常打开　✓</text>
+<text x="216" y="292" text-anchor="middle" font-size="10.5" fill="#8f8d85">Claude 不会写回项目内容</text>
+<text x="216" y="309" text-anchor="middle" font-size="10.5" fill="#8f8d85">外部 agent 看不到（只有那份缓存）</text>
+
+<rect x="442" y="14" width="404" height="308" rx="10" fill="none" stroke="#c15f3c" stroke-width="1.6"/>
+<text x="458" y="38" font-size="12.5" font-weight="700" fill="#c15f3c">指定了本地文件夹</text>
+<text x="458" y="55" font-size="9.5" fill="#8f8d85">路由 /space/…</text>
+<rect x="458" y="68" width="372" height="52" rx="6" fill="none" stroke="#c15f3c" stroke-width="1.5"/>
+<text x="644" y="89" text-anchor="middle" font-size="11.5" font-weight="700" fill="#c15f3c">磁盘上的真实文件夹</text>
+<text x="644" y="106" text-anchor="middle" font-size="9.5" fill="#5c5b57">受磁盘限制，没有容量条</text>
+<line x1="600" y1="120" x2="600" y2="152" stroke="#c15f3c" stroke-width="2.2" marker-start="url(#s1b)" marker-end="url(#s1)"/>
+<text x="612" y="140" font-size="9.5" font-weight="600" fill="#c15f3c">双向读写</text>
+<rect x="458" y="156" width="372" height="52" rx="6" fill="none" stroke="#b8b5ab" stroke-width="1.4"/>
+<text x="644" y="176" text-anchor="middle" font-size="11" font-weight="600" fill="#1a1a18">Cowork 会话　直接改文件</text>
+<text x="644" y="193" text-anchor="middle" font-size="9.5" fill="#5c5b57">产出落在同一个文件夹里</text>
+<rect x="458" y="224" width="372" height="42" rx="6" fill="none" stroke="#8f8d85" stroke-width="1.1" stroke-dasharray="5 4"/>
+<text x="644" y="250" text-anchor="middle" font-size="10.5" fill="#8f8d85">Web 打开是空白页　✕　仅桌面可用</text>
+<text x="644" y="292" text-anchor="middle" font-size="10.5" fill="#c15f3c">Claude 直接读写原文件</text>
+<text x="644" y="309" text-anchor="middle" font-size="10.5" fill="#c15f3c">外部 agent 也能读到同一份</text>
+</svg>
+</figure>
+
+<table>
+<thead><tr><th></th><th>未指定（纯云端）</th><th>指定了文件夹</th></tr></thead>
+<tbody>
+<tr><td>路由</td><td><code>/cowork/project/…</code></td><td><code>/space/…</code></td></tr>
+<tr><td>Web 与手机</td><td class="y">正常打开</td><td>空白页，桌面独占</td></tr>
+<tr><td>知识来源</td><td>上传的 Files（有容量条）</td><td class="y">磁盘文件夹（无上限）</td></tr>
+<tr><td>Claude 写回</td><td>不写回，产出要手动加进项目</td><td class="y">直接改文件，产出自动落盘</td></tr>
+<tr><td>版本管理</td><td>重传一份新的</td><td class="y">走原有流程（Git、云盘同步…）</td></tr>
+<tr><td>外部 agent</td><td>读不到</td><td>读得到，就是普通文件夹</td></tr>
+</tbody>
+</table>
+
+<div class="key"><strong>没有所谓的"项目默认目录"。</strong>桌面端 <code>用户目录\Claude\</code> 全量扫过，只有 <code>Scheduled\</code>（定时任务）和 <code>Artifacts\</code>（live artifacts），没有任何项目文件夹。那是 Claude 放自己产物的地方。项目只有两种状态：绑一个你选的路径，或者根本没有本地文件夹。</div>
+
+<p><strong>另一个发现：</strong>上传到云端项目的文件会在本地留一份只读镜像，路径形如 <code>AppData\…\.project-cache\&lt;项目ID&gt;\docs\</code>，原始 <code>.docx</code> 被转成 <code>.md</code>。所以 Cowork 读云端知识库不是实时调 API，是读这份镜像——这也解释了"读得到但改不了"。</p>
+
+<div class="key">一句话选型：<strong>指定文件夹换来的是"文件流"，不指定换来的是"跨端"。</strong>有真实文件要反复迭代 → 指定；纯对话推演、随时随地要能开 → 不指定。</div>
+</section>
+
+<!-- ============ 7 ============ -->
+<section id="s7">
+<h2><span class="num">07</span>终端：云端跟人走，本地跟机器走</h2>
+<p class="sub">真正的分界不是操作系统，而是"这台机器现在通不通"。</p>
+
+<figure>
+<svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="非主力终端对本机的读取条件">
+<defs>
+<marker id="q1" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,1 L10,5 L0,9 z" fill="#c15f3c"/></marker>
+</defs>
+<rect x="14" y="12" width="852" height="54" rx="9" fill="none" stroke="#c15f3c" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="440" y="34" text-anchor="middle" font-size="12.5" font-weight="700" fill="#c15f3c">云端层　记忆 · Instruction · Project 知识 · 全部会话与 Cowork 产出</text>
+<text x="440" y="53" text-anchor="middle" font-size="10.5" fill="#5c5b57">跟随账号　—　Windows / Mac / Web / 手机 读到的完全是同一份，没有任何差别</text>
+<line x1="200" y1="66" x2="200" y2="98" stroke="#c15f3c" stroke-width="2" marker-end="url(#q1)"/>
+<line x1="660" y1="66" x2="660" y2="98" stroke="#c15f3c" stroke-width="2" marker-end="url(#q1)"/>
+<rect x="14" y="102" width="372" height="46" rx="8" fill="none" stroke="#b8b5ab" stroke-width="1.5"/>
+<text x="200" y="130" text-anchor="middle" font-size="12" font-weight="700" fill="#1a1a18">装了桌面 app 的主力机</text>
+<rect x="474" y="102" width="372" height="46" rx="8" fill="none" stroke="#b8b5ab" stroke-width="1.5"/>
+<text x="660" y="124" text-anchor="middle" font-size="12" font-weight="700" fill="#1a1a18">其他终端</text>
+<text x="660" y="140" text-anchor="middle" font-size="9.5" fill="#5c5b57">Mac · Web · 手机 · 另一台电脑</text>
+<line x1="200" y1="148" x2="200" y2="192" stroke="#c15f3c" stroke-width="2" marker-end="url(#q1)"/>
+<text x="212" y="174" font-size="10" fill="#c15f3c">本机直读</text>
+<path d="M660,148 L660,170 L250,170 L250,190" fill="none" stroke="#c15f3c" stroke-width="2" marker-end="url(#q1)"/>
+<text x="672" y="166" font-size="10" font-weight="600" fill="#c15f3c">要主力机的桌面 app 在线</text>
+<text x="672" y="182" font-size="10" fill="#8f8d85">关机 / app 关闭 → 读不到</text>
+<rect x="60" y="196" width="330" height="66" rx="7" fill="none" stroke="#b8b5ab" stroke-width="1.4"/>
+<text x="225" y="218" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1a1a18">本机层</text>
+<text x="225" y="236" text-anchor="middle" font-size="10" fill="#5c5b57">已连接的文件夹　·　~/.claude/（Claude Code 全部状态）</text>
+<text x="225" y="252" text-anchor="middle" font-size="10" fill="#5c5b57">用户目录\Claude\　定时任务 · Artifacts</text>
+<text x="440" y="288" text-anchor="middle" font-size="10.5" fill="#8f8d85">Mac 与 Windows 能力完全对等　·　本地会话下 Mac 走 Apple Virtualization.framework，Win 走 Hyper-V</text>
+</svg>
+</figure>
+
+<table>
+<thead><tr><th>能力</th><th class="c">桌面 Mac</th><th class="c">桌面 Win</th><th class="c">Web</th><th class="c">手机</th></tr></thead>
+<tbody>
+<tr><td>启动 · 接管 · 回顾任务</td><td class="c y">●</td><td class="c y">●</td><td class="c y">●</td><td class="c y">●</td></tr>
+<tr><td>跨端接管同一会话</td><td class="c y">●</td><td class="c y">●</td><td class="c y">●</td><td class="c y">●</td></tr>
+<tr><td>Projects</td><td class="c y">●</td><td class="c y">●</td><td class="c y">●</td><td class="c y">●</td></tr>
+<tr><td>连接器 · 技能 · 插件</td><td class="c y">●</td><td class="c y">●</td><td class="c y">●</td><td class="c y">●</td></tr>
+<tr><td>定时任务（云端跑）</td><td class="c y">●</td><td class="c y">●</td><td class="c y">●</td><td class="c y">●</td></tr>
+<tr><td>Chat 记忆与历史搜索</td><td class="c y">●</td><td class="c y">●</td><td class="c y">●</td><td class="c y">●</td></tr>
+<tr><td>本地文件读写</td><td class="c y">●</td><td class="c y">●</td><td class="c">◐</td><td class="c">◐</td></tr>
+<tr><td>浏览器操作 · 电脑操作</td><td class="c y">●</td><td class="c y">●</td><td class="c">◐</td><td class="c">◐</td></tr>
+<tr><td>Live artifacts</td><td class="c y">●</td><td class="c y">●</td><td class="c n">○</td><td class="c n">○</td></tr>
+<tr><td>本地 MCP · 含本地 server 的插件</td><td class="c y">●</td><td class="c y">●</td><td class="c n">○</td><td class="c n">○</td></tr>
+<tr><td>Claude Code 的上下文</td><td colspan="4" class="c n">只在装了它、且有 ~/.claude/ 的那台机器上</td></tr>
+</tbody>
+</table>
+<p class="legend"><span class="y">●</span> 原生支持　　◐ 经桌面 app 代理，那台电脑的 app 必须在线　　<span class="n">○</span> 不支持</p>
+</section>
+
+<!-- ============ 8 ============ -->
+<section id="s8">
+<h2><span class="num">08</span>外部 agent 的边界</h2>
+<p class="sub">Codex、Cursor 等：唯一实际交集是你电脑上的本地文件夹。</p>
+
+<figure>
+<svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="外部 agent 的可读边界">
+<defs>
+<marker id="a2" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0.5 L9,4.5 L0,8.5 z" fill="#c15f3c"/></marker>
+<marker id="a2s" markerWidth="9" markerHeight="9" refX="1" refY="4.5" orient="auto"><path d="M9,0.5 L0,4.5 L9,8.5 z" fill="#c15f3c"/></marker>
+</defs>
+<path d="M195,64 Q470,4 745,64" fill="none" stroke="#8f8d85" stroke-width="1.4" stroke-dasharray="5 4"/>
+<line x1="452" y1="14" x2="468" y2="30" stroke="#8f8d85" stroke-width="2.2"/>
+<line x1="468" y1="14" x2="452" y2="30" stroke="#8f8d85" stroke-width="2.2"/>
+<text x="486" y="28" font-size="11" font-weight="600" fill="#8f8d85">没有任何通道</text>
+
+<rect x="14" y="64" width="362" height="212" rx="10" fill="none" stroke="#d6d3ca" stroke-width="1.2" stroke-dasharray="6 4"/>
+<text x="30" y="88" font-size="12" font-weight="700" fill="#1a1a18">Anthropic 云端</text>
+<rect x="30" y="98" width="330" height="34" rx="5" fill="none" stroke="#b8b5ab" stroke-width="1"/>
+<text x="195" y="119" text-anchor="middle" font-size="11" fill="#1a1a18">Chat 对话记录 + 全局记忆</text>
+<rect x="30" y="138" width="330" height="34" rx="5" fill="none" stroke="#b8b5ab" stroke-width="1"/>
+<text x="195" y="159" text-anchor="middle" font-size="11" fill="#1a1a18">Project 知识库 · 指令 · 项目记忆</text>
+<rect x="30" y="178" width="330" height="34" rx="5" fill="none" stroke="#b8b5ab" stroke-width="1"/>
+<text x="195" y="199" text-anchor="middle" font-size="11" fill="#1a1a18">Cowork 云会话与产出文件</text>
+<rect x="30" y="218" width="330" height="34" rx="5" fill="none" stroke="#8f8d85" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="195" y="239" text-anchor="middle" font-size="11" fill="#8f8d85">临时沙箱（会话结束即销毁）</text>
+
+<line x1="382" y1="150" x2="454" y2="150" stroke="#c15f3c" stroke-width="1.8" marker-start="url(#a2s)" marker-end="url(#a2)"/>
+<text x="418" y="138" text-anchor="middle" font-size="10" fill="#c15f3c">经桌面 app</text>
+<text x="418" y="170" text-anchor="middle" font-size="10" fill="#8f8d85">app 关了就断</text>
+
+<rect x="460" y="64" width="192" height="212" rx="10" fill="none" stroke="#c15f3c" stroke-width="1.6"/>
+<text x="476" y="88" font-size="12" font-weight="700" fill="#c15f3c">你的电脑</text>
+<rect x="476" y="118" width="160" height="52" rx="6" fill="none" stroke="#b8b5ab" stroke-width="1.4"/>
+<text x="556" y="140" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1a1a18">已连接的文件夹</text>
+<text x="556" y="157" text-anchor="middle" font-size="10" fill="#5c5b57">就是普通文件</text>
+<text x="556" y="196" text-anchor="middle" font-size="10.5" font-weight="600" fill="#c15f3c">唯一交集点</text>
+<text x="556" y="220" text-anchor="middle" font-size="10" fill="#8f8d85">Cowork 写下的文件</text>
+<text x="556" y="235" text-anchor="middle" font-size="10" fill="#8f8d85">外部 agent 都能读</text>
+
+<line x1="658" y1="150" x2="738" y2="150" stroke="#c15f3c" stroke-width="1.8" marker-start="url(#a2s)" marker-end="url(#a2)"/>
+<text x="698" y="138" text-anchor="middle" font-size="10" fill="#c15f3c">可读可写</text>
+
+<rect x="744" y="64" width="102" height="212" rx="10" fill="none" stroke="#d6d3ca" stroke-width="1.2"/>
+<text x="795" y="88" text-anchor="middle" font-size="12" font-weight="700" fill="#1a1a18">外部 agent</text>
+<text x="795" y="128" text-anchor="middle" font-size="10.5" fill="#5c5b57">Codex</text>
+<text x="795" y="146" text-anchor="middle" font-size="10.5" fill="#5c5b57">Cursor</text>
+<text x="795" y="164" text-anchor="middle" font-size="10.5" fill="#5c5b57">Copilot</text>
+<text x="795" y="182" text-anchor="middle" font-size="10.5" fill="#5c5b57">…</text>
+<text x="795" y="218" text-anchor="middle" font-size="10" fill="#8f8d85">只有本地</text>
+<text x="795" y="233" text-anchor="middle" font-size="10" fill="#8f8d85">文件系统权限</text>
+
+<text x="440" y="304" text-anchor="middle" font-size="10.5" fill="#8f8d85">另一个间接交汇：双方都连了同一个 MCP / 连接器（如 Notion、Slack）——那是同一个外部数据源，不是互相读对方</text>
+</svg>
+</figure>
+
+<p>想做 Claude + 外部 agent 协作，交接点只能是磁盘上的文件。<strong>反过来 Cowork 也能读外部 agent 的工作目录</strong>——实测在 Codex 的默认输出目录下看到了完整的会话产出。</p>
+</section>
+
+<!-- ============ 9 ============ -->
+<section id="s9">
+<h2><span class="num">09</span>实测记录与更正日志</h2>
+<p class="sub">本文档的结论来自实机验证，与早期推断冲突的地方一并记录。</p>
+
+<div class="log">
+<h3>实测证据</h3>
+<ul>
+<li><span class="tag test">实测</span><b>跨项目读取成立。</b>在一个不属于任何 project 的 Cowork 会话里，一次调用读到了 22 个 Cowork 会话的完整逐字稿，横跨五个不同项目。<code>session_info</code> 返回扁平列表，不含 project 字段。</li>
+<li><span class="tag test">实测</span><b>Cowork 能读 Chat，但走浏览器。</b><code>session_info</code> 返回 0 条 chat；通过浏览器扩展以已登录身份打开 <code>claude.ai/chat/…</code>，可读任意对话全文。权限来源是登录态，不是 Claude 内部数据通道——扩展没连时这扇门就是关的。</li>
+<li><span class="tag test">实测</span><b>账户级指令覆盖 Cowork。</b>Settings › General 的「Instructions for Claude」字段说明原文写着 "across chats <b>and Cowork</b>"。Web 端设置里没有 Cowork 栏（搜索返回 No matching settings），Cowork 全局指令只存在于桌面应用。</li>
+<li><span class="tag test">实测</span><b>无项目默认目录。</b>用户目录下的 <code>Claude\</code> 只有 <code>Scheduled\</code> 与 <code>Artifacts\</code>，无任何项目文件夹。</li>
+<li><span class="tag test">实测</span><b>云端项目文件有本地镜像。</b><code>.project-cache\&lt;项目ID&gt;\docs\</code> 下存着 <code>.docx</code> 转换后的 <code>.md</code>。</li>
+<li><span class="tag test">实测</span><b>Claude Code 状态完全本地。</b><code>~/.claude/</code> 下是会话历史与凭据，按工作目录分组；没有 CLAUDE.md 就等于每次白纸开局。</li>
+<li><span class="tag test">实测</span><b>folder-bound 项目桌面独占。</b><code>/space/…</code> 路由在浏览器里渲染为空白页。</li>
+<li><span class="tag test">实测</span><b>Claude 无法操作自己的应用窗口。</b>computer-use 明确拒绝授予对 Claude 自身界面的控制权——否则它就能改自己的权限与设置。</li>
+</ul>
+</div>
+
+<div class="log" style="margin-top:14px">
+<h3>更正日志</h3>
+<ul>
+<li><span class="tag fix">更正</span><b>"项目之间互不可读"是错的。</b>早期图把"记忆隔离"画成了"读取隔离"。正确表述：Project 隔离的是自动注入，不是可达性。</li>
+<li><span class="tag fix">更正</span><b>"Chat Project 与 Cowork Project 是两个独立对象"已过时。</b>较新文档明确：从同一个 Project 既能开 chat 也能开 Cowork 会话，共用同一份项目知识。早期那张"一次性导入 / 链接"的单向箭头图是过渡期产物。</li>
+<li><span class="tag fix">更正</span><b>"Profile 指令可能不覆盖 Cowork"推断错误。</b>该字段说明原文即写明覆盖 Chat 和 Cowork。</li>
+</ul>
+</div>
+
+<div class="log" style="margin-top:14px">
+<h3>仍未确认</h3>
+<ul>
+<li>同一个 Project 内，Chat 记忆与 Cowork 记忆是否完全打通——官方文档未明说。</li>
+<li>Cowork 项目数据是否已完成从本地存储到云端同步的迁移（两篇官方文档口径不一致，以桌面版实际表现为准）。</li>
+</ul>
+</div>
+</section>
+
+<footer>
+Claude 生态读取关系图谱 · 2026-08 整理 · 内容已脱敏<br>
+主要依据：<a href="https://support.claude.com/en/collections/19667525-claude-cowork">Claude Cowork 帮助中心</a>、<a href="https://docs.claude.com/en/docs/claude-code/memory">Claude Code memory 文档</a>、<a href="https://support.claude.com/en/articles/11817273-use-claude-s-chat-search-and-memory-to-build-on-previous-context">chat search and memory</a>，以及实机测试。文档与实测冲突处以实测为准。<br>
+产品仍在快速迭代，结论可能过期——注意查看官方文档的更新日期。
+</footer>
+
+</div>
+</body>
+</html>
