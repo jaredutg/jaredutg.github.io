@@ -649,7 +649,10 @@ return {esc:esc,el:el,S:S,tw:tw,nav:nav,toc:toc,sortable:sortable,wrapTables:wra
 (function(){
 K.nav('03',1,'00_目录.html');
 var esc=K.esc, D=CNS, Q=CNS.q, FX=7.1;
-function txt(s){return String(s==null?'':s).replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim();}
+/* 去标签 + 还原 HTML 实体。长文本列会先 txt() 再 esc()，不还原就会双重转义（&lt;5% 被显示成字面量） */
+var _de=document.createElement('textarea');
+function txt(s){ _de.innerHTML=String(s==null?'':s).replace(/<[^>]*>/g,'');
+  return _de.value.replace(/\s+/g,' ').trim(); }
 function n2(v,d){return v==null?'<span class="na">—</span>':(+v).toFixed(d==null?2:d);}
 function nm(v){return v==null?'<span class="na">—</span>':Math.round(v).toLocaleString('en-US');}
 function tag(c,t){return '<span class="tg '+c+'">'+esc(t)+'</span>';}
