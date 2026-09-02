@@ -189,6 +189,16 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);font-si
 </footer>
 </div>
 <script>
+var CNS_BUILD='202609020935';
+(function(){ /* 线上防陈旧缓存，说明见各页 kit.js */
+  try{
+    if(!/^https?:$/.test(location.protocol))return;
+    if(new URLSearchParams(location.search).get('v'))return;
+    fetch('version.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(j){
+      if(j&&j.v&&j.v!==CNS_BUILD) location.replace(location.pathname+'?v='+encodeURIComponent(j.v)+location.hash);
+    }).catch(function(){});
+  }catch(e){}
+})();
 (function(){
  var r=document.documentElement,b=document.getElementById('tog');
  function ls(){try{return localStorage;}catch(e){return null;}}
