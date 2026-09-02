@@ -9,7 +9,7 @@
  --bg:#faf9f7;--panel:#fff;--ink:#1f1e1c;--ink2:#57534e;--ink3:#8a8480;
  --line:#e5e1dc;--line2:#d6d1ca;
  --lead:#1f7a4d;--leadb:#e4f2ea;
- --brk:#4a8f5f;--brkb:#eaf4ed;
+ --brk:#2f7d4f;--brkb:#e8f3ec;
  --near:#8a8a1f;--nearb:#f5f5e4;
  --chase:#b8722e;--chaseb:#fbf0e5;
  --block:#a83232;--blockb:#fbeaea;
@@ -17,7 +17,7 @@
  --up:#6b5b95;--mid:#2b7a8c;--down:#9a7112;
  --accent:#1f1e1c;
 }
-@media(prefers-color-scheme:dark){:root{
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
  --bg:#191817;--panel:#221f1d;--ink:#f0ece7;--ink2:#b6afa8;--ink3:#857d76;
  --line:#332f2c;--line2:#443e3a;
  --lead:#5fc48c;--leadb:#16281e; --brk:#63b585;--brkb:#1a271f;
@@ -26,6 +26,15 @@
  --cn:#e08a6d;--ov:#89aad6;--ovb:#1b222c;--cnb:#2e211c;
  --up:#a795cc;--mid:#6cc0d1;--down:#d9b45c;
  --accent:#f0ece7;}}
+:root[data-theme="dark"]{--bg:#191817;--panel:#221f1d;--ink:#f0ece7;--ink2:#b6afa8;--ink3:#857d76;
+ --line:#332f2c;--line2:#443e3a;
+ --lead:#5fc48c;--leadb:#16281e; --brk:#63b585;--brkb:#1a271f;
+ --near:#c3c35c;--nearb:#26260f; --chase:#dd9a5e;--chaseb:#2b2117;
+ --block:#e07070;--blockb:#2c1919;
+ --cn:#e08a6d;--ov:#89aad6;--ovb:#1b222c;--cnb:#2e211c;
+ --up:#a795cc;--mid:#6cc0d1;--down:#d9b45c;
+ --accent:#f0ece7;}
+
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6;
  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
@@ -99,6 +108,143 @@ h1{font-size:25px;margin:0 0 6px;letter-spacing:-.01em}
 .st .l{font-size:11px;color:var(--ink3);margin-top:1px}
 footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink3);line-height:1.75}
 @media(max-width:700px){.wrap{padding:18px 11px 60px}h1{font-size:19px}.nodes{grid-template-columns:1fr}}
+.allnodes{margin:18px 0 0;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.allnodes>summary{cursor:pointer;padding:11px 15px;font-size:13px;font-weight:620;color:var(--ink2);list-style:none}
+.allnodes>summary::-webkit-details-marker{display:none}
+.allnodes>summary::before{content:"▸ ";color:var(--ink3)}
+.allnodes[open]>summary::before{content:"▾ "}
+.allnodes>div{padding:0 15px 15px}
+#nodepanel .ph{font-size:12.6px;color:var(--ink3);background:var(--panel);border:1px dashed var(--line2);
+ border-radius:10px;padding:12px 15px;margin:0 0 4px;line-height:1.65}
+.pnl{background:var(--panel);border:1px solid var(--sc);border-left:4px solid var(--sc);border-radius:10px;padding:14px 16px;margin:0 0 4px}
+.ph2{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:5px}
+.pn{font-size:17px;font-weight:680}
+.pst{font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px;background:var(--scb);color:var(--sc)}
+.pstage{font-size:11.5px;color:var(--ink3)}
+.pcl{margin-left:auto;font:inherit;font-size:11.5px;cursor:pointer;background:transparent;border:1px solid var(--line2);
+ color:var(--ink3);border-radius:6px;padding:2px 9px}
+.pcl:hover{color:var(--ink);border-color:var(--ink3)}
+.pkpi{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--sc);margin-bottom:9px}
+.prow{display:flex;gap:9px;font-size:12.6px;margin:3px 0;line-height:1.6}
+.prow .f{flex:0 0 62px;color:var(--ink3);font-size:11.5px}
+.prow .v{color:var(--ink2)}
+.pd{font-size:12.8px;color:var(--ink2);line-height:1.72;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.pdep{margin-top:11px;padding-top:10px;border-top:1px solid var(--line);font-size:12.3px;color:var(--ink2);line-height:1.7}
+.pchip{display:inline-block;font-size:11px;padding:1.5px 7px;border-radius:5px;margin:2px 4px 2px 0}
+.pwarn{margin-top:8px;background:var(--blockb);color:var(--block);border-radius:7px;padding:8px 11px;font-size:12.3px}
+@media(max-width:640px){.prow{flex-direction:column;gap:1px}.prow .f{flex:none}}
+
+/* ==== 共用外壳 ==== */
+/* ===== 国产替代研究 · 共用外壳与图表样式 ===== */
+:root{
+ /* 统一 dataviz 调色板（浅色） */
+ --dv1:#41608c; --dv2:#2b7a8c; --dv3:#9a7112; --dv4:#7b4397; --dv5:#2f7d4f; --dv6:#b8492e;
+ --dvgrid:#e8e4df; --dvaxis:#b8b2ab; --dvlab:#57534e; --dvhalo:#faf9f7;
+}
+:root:not([data-theme="light"]) { }
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --dv1:#89aad6; --dv2:#6cc0d1; --dv3:#d9b45c; --dv4:#b98cd4; --dv5:#63b585; --dv6:#e08a6d;
+ --dvgrid:#2e2a27; --dvaxis:#5b544e; --dvlab:#b6afa8; --dvhalo:#191817;
+}}
+:root[data-theme="dark"]{
+ --dv1:#89aad6; --dv2:#6cc0d1; --dv3:#d9b45c; --dv4:#b98cd4; --dv5:#63b585; --dv6:#e08a6d;
+ --dvgrid:#2e2a27; --dvaxis:#5b544e; --dvlab:#b6afa8; --dvhalo:#191817;
+}
+
+/* ---------- 顶部一行提示 + 页尾长说明 ---------- */
+.k-notice{font-size:12px;color:var(--ink3);margin:-14px 0 22px;line-height:1.7}
+.k-notice a{color:var(--ink3);text-decoration:none;border-bottom:1px dotted currentColor;white-space:nowrap}
+.k-notice a:hover{color:var(--ink)}
+.k-tail{margin-top:46px;padding-top:6px;border-top:1px dashed var(--line2)}
+.k-tail>h2{font-size:16px}
+.k-tail .disc,.k-tail .warn,.k-tail .note,.k-tail .ten{font-size:12.2px}
+
+/* ---------- 顶部导航 ---------- */
+.k-nav{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--bg) 92%,transparent);
+ backdrop-filter:saturate(1.4) blur(8px);-webkit-backdrop-filter:saturate(1.4) blur(8px);
+ border-bottom:1px solid var(--line);margin:0 0 0}
+.k-navin{max-width:1400px;margin:0 auto;padding:7px 20px;display:flex;align-items:center;gap:10px;
+ font-size:12.5px;flex-wrap:wrap}
+.k-nav a{color:var(--ink2);text-decoration:none;padding:3px 8px;border-radius:6px;border:1px solid transparent;
+ white-space:nowrap;transition:.12s}
+.k-nav a:hover{background:var(--panel);border-color:var(--line);color:var(--ink)}
+.k-nav .k-here{font-weight:660;color:var(--ink);background:var(--panel);border-color:var(--line)}
+.k-nav .k-sp{flex:1 1 auto}
+.k-seq{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--ink3);
+ border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+.k-tog{font:inherit;font-size:12px;cursor:pointer;background:var(--panel);border:1px solid var(--line);
+ color:var(--ink2);border-radius:6px;padding:3px 9px;white-space:nowrap}
+.k-tog:hover{color:var(--ink);border-color:var(--line2)}
+
+/* ---------- 左侧粘性目录 ---------- */
+.k-toc{position:fixed;left:max(10px,calc(50% - var(--kw)/2 - 178px));top:96px;width:164px;z-index:40;
+ font-size:12px;line-height:1.45;max-height:calc(100vh - 130px);overflow-y:auto;
+ padding-right:6px;scrollbar-width:thin}
+.k-toc h6{margin:0 0 7px;font-size:10.5px;letter-spacing:.08em;color:var(--ink3);font-weight:650;text-transform:uppercase}
+.k-toc a{display:block;color:var(--ink3);text-decoration:none;padding:3.5px 8px;border-radius:5px;
+ border-left:2px solid transparent;transition:.12s}
+.k-toc a:hover{color:var(--ink);background:var(--panel)}
+.k-toc a.on{color:var(--ink);border-left-color:var(--accent);font-weight:600;background:var(--panel)}
+.k-tocm{display:none}
+/* 侧栏目录只在「正文两侧真的放得下」时才出现，由 JS 量出来打 html.k-wide */
+.k-toc{display:none}
+html.k-wide .k-toc{display:block}
+.k-tocm{display:block;position:sticky;top:38px;z-index:50;padding:6px 0 4px;background:var(--bg)}
+html.k-wide .k-tocm{display:none}
+.k-tocm select{font:inherit;font-size:12.5px;width:100%;max-width:420px;padding:5px 8px;border-radius:7px;
+ border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+
+/* ---------- 可排序表头 ---------- */
+th.k-s{cursor:pointer;user-select:none;position:relative;white-space:nowrap}
+th.k-s:hover{color:var(--ink)}
+th.k-s::after{content:"↕";opacity:.28;font-size:9px;margin-left:3px;vertical-align:1px}
+th.k-s.k-asc::after{content:"↑";opacity:.95}
+th.k-s.k-desc::after{content:"↓";opacity:.95}
+thead th{position:sticky;top:36px;background:var(--bg);z-index:5}
+/* .k-tw 是横向滚动容器，浏览器会把它也当成纵向滚动容器：
+   此时 top:36px 会把表头往下推 36px，正好盖住第一行。容器内一律贴 0。 */
+.k-tw thead th{top:0}
+
+/* ---------- 宽表格容器 ---------- */
+.k-tw{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+.k-tw>table{min-width:max-content}
+@media(max-width:520px){.k-tw>table{min-width:0}}
+
+/* ---------- 图表外壳 ---------- */
+.k-fig{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px 10px;margin:14px 0 18px}
+.k-fig h4{margin:0 0 2px;font-size:14px}
+.k-fig .k-cap{margin:0 0 10px;font-size:12px;color:var(--ink3);line-height:1.55}
+.k-figbody{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.k-figbody svg{display:block;max-width:100%;height:auto}
+.k-lg{display:flex;flex-wrap:wrap;gap:5px 14px;font-size:11.5px;color:var(--ink2);margin-top:9px;align-items:center}
+.k-lg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.k-lg .sq{border-radius:2px}
+.k-tip{position:fixed;pointer-events:none;opacity:0;transition:opacity .1s;z-index:200;max-width:290px;
+ background:var(--panel);border:1px solid var(--line2);border-radius:8px;padding:8px 10px;font-size:12px;
+ line-height:1.5;box-shadow:0 6px 24px rgba(0,0,0,.14);color:var(--ink)}
+.k-tip b{color:var(--ink)}
+.k-tip .k-tk{color:var(--ink3);font-size:11px}
+.k-dot{cursor:pointer;transition:opacity .12s}
+.k-dot:hover{opacity:.82}
+.k-hl{animation:k-flash 1.7s ease-out 1}
+@keyframes k-flash{0%,22%{box-shadow:0 0 0 3px color-mix(in srgb,var(--dv3) 62%,transparent)}100%{box-shadow:0 0 0 0 transparent}}
+
+/* ---------- 条形着色单元格 ---------- */
+.k-bc{position:relative;z-index:0}
+.k-bc::before{content:"";position:absolute;left:0;top:2px;bottom:2px;width:var(--w,0%);
+ background:color-mix(in srgb,var(--c,var(--dv1)) 17%,transparent);border-radius:3px;z-index:-1}
+
+/* ---------- 打印 ---------- */
+@media print{
+ :root{--bg:#fff;--panel:#fff}
+ .k-nav,.k-toc,.k-tocm,.k-tip,.k-noprint{display:none!important}
+ body{background:#fff}
+ .wrap{max-width:none;padding:0}
+ table{page-break-inside:auto} tr{page-break-inside:avoid}
+ .k-fig,.seg,.card,.etf{page-break-inside:avoid}
+ *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+
 </style>
 </head>
 <body>
@@ -106,13 +252,12 @@ footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-si
 
 <h1>全产业链流程图 · 上中下游</h1>
 <p class="sub">从 EDA 到自动驾驶的完整链路 · 每个环节标注中国与海外代表公司 · 按国产状态着色</p>
-<p class="meta">编制日期 2026-08-11 ｜ 汇总 01–05 号文件的全部结论 ｜ 点击任一节点展开说明，顶部可按链路与状态筛选</p>
+<p class="meta">编制日期 2026-08-11 ｜ 汇总 01–05 号文件的全部结论 ｜ 点击任一节点展开说明，顶部可按链路与状态筛选</p><p class="k-notice">本页不是投资建议 · 着色标准基于份额与国产化率 · 节点里的估值为 2026-08-12 同日实测 <a href="#tail">完整口径、修正说明与免责 ↓</a></p>
 
-<div class="warn">
-<b>声明</b>　本页不是投资建议，我不是投资顾问。代表公司为各环节的典型玩家，不构成推荐，也不代表该公司是最优选择。份额与状态数据的口径、时点与局限见 01–05 号文件的对应章节。
-</div>
 
-<div class="warn" style="background:var(--leadb);border-color:color-mix(in srgb,var(--lead) 30%,transparent)"><b style="color:var(--lead)">✓ 2026-08-12 已注入实测估值</b>　EDA、大硅片、AI 加速芯片、刻蚀、DRAM、光模块六个节点已补入<b>同日实测的 PE / PB / 利润率</b>，并标出<b>四家亏损公司</b>（华大九天、沪硅产业、摩尔线程、沐曦）。两处方向性修正：<b>实测英伟达 PE 仅 33.36，低于三家设备商</b>；<b>Synopsys 营业利润率仅 10.4%，「EDA 利润率最高」是错的</b>。着色标准基于份额与国产化率，不受估值修正影响。完整说明见 <b>07 号文件</b>。</div>
+
+
+
 <div class="ctrl">
   <div class="row">
     <span style="font-size:12px;color:var(--ink3);margin-right:2px">链路</span>
@@ -138,7 +283,18 @@ footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-si
   <div class="lg" id="cnt" style="color:var(--ink3)"></div>
 </div>
 
+<div class="k-fig" style="padding:12px 14px 8px">
+ <h4>依赖流程图 · 41 个环节，谁卡住谁</h4>
+ <p class="k-cap">自上而下九级，<b>连线是真实的上下游依赖</b>（上游做不出来，下游就得等）。
+ 节点颜色是国产状态。<b>点任意节点</b>：它的上游连线变红、下游连线变蓝，其余节点淡出。
+ 顶部的链路与状态筛选同时作用于这张图。</p>
+ <div class="k-figbody"><div id="dag"></div></div>
+</div>
+<div id="nodepanel"></div>
+
+<details class="allnodes"><summary>全部 41 个节点的明细卡片（原分层网格）</summary>
 <div id="flow"></div>
+</details>
 
 <div class="stat" id="stat"></div>
 
@@ -155,172 +311,450 @@ footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-si
 <p>换句话说：<b>中国赢下的每一格，规模都比输掉的那几格小一到两个数量级。</b>把「国产化率」当成投资标尺会系统性地高估下游、低估上游的重要性——因为国产化率不含权重，而利润池含权重。这是整个国产替代叙事里最容易被跳过的一步换算。</p>
 </div>
 
+
+<section id="tail" class="k-tail">
+<h2>口径 · 修正 · 免责<span class="n">原来放在页面顶部的长说明，原文搬到这里</span></h2>
+<div class="warn">
+<b>声明</b>　本页不是投资建议，我不是投资顾问。代表公司为各环节的典型玩家，不构成推荐，也不代表该公司是最优选择。份额与状态数据的口径、时点与局限见 01–05 号文件的对应章节。
+</div>
+<div class="warn" style="background:var(--leadb);border-color:color-mix(in srgb,var(--lead) 30%,transparent)"><b style="color:var(--lead)">✓ 2026-08-12 已注入实测估值</b>　EDA、大硅片、AI 加速芯片、刻蚀、DRAM、光模块六个节点已补入<b>同日实测的 PE / PB / 利润率</b>，并标出<b>四家亏损公司</b>（华大九天、沪硅产业、摩尔线程、沐曦）。两处方向性修正：<b>实测英伟达 PE 仅 33.36，低于三家设备商</b>；<b>Synopsys 营业利润率仅 10.4%，「EDA 利润率最高」是错的</b>。着色标准基于份额与国产化率，不受估值修正影响。完整说明见 <b>07 号文件</b>。</div>
+</section>
 <footer>
 <b>着色标准</b>　中国领先 = 全球份额已超越海外对标（激光雷达、光模块、智驾芯片全阶）；已突围 = 全球份额 ≥10% 或国内份额 ≥50% 且产品达国际主流水平；接近突围 = 国内 30–50%，成熟制程已替代；追赶中 = 国内 10–30%；被卡死 = 国内 &lt;10% 且存在明确代差。同一环节在成熟制程与先进制程可能不同色，图中取主力出货节点。<br>
 <b>代表公司的选取</b>　按该环节的份额或代表性选取 2–4 家，<b>不代表推荐，也不代表是最优标的</b>。未上市公司（长江存储、上海微电子、华为海思、宇树等）同样列入，因为产业链的完整性比可投资性更重要。<br>
 <b>已知局限</b>　（1）流程图是简化的，实际产业链存在大量交叉供应与反馈回路，本图只画主干。（2）「上游→中游→下游」的分层是按加工顺序而非价值顺序——价值分布见 05 号文件的利润池地图，两者形状几乎相反。（3）份额与国产化率数据取自 2025 年报至 2026Q2 的不同时点，跨环节比较仅作数量级参考。（4）AI 与汽车两条链在芯片设计、先进封装等环节共用产能，筛选时会同时出现。<br>
 <b>数据来源</b>　汇总自本文件夹 01–05 号文件，原始来源包括 SEMI、TrendForce/CFM 闪存市场、Yole、高工智能汽车研究院、LightCounting、Bernstein、中国信通院、麦姆斯咨询，及各公司年报与交易所披露（2026 年 8 月检索）。
+<br><span style="opacity:.75"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">苏ICP备2026059001号</a></span>
 </footer>
 </div>
 
+<script>/* 共用数据（由 src/data.js 构建注入，勿手改） */
+var CNS=(function(){var D={"meta":{"ver":"2026-09-02","priceDate":"2026-08-12","asOf":"2026-08","note":"本文件是国产替代研究七页的唯一数据源。quotes（实测估值）由 07 号文件的同日取数构成，02 / 04 / 07 三页的 PE / PB / 市值全部从这里派生，不再各存一份。"},"chainStatus":{"lead":["中国领先","--lead","--leadb"],"brk":["已突围","--brk","--brkb"],"near":["接近","--near","--nearb"],"chase":["追赶中","--chase","--chaseb"],"block":["被卡死","--block","--blockb"]},"chainTier":{"up":["上游","--up","工具与原料 —— 决定「能不能造」"],"mid":["中游","--mid","设计与制造 —— 决定「造得出多好」"],"down":["下游","--down","系统与应用 —— 决定「卖给谁、赚多少」"]},"stages":[{"i":0,"tier":"up","stage":"第 1 级 · 设计工具与 IP","flowNote":"EDA 决定芯片能不能被设计出来 —— 全链条起点","nodes":[{"n":"EDA 工具","st":"block","kpi":"国产约 20% · 华大九天亏损","c":["ai","auto","robot"],"cn":["华大九天（亏损）","概伦电子","广立微","芯华章"],"ov":["Synopsys 32% · 营业利润率仅10.4%","Cadence 23%","Siemens 14%"],"d":"全球集中度最高的一格，三家合计 69%。❗<b>2026-08-12 实测修正：Synopsys 毛利率 82.6% 但营业利润率仅 10.4%、ROE 3.8%、最近一季 EPS 同比 -96%</b>——「利润率最高」是错的，研发与并购摊销吃掉了绝大部分毛利。<b>华大九天当前处于亏损</b>（PE -2479，市值 539 亿）。模拟全流程已可用，数字先进节点全流程仍空白。壁垒是数十年工艺库与设计习惯，<b>不随时间自然收敛</b>。","id":"EDA 工具"},{"n":"半导体 IP","st":"chase","kpi":"Arm 生态主导","c":["ai","auto","robot"],"cn":["芯原股份","平头哥（自研）"],"ov":["Arm","Synopsys IP","Cadence IP"],"d":"芯原更接近 IP 平台与设计服务，不是传统全流程 EDA。RISC-V 是国产绕开 Arm 授权的主要路径，但生态成熟度仍有差距。","id":"半导体 IP"}]},{"i":1,"tier":"up","stage":"第 2 级 · 半导体设备","flowNote":"设备决定产线能建到什么制程 —— 全球 1333 亿美元，利润率约 50%","nodes":[{"n":"光刻机","st":"block","kpi":"国产化率个位数 · 代差约 8 年","c":["ai","auto","robot"],"cn":["上海微电子（未上市）","芯上微装（拟2027 IPO）"],"ov":["ASML 53%毛利","尼康","佳能"],"d":"⚠ <b>全链条差距最大的一格。</b>SSA800 28nm 浸没式 DUV 已于 2026 年初交付中芯上机测试，良率超 90%、国产化率超 85%，可支持 7nm 多重曝光。但<b>产能 10 片/小时 vs ASML 170 片/小时</b>，EUV 无产品。ASML 在 EUV 上是全球唯一供应商。","id":"光刻机"},{"n":"刻蚀设备","st":"brk","kpi":"成熟 50–60% · 先进 <15%","c":["ai","auto","robot"],"cn":["中微公司 全球7.7%","北方华创"],"ov":["Lam Research","AMAT","TEL"],"d":"<b>国产化最成功的前道设备。</b>中微 5nm CCP 刻蚀机已达国际水平并进入台积电验证流程。<b>2026-08-12 实测中微 PE 133.71 vs 泛林 53.23 = 2.51x</b>——设备环节对海外的溢价约 2.3 倍，远低于设计环节的 6–7 倍。受益于 3D NAND 层数增加与长鑫长存扩产。","id":"刻蚀设备"},{"n":"薄膜沉积","st":"chase","kpi":"CVD/ALD 仅 5–10%","c":["ai","auto","robot"],"cn":["拓荆科技","北方华创"],"ov":["AMAT","Lam","ASM International"],"d":"<b>市场第二大（282 亿美元）但渗透率最低</b>的一格。拓荆 PECVD 国内第一，ALD 与高深宽比填充仍是硬骨头。市场大×渗透低，空间与难度同样大。","id":"薄膜沉积"},{"n":"量测检测","st":"chase","kpi":"国产化率低两位数","c":["ai","auto","robot"],"cn":["中科飞测","精测电子"],"ov":["KLA","Onto Innovation","AMAT"],"d":"KLA 垄断度最高的环节之一。<b>先进节点的套刻精度量测与电子束检测基本空白。</b>制程越先进，量测设备价值量占比越高，这一格的长期空间常被低估。","id":"量测检测"},{"n":"清洗设备","st":"brk","kpi":"国产化率 50–60%","c":["ai","auto","robot"],"cn":["盛美上海 全球14.3%","至纯科技","北方华创"],"ov":["SCREEN","TEL","Lam"],"d":"<b>已实质突围。</b>盛美 SAPS/TEBO 兆声波清洗是差异化技术路径而非模仿，2025 营收 67.86 亿、国内第三。母体 ACM Research 在纳斯达克上市（ACMR）。","id":"清洗设备"},{"n":"CMP 设备","st":"chase","kpi":"成熟 15–25% · 先进 <10%","c":["ai","auto","robot"],"cn":["华海清科"],"ov":["AMAT","荏原 Ebara"],"d":"华海清科国内第一。逻辑、存储、先进封装都需要多次平坦化，先进封装扩产会拉动需求。","id":"CMP 设备"},{"n":"涂胶显影","st":"chase","kpi":"成熟 10–15%","c":["ai","auto","robot"],"cn":["芯源微"],"ov":["TEL 超 85%"],"d":"东京电子全球份额超 85%，垄断度极高。难点在于<b>必须与光刻机联机验证</b>——光刻机不突破，track 也难独立突破。","id":"涂胶显影"},{"n":"离子注入 / 测试设备","st":"chase","kpi":"离子注入成熟 10–20%","c":["ai","auto","robot"],"cn":["万业企业/凯世通","长川科技","华峰测控"],"ov":["AMAT","Axcelis","Advantest","Teradyne"],"d":"高能注入机基本空白。测试端 Advantest 与 Teradyne 双寡头，华峰测控在模拟与功率测试机国内领先，SoC 与 HBM 测试仍是短板。","id":"离子注入 / 测试设备"}]},{"i":2,"tier":"up","stage":"第 3 级 · 半导体材料","flowNote":"材料是产线的持续性弹药 —— 全球 732 亿美元，国产化率整体不足 20%","nodes":[{"n":"大硅片","st":"chase","kpi":"8寸 55% · 12寸仅 10% · 沪硅亏损","c":["ai","auto","robot"],"cn":["沪硅产业（亏损）","立昂微","中欣晶圆"],"ov":["信越","SUMCO","环球晶圆"],"d":"<b>两极分化格。</b>8 英寸已实质替代，12 英寸仅 10%。<b>2026-08-12 实测沪硅产业 PE -48.7，确认持续亏损；PB 5.16 是全部国产标的中最低</b>——「份额追上不等于盈利追上」的实证。","id":"大硅片"},{"n":"光刻胶","st":"block","kpi":"ArF 仅 2% · EUV 研发中","c":["ai","auto","robot"],"cn":["南大光电","彤程新材","晶瑞电材"],"ov":["JSR","东京应化","信越"],"d":"⚠ <b>材料端差距最大、分层最陡的一格。</b>g/i 线 30%、KrF 10%、ArF 2%、EUV 研发阶段。2025 年底南大光电成为国内首家 ArF 量产企业并通过中芯与长江存储验证——0 到 1 已完成，1 到 N 需要时间。","id":"光刻胶"},{"n":"电子特气","st":"near","kpi":"国产化率约 30%","c":["ai","auto","robot"],"cn":["华特气体","金宏气体","中船特气"],"ov":["林德","液化空气","空气化工"],"d":"认证周期 2–3 年/品种 × 数十个品种，<b>时间由流程决定而非技术</b>。大宗气体国产化率高，超纯氨、六氟化钨等高端品种仍依赖进口。","id":"电子特气"},{"n":"CMP 抛光材料","st":"chase","kpi":"国产化率 <30%","c":["ai","auto","robot"],"cn":["安集科技","鼎龙股份"],"ov":["Entegris","Fujimi","杜邦"],"d":"鼎龙抛光垫实现替代并<b>维持 35–45% 高毛利</b>——高毛利本身说明壁垒真实、竞争尚未充分。","id":"CMP 抛光材料"},{"n":"溅射靶材","st":"brk","kpi":"江丰晶圆制造靶材 38%","c":["ai","auto","robot"],"cn":["江丰电子 38%","有研新材"],"ov":["JX金属","霍尼韦尔"],"d":"<b>材料端国产化最成功的一格</b>，已进入全球主流晶圆厂供应链。制约是天花板——全球市场仅约 20 亿美元。","id":"溅射靶材"},{"n":"湿电子化学品 / 掩膜版 / 封装基板","st":"chase","kpi":"高端等级与 ABF 载板仍依赖进口","c":["ai","auto","robot"],"cn":["江化微","格林达","清溢光电","深南电路","兴森科技"],"ov":["关东化学","巴斯夫","Photronics","揖斐电","欣兴"],"d":"通用湿化学品国产化率高，G4/G5 超高纯等级仍依赖进口。高端半导体掩膜版基本空白。AI 芯片带动 ABF 载板需求暴增，但高层数仍由揖斐电、新光、欣兴主导。","id":"湿电子化学品 / 掩膜版 / 封装基板"}]},{"i":3,"tier":"mid","stage":"第 4 级 · 芯片设计","flowNote":"拿到 EDA 与 IP 后开始设计 —— 这一层决定产品定义，也是利润最集中的地方","nodes":[{"n":"AI 加速芯片","st":"near","kpi":"国产在华 52.3% · 国产GPU三家亏损","c":["ai","robot"],"cn":["华为昇腾 37%","寒武纪 PE208","海光 PE245","摩尔线程（亏损）","沐曦（亏损）","壁仞"],"ov":["NVIDIA >80% · PE仅33.36","AMD","Google TPU","Broadcom"],"d":"⭐ <b>全球链最大的单一利润池。</b>2026-08-12 实测英伟达毛利率 74.1%、营业利润率 65.6%、ROE 114.3%，<b>但 PE 只有 33.36——低于 AMAT 49.35、泛林 53.23，「英伟达贵」在这个时点是错的</b>。国产在华份额首破 52.3%（昇腾 37%），<b>但摩尔线程 PE -363、沐曦 PE -436 均亏损，两家合计市值 5,553 亿元，市场用 PB 22 倍定价</b>；寒武纪 PE 208、PB 51.23（行业 PB 排名 168/172）。国产全球份额仍是个位数——<b>利润来源是 CUDA 不是硅片</b>。","id":"AI 加速芯片"},{"n":"服务器 CPU","st":"near","kpi":"信创市场已成规模","c":["ai"],"cn":["海光信息","飞腾信息","龙芯中科"],"ov":["Intel Xeon","AMD EPYC","Ampere"],"d":"海光走 x86 授权路线，生态兼容是优势也是风险；龙芯自主指令集自主度最高但生态最小。<b>这是两种权衡，不是优劣。</b>","id":"服务器 CPU"},{"n":"智驾芯片","st":"lead","kpi":"全阶 地平线 31.94% 第一","c":["auto"],"cn":["地平线 31.94%","华为 8.74%","黑芝麻智能"],"ov":["英伟达 29.38%","Mobileye 9.17%"],"d":"⭐ <b>中国已在全阶市场领先。</b>地平线累计出货超 1100 万套，征程 6M 订单超 250 万颗。<b>但城区 NOA 高阶市场英伟达 39.43% 反超、地平线仅 22.82%</b>——量在国产手上，高价位利润在英伟达手上。","id":"智驾芯片"},{"n":"内存接口芯片","st":"brk","kpi":"澜起为全球三强之一","c":["ai"],"cn":["澜起科技"],"ov":["Rambus","瑞萨（原IDT）"],"d":"国产芯片设计里全球竞争力最强的环节之一。DDR5 代际升级与服务器内存扩容直接拉动需求，受益于存储超级周期。","id":"内存接口芯片"}]},{"i":4,"tier":"mid","stage":"第 5 级 · 晶圆制造与存储","flowNote":"设计图纸在这里变成硅片 —— 需要第 1–3 级的全部投入","nodes":[{"n":"晶圆代工","st":"near","kpi":"中芯全球 4.8–6% 第三","c":["ai","auto","robot"],"cn":["中芯国际","华虹公司","晶合集成"],"ov":["台积电 64%毛利","三星代工","格芯","联电"],"d":"台积电毛利率 62–66%，中芯约 20%——<b>差距来自没有 EUV，只能靠 DUV 多重曝光</b>，成本结构天然更差。N+2（7nm 级）已实现，但 5nm 以下不是时间问题而是路径问题。成熟制程是真实优势，8 英寸产能利用率超 90%。","id":"晶圆代工"},{"n":"DRAM","st":"brk","kpi":"长鑫全球 7.85% 第四","c":["ai","auto","robot"],"cn":["长鑫科技 688825"],"ov":["三星","SK海力士 29.6%","美光 19.9%"],"d":"⭐ <b>国产进展最快的一格。</b>份额从 2025Q1 的 3% 升到 2026Q1 的 7.7–8%，2026Q1 DRAM 收入 73.09 亿美元、环比 +115%。<b>2026-08-12 实测市值 3.58 万亿、PE 126.95、PB 43.80（全表最高）</b>，对标美光 PE 19.46 = 6.52x 溢价。⚠ <b>美光营业利润率 80.4%、前瞻 PE 仅 5.55——周期股在盈利峰值时 PE 最低，那是风险信号。</b>","id":"DRAM"},{"n":"NAND Flash","st":"brk","kpi":"长江存储全球 13%","c":["ai","auto","robot"],"cn":["长江存储（未上市）"],"ov":["三星 29%","SK海力士 18%","铠侠 14%","美光 13%"],"d":"份额从 8% 升到 13%，与美光、闪迪并列。Xtacking 架构提供独立技术路径。<b>收敛快是因为不依赖 EUV。</b>2026-05 启动 IPO 辅导，估值预期约 3000 亿。","id":"NAND Flash"},{"n":"HBM 高带宽内存","st":"block","kpi":"海力士 >70% · 营业利润率 76%","c":["ai"],"cn":["长鑫（追赶中）"],"ov":["SK海力士 >70%","三星 35–40%","美光 5–10%"],"d":"⚠ <b>中国链最大的单一缺口，也是全球链利润最集中的位置。</b>SK 海力士 2026Q2 营业利润率 76%——超过英伟达 75% 的毛利率。HBM 占其 DRAM 收入约 42%。需要先进封装 + 极高良率 + 与 GPU 厂商联合认证，不是扩产能解决的。","id":"HBM 高带宽内存"}]},{"i":5,"tier":"mid","stage":"第 6 级 · 封装与测试","flowNote":"芯片与 HBM 在这里被封在一起 —— AI 芯片最硬的物理瓶颈","nodes":[{"n":"传统封装测试","st":"brk","kpi":"长电全球 12.2% 第三","c":["ai","auto","robot"],"cn":["长电科技 12.2%","通富微电","华天科技"],"ov":["日月光","安靠 Amkor","力成"],"d":"<b>传统封装替代已完成。</b>全球前三合计超 52%。通富微电是 AMD 主要封测合作方，CPU/GPU 封测经验是差异化优势。","id":"传统封装测试"},{"n":"先进封装 CoWoS 级","st":"block","kpi":"台积电垄断 · 订满至 2026","c":["ai"],"cn":["长电、通富（追赶中）"],"ov":["台积电 CoWoS/SoIC"],"d":"⚠ <b>AI 芯片的实际物理瓶颈。</b>所有高端 AI 芯片都要经过这一道，产能扩张受设备与良率限制。<b>这是国产 AI 芯片「设计得出、造不出来」的卡点</b>——在瓶颈缓解前，拿到 CoWoS 配额比芯片设计更好更重要。长电 2026 年固投约 100 亿投向先进封装。","id":"先进封装 CoWoS 级"}]},{"i":6,"tier":"down","stage":"第 7 级 · 硬件与基础设施","flowNote":"芯片被组装成算力系统 —— 从这里开始中国明显变强","nodes":[{"n":"光模块 / 光互联","st":"lead","kpi":"中际旭创全球 23.4–27% 第一","c":["ai"],"cn":["中际旭创 第一","新易盛","天孚通信","光迅科技"],"ov":["Coherent 约16%","Lumentum","Marvell"],"d":"⭐ <b>半导体链唯一全球第一。</b>800G 市占超 40%、1.6T 达 50–70%，技术已无代差。<b>2026-08-12 实测：中际旭创 PE 72.07 / 新易盛 55.59，而 Coherent 154.10、Lumentum 156.14——折价 0.47x 与 0.36x。</b>但行业分位显示旭创 PE 排名 22/98（便宜）、<b>PB 92/98、PS 88/98（最贵一档）</b>——低 PE 靠 29% 净利率撑起。<b>风险不在技术在结构：90% 以上收入来自境外，FCC 正讨论禁令，一旦利润率回落 PE 会自己变贵。</b>","id":"光模块 / 光互联"},{"n":"CPO 共封装光学","st":"lead","kpi":"中国占全球订单 >65%","c":["ai"],"cn":["中际旭创","新易盛","天孚通信"],"ov":["Broadcom","Coherent"],"d":"🔮 <b>未来生态位候选。</b>2026 年全球约 80 亿美元（+433%），2027 年预计 400 亿。可降低数据中心功耗超 40%——电力成为瓶颈时省电即省钱。<b>证伪条件：良率可能把量产推迟到 2028–29；若 LPO 等方案解决功耗，CPO 紧迫性下降。</b>","id":"CPO 共封装光学"},{"n":"网络与交换","st":"chase","kpi":"国产主要在国内市场","c":["ai"],"cn":["中兴通讯","锐捷网络","新华三"],"ov":["Broadcom","Arista","Cisco","NVIDIA NVLink"],"d":"Arista、Broadcom 毛利率 62–77%，<b>是被低估的高利润环节</b>——集群规模越大网络成本占比越高。国产在国内市场可替代，全球市场基本无份额。","id":"网络与交换"},{"n":"AI 服务器 / 整机","st":"near","kpi":"毛利率仅约 8–12%","c":["ai"],"cn":["浪潮信息","工业富联","中科曙光","联想"],"ov":["Dell","HPE","超微 Supermicro"],"d":"<b>规模巨大、利润极薄的典型陷阱。</b>AI 服务器的价值几乎全部由内部 GPU 与 HBM 决定，整机厂只赚组装与集成费。国内竞争更充分，毛利率比海外还低。","id":"AI 服务器 / 整机"},{"n":"电力设备与液冷","st":"brk","kpi":"变压器交期 128 周（全球）","c":["ai"],"cn":["英维克","科华数据","中恒电气","申菱环境"],"ov":["Vertiv","Eaton","施耐德","GE Vernova"],"d":"🔮 <b>正在成为全球新瓶颈。</b>已宣布的 2026 年 16GW 中仅约 5GW 在建，30–50% 管道面临延期——<b>原因是电力设备而非 GPU</b>。美国市场 2026 约 200 亿美元 → 2030 年 650 亿。<b>中国不缺电，所以这在国产链里是出口机会而非内需机会。</b>","id":"电力设备与液冷"},{"n":"激光雷达","st":"lead","kpi":"中国占全球车载 80–95%","c":["auto","robot"],"cn":["禾赛 全球43%","速腾聚创","华为"],"ov":["Luminar（2025-12 破产）","Valeo"],"d":"⭐ <b>全清单中国优势最彻底的一格——海外龙头已经破产。</b>禾赛全球 ADAS 主雷达 43% 第一、中国 55%，出货指引 300–350 万台。速腾 2026Q1 机器人激光雷达出货 18.55 万台（+1458.8%）。<b>但全球市场 2025 年才刚破 10 亿美元，赢的是小池子。</b>","id":"激光雷达"},{"n":"机器人零部件","st":"near","kpi":"丝杠国产良率 60%（海外 85%）","c":["robot"],"cn":["减速器/丝杠/电机国产厂商","速腾（传感器）"],"ov":["哈默纳科","纳博特斯克","THK"],"d":"🔮 中国 2025 出货约 1.8 万台（+650%），2026 预计 6.25 万台。<b>成本曲线与激光雷达高度相似</b>——宇树单价从 2023 年 59.34 万元降到 2026 年中 2.99 万元。但传感器海外定价仍是国产 3 倍以上，丝杠良率仍有差距。","id":"机器人零部件"}]},{"i":7,"tier":"down","stage":"第 8 级 · 平台与系统","flowNote":"硬件被组织成可用的算力与整车平台","nodes":[{"n":"智算中心与云","st":"chase","kpi":"2026 中国智能算力 1460 EFLOPS","c":["ai"],"cn":["阿里云 35.8%","华为云","腾讯云","三大运营商"],"ov":["AWS","Azure","GCP","CoreWeave"],"d":"全球六大买方 2026 年资本开支超 <b>7600 亿美元</b>（2025 年 4100 亿），<b>既是最大买方也是利润池的最终定价者</b>。中国 2025H1 AI 云市场 223 亿元，阿里云一家超过第 2–4 名之和——<b>需求端集中度风险高于美国。</b>","id":"智算中心与云"},{"n":"操作系统 / 数据库","st":"chase","kpi":"信创高、商业市场低","c":["ai"],"cn":["麒麟软件","统信软件","达梦数据","东方通"],"ov":["微软","Red Hat","Oracle","IBM"],"d":"⚠ 党政与金融信创已成规模，商业市场仍由 Oracle、微软主导。<b>差距在生态不在功能</b>：迁移成本、第三方软件兼容、开发者规模——不是年限能解决的类型。","id":"操作系统 / 数据库"},{"n":"智驾域控制器","st":"lead","kpi":"中国 Tier1 主导","c":["auto"],"cn":["德赛西威","经纬恒润","华为"],"ov":["博世","大陆","安波福"],"d":"绑定本土车企的迭代速度。<b>海外 Tier1 的开发节奏跟不上中国车企的年度改款周期</b>，这是中国在这一格领先的结构性原因。","id":"智驾域控制器"},{"n":"算法与数据闭环","st":"near","kpi":"路况复杂度是中国优势","c":["auto"],"cn":["华为 ADS","小鹏","蔚来","Momenta","地平线"],"ov":["Tesla FSD","Mobileye","Waymo"],"d":"<b>硬件商品化后，价值会向这一层转移。</b>中国优势是路况复杂度与数据规模，劣势是数据出境限制与训练算力受限。","id":"算法与数据闭环"}]},{"i":8,"tier":"down","stage":"第 9 级 · 应用与终端","flowNote":"最终变现的地方 —— 也是整条链估值的最终依据","nodes":[{"n":"大模型","st":"near","kpi":"两边都未形成稳定利润池","c":["ai"],"cn":["DeepSeek","通义","豆包","智谱","Kimi"],"ov":["OpenAI","Anthropic","Google DeepMind","xAI"],"d":"⚠ <b>整条链最大的单一系统性风险。</b>7600 亿美元资本开支的最终依据是这些算力能产生足够下游收入，但模型层多数仍在亏损。中国价格战比美国更激烈，开源模型进一步压缩闭源定价空间。<b>这是唯一一个「上游判断全对、结论仍可能错」的变量。</b>","id":"大模型"},{"n":"AI 应用与 Agent","st":"near","kpi":"商业模式仍在验证","c":["ai"],"cn":["字节","阿里","腾讯","各垂直应用"],"ov":["Microsoft Copilot","Anthropic","OpenAI"],"d":"决定整条链能否闭环。2026 年 7 月底全球芯片股的大幅回调，本质上就是市场开始对「AI 收入能否追上 AI 投入」打问号。","id":"AI 应用与 Agent"},{"n":"智能汽车 / 自动驾驶","st":"lead","kpi":"2026 城区 NOA 预计 650 万辆","c":["auto"],"cn":["比亚迪","理想","小鹏","蔚来","小米"],"ov":["Tesla","传统车企"],"d":"⭐ 2026H1 中国城区 NOA 交付 204.69 万辆（同比 +约70%）。<b>整车环节利润率普遍薄，价值捕获在于能否把智驾变成品牌溢价而非成本项。</b>","id":"智能汽车 / 自动驾驶"},{"n":"人形机器人","st":"lead","kpi":"中国 2026 预计出货 6.25 万台","c":["robot"],"cn":["宇树科技（已过会）","优必选","众多创业公司"],"ov":["特斯拉 Optimus","Figure","1X"],"d":"🔮 宇树 2025 年全球出货第一、<b>毛利率超 60%</b>，2026-07 科创板过会拟募 42 亿+。特斯拉 Optimus Gen3 2026 年目标约 1.5 万台。<b>证伪条件：若 2027 年前仍无规模化真实商业场景，这就只是一场制造业内卷。</b>","id":"人形机器人"}]}],"edges":[["EDA 工具","AI 加速芯片"],["EDA 工具","服务器 CPU"],["EDA 工具","智驾芯片"],["EDA 工具","内存接口芯片"],["半导体 IP","AI 加速芯片"],["半导体 IP","服务器 CPU"],["半导体 IP","智驾芯片"],["光刻机","晶圆代工"],["光刻机","DRAM"],["光刻机","NAND Flash"],["刻蚀设备","晶圆代工"],["刻蚀设备","DRAM"],["刻蚀设备","NAND Flash"],["薄膜沉积","晶圆代工"],["薄膜沉积","DRAM"],["薄膜沉积","NAND Flash"],["量测检测","晶圆代工"],["清洗设备","晶圆代工"],["CMP 设备","晶圆代工"],["涂胶显影","晶圆代工"],["离子注入 / 测试设备","晶圆代工"],["离子注入 / 测试设备","传统封装测试"],["大硅片","晶圆代工"],["大硅片","DRAM"],["大硅片","NAND Flash"],["光刻胶","晶圆代工"],["电子特气","晶圆代工"],["CMP 抛光材料","晶圆代工"],["溅射靶材","晶圆代工"],["湿电子化学品 / 掩膜版 / 封装基板","晶圆代工"],["湿电子化学品 / 掩膜版 / 封装基板","传统封装测试"],["湿电子化学品 / 掩膜版 / 封装基板","先进封装 CoWoS 级"],["AI 加速芯片","先进封装 CoWoS 级"],["服务器 CPU","传统封装测试"],["智驾芯片","传统封装测试"],["内存接口芯片","传统封装测试"],["晶圆代工","AI 加速芯片"],["晶圆代工","服务器 CPU"],["晶圆代工","智驾芯片"],["晶圆代工","内存接口芯片"],["DRAM","HBM 高带宽内存"],["NAND Flash","传统封装测试"],["HBM 高带宽内存","先进封装 CoWoS 级"],["先进封装 CoWoS 级","AI 服务器 / 整机"],["传统封装测试","AI 服务器 / 整机"],["传统封装测试","智驾域控制器"],["传统封装测试","机器人零部件"],["光模块 / 光互联","智算中心与云"],["CPO 共封装光学","智算中心与云"],["网络与交换","智算中心与云"],["AI 服务器 / 整机","智算中心与云"],["电力设备与液冷","智算中心与云"],["激光雷达","智驾域控制器"],["激光雷达","算法与数据闭环"],["机器人零部件","人形机器人"],["智算中心与云","大模型"],["操作系统 / 数据库","大模型"],["智驾域控制器","智能汽车 / 自动驾驶"],["算法与数据闭环","智能汽车 / 自动驾驶"],["大模型","AI 应用与 Agent"],["大模型","人形机器人"],["AI 加速芯片","AI 服务器 / 整机"],["AI 加速芯片","智算中心与云"]]};
+var qc={},qn={};(D.quotes||[]).forEach(function(q){qc[q.cd]=q;qn[q.n]=q;});
+D.q=function(k){return qc[k]||qn[k]||null;};
+D.fmtMC=function(q){if(!q||q.mc==null)return '—';var v=Math.round(q.mc).toLocaleString('en-US');return q.reg==='ov'?('$'+v+' 亿'):(v+' 亿元');};
+D.fmtPE=function(q){return !q?'—':(q.pe==null?(q.loss?'亏损':'存疑'):q.pe.toFixed(2)+'x');};
+D.fmtPB=function(q){return (!q||q.pb==null)?'—':q.pb.toFixed(2);};
+D.rel=function(a,b){var x=D.q(a),y=D.q(b);return (!x||!y||x.pe==null||y.pe==null||y.pe<=0)?null:x.pe/y.pe;};
+return D;})();</script>
+<script>/*! 国产替代研究 · 共用交互与图表（零依赖，全部手写 SVG） */
+var K=(function(){
+var NS='http://www.w3.org/2000/svg';
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function el(t,a,h){var e=document.createElement(t);if(a)for(var k in a)e.setAttribute(k,a[k]);if(h!=null)e.innerHTML=h;return e;}
+function S(t,a,txt){var e=document.createElementNS(NS,t);if(a)for(var k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;}
+/* CJK 偏宽，粗略量一下文字宽度 */
+function tw(s,fs){var w=0;for(var i=0;i<s.length;i++){var c=s.charCodeAt(i);w+=c>0x2e80?1:(c>=65&&c<=90?.62:.52);}return w*fs;}
+
+/* ---------- 主题 ---------- */
+var LS=(function(){try{localStorage.getItem('x');return localStorage;}catch(e){return null;}})();
+function getTheme(){try{return (LS&&LS.getItem('cns-theme'))||'auto';}catch(e){return 'auto';}}
+function setTheme(v){
+  var r=document.documentElement;
+  if(v==='auto'){r.removeAttribute('data-theme');}else{r.setAttribute('data-theme',v);}
+  try{if(LS)LS.setItem('cns-theme',v);}catch(e){}
+  var b=document.getElementById('k-tog');
+  if(b)b.textContent=v==='auto'?'主题 · 跟随系统':(v==='dark'?'主题 · 深色':'主题 · 浅色');
+  redrawAll();
+}
+function cycleTheme(){var o=getTheme();setTheme(o==='auto'?'light':o==='light'?'dark':'auto');}
+
+/* ---------- 顶部导航 ---------- */
+var DOCS=[
+ ['06','全产业链流程图','06_全产业链流程图.html','cn-substitution-06-full-chain-flow.html'],
+ ['07','实测估值数据','07_实测估值数据_修正版.html','cn-substitution-07-measured-valuation.html'],
+ ['01','六模型整合与校正','01_国产替代价值链整合.html','cn-substitution-01-value-chain.html'],
+ ['02','差距量化与突围地图','02_国产替代量化分析.html','cn-substitution-02-quantified.html'],
+ ['03','量化数据表','03_量化数据表.html','cn-substitution-03-data.html'],
+ ['04','追赶时间 · 估值 · ETF','04_追赶时间_估值对比_ETF.html','cn-substitution-04-catchup-valuation-etf.html'],
+ ['05','下游价值链 · 利润池','05_下游价值链_利润池_生态位.html','cn-substitution-05-downstream-profit-pools.html']
+];
+var MODE=0, IDX='00_README.md';
+function nav(cur,mode,idxHref){
+  MODE=mode||0; if(idxHref)IDX=idxHref;
+  var i=-1;for(var k=0;k<DOCS.length;k++)if(DOCS[k][0]===cur)i=k;
+  function href(d){return MODE===1?d[3]:d[2];}
+  var prev=i>0?DOCS[i-1]:null, next=(i>=0&&i<DOCS.length-1)?DOCS[i+1]:null;
+  var COL=(MODE===2); /* 离线合集：链接改成切换父页签 */
+  function A(d,label){ return COL? '<a href="#" data-go="'+esc(d[0])+'">'+esc(label)+'</a>'
+                                 : '<a href="'+esc(href(d))+'">'+esc(label)+'</a>'; }
+  var h='<div class="k-navin">';
+  h+=COL?'<a href="#" data-go="_idx" title="回目录">目录</a>':'<a href="'+esc(IDX)+'" title="回目录">目录</a>';
+  h+='<span class="k-seq">'+(i+1)+' / '+DOCS.length+'</span>';
+  h+=prev?A(prev,'← '+prev[0]+' '+prev[1]):'<a style="opacity:.32;pointer-events:none">← 上一篇</a>';
+  h+=next?A(next,next[0]+' '+next[1]+' →'):'<a style="opacity:.32;pointer-events:none">下一篇 →</a>';
+  h+='<span class="k-sp"></span>';
+  h+='<button class="k-tog" id="k-tog" type="button">主题</button></div>';
+  var n=el('nav',{'class':'k-nav'},h);
+  document.body.insertBefore(n,document.body.firstChild);
+  document.getElementById('k-tog').onclick=cycleTheme;
+  if(COL) [].slice.call(n.querySelectorAll('a[data-go]')).forEach(function(a){
+    a.onclick=function(e){e.preventDefault();
+      try{parent.postMessage({cns:'go',id:a.getAttribute('data-go')},'*');}catch(err){}};});
+  setTheme(getTheme());
+}
+
+/* ---------- 粘性目录（由 h2 生成） ---------- */
+function toc(scope){
+  var root=document.querySelector(scope||'.wrap');if(!root)return;
+  var hs=[].slice.call(root.querySelectorAll('h2'));if(hs.length<2)return;
+  var items=hs.map(function(h,i){
+    if(!h.id)h.id='s'+(i+1);
+    var t=h.cloneNode(true);var n=t.querySelector('.n');if(n)n.remove();
+    return {id:h.id,t:(t.textContent||'').trim().replace(/\s+/g,' '),el:h};
+  });
+  var w=getComputedStyle(root).maxWidth;
+  var wpx=/px/.test(w)?parseFloat(w):1100;
+  document.documentElement.style.setProperty('--kw',wpx+'px');
+  function fit(){ /* 正文两侧各留 186px 才放得下侧栏目录，否则用顶部下拉 */
+    document.documentElement.classList.toggle('k-wide',window.innerWidth>=wpx+372);
+  }
+  fit();window.addEventListener('resize',fit,{passive:true});
+  var side=el('nav',{'class':'k-toc'},'<h6>本页目录</h6>'+items.map(function(x){
+    return '<a href="#'+x.id+'" data-t="'+x.id+'">'+esc(x.t)+'</a>';}).join(''));
+  document.body.appendChild(side);
+  var m=el('div',{'class':'k-tocm k-noprint'},'<select aria-label="跳到章节"><option value="">本页目录 —— 跳到章节…</option>'+
+    items.map(function(x){return '<option value="'+x.id+'">'+esc(x.t)+'</option>';}).join('')+'</select>');
+  root.insertBefore(m,root.firstChild);
+  m.querySelector('select').onchange=function(){if(this.value)document.getElementById(this.value).scrollIntoView({behavior:'smooth'});};
+  var links=[].slice.call(side.querySelectorAll('a'));
+  function mark(){
+    var best=0,y=window.scrollY+120;
+    items.forEach(function(x,i){if(x.el.offsetTop<=y)best=i;});
+    links.forEach(function(a,i){a.classList.toggle('on',i===best);});
+  }
+  window.addEventListener('scroll',mark,{passive:true});mark();
+}
+
+/* ---------- 表头排序 ---------- */
+function sortable(tableSel,cfg,rows,render,opt){
+  var tb=document.querySelector(tableSel);if(!tb)return;
+  var table=tb.closest('table'),ths=[].slice.call(table.querySelectorAll('thead th'));
+  var st={k:(opt&&opt.k)||null,dir:(opt&&opt.dir)||1},base=rows.slice();
+  var filt=(opt&&opt.filter)||function(r){return r;};
+  ths.forEach(function(th,i){
+    var key=cfg[i];if(!key)return;
+    th.classList.add('k-s');th.tabIndex=0;
+    function go(){st.dir=st.k===key?-st.dir:(key.desc?-1:1);st.k=key;paint();}
+    th.onclick=go;th.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}};
+  });
+  function paint(){
+    var r=filt(base.slice());
+    if(st.k){var f=st.k.get;
+      r.sort(function(a,b){var va=f(a),vb=f(b);
+        if(va==null&&vb==null)return 0; if(va==null)return 1; if(vb==null)return -1;
+        var c=typeof va==='number'?va-vb:String(va).localeCompare(String(vb),'zh');
+        return c*st.dir;});}
+    ths.forEach(function(th,i){var key=cfg[i];if(!key)return;
+      th.classList.toggle('k-asc',st.k===key&&st.dir===1);
+      th.classList.toggle('k-desc',st.k===key&&st.dir===-1);});
+    render(r);
+  }
+  paint();
+  return {refresh:paint,setFilter:function(fn){filt=fn;paint();}};
+}
+
+/* ---------- 宽表格自己横向滚动，不让整页横向滚 ---------- */
+function wrapTables(scope){
+  var root=document.querySelector(scope||'.wrap');if(!root)return;
+  [].slice.call(root.querySelectorAll('table')).forEach(function(t){
+    if(t.parentElement&&t.parentElement.classList.contains('k-tw'))return;
+    var p=t.parentElement,ok=false;
+    while(p&&p!==root){var ox=getComputedStyle(p).overflowX;if(ox==='auto'||ox==='scroll'){ok=true;break;}p=p.parentElement;}
+    if(ok)return;
+    var w=document.createElement('div');w.className='k-tw';
+    t.parentNode.insertBefore(w,t);w.appendChild(t);
+  });
+}
+
+/* ---------- 提示气泡 ---------- */
+var TIP=null;
+function tip(){if(!TIP){TIP=el('div',{'class':'k-tip'});document.body.appendChild(TIP);}return TIP;}
+function tipOn(e,html){var t=tip();t.innerHTML=html;t.style.opacity=1;tipMove(e);}
+function tipMove(e){var t=tip();var x=e.clientX+14,y=e.clientY+14;
+  var b=t.getBoundingClientRect();
+  if(x+b.width>innerWidth-8)x=e.clientX-b.width-14;
+  if(y+b.height>innerHeight-8)y=Math.max(8,e.clientY-b.height-14);
+  t.style.left=x+'px';t.style.top=y+'px';}
+function tipOff(){if(TIP)TIP.style.opacity=0;}
+function bindTip(node,html){
+  node.addEventListener('mouseenter',function(e){tipOn(e,html);});
+  node.addEventListener('mousemove',tipMove);
+  node.addEventListener('mouseleave',tipOff);
+}
+
+/* ---------- 标签避让：候选位打分，取重叠最小的一个 ---------- */
+function placeLabels(items,W,H,fs,seeds){
+  var placed=(seeds||[]).slice();
+  var cand=[[1,0,'start',.35],[-1,0,'end',.35],[0,-1,'middle',-.55],[0,1,'middle',1.15],
+            [1,-1,'start',-.25],[-1,-1,'end',-.25],[1,1,'start',1.0],[-1,1,'end',1.0],
+            [1.9,0,'start',.35],[-1.9,0,'end',.35],[0,-1.9,'middle',-.55],[0,1.9,'middle',1.15]];
+  function ov(a,b){var w=Math.min(a.x1,b.x1)-Math.max(a.x0,b.x0),h=Math.min(a.y1,b.y1)-Math.max(a.y0,b.y0);
+    return (w>0&&h>0)?w*h:0;}
+  items.forEach(function(it){
+    var w=tw(it.text,fs),h=fs*1.15,best=null,bestScore=Infinity;
+    for(var ci=0;ci<cand.length;ci++){
+      var c=cand[ci],pad=it.r+5;
+      var cx=it.x+c[0]*pad, cy=it.y+c[1]*pad+c[3]*fs;
+      var x0=c[2]==='start'?cx:c[2]==='end'?cx-w:cx-w/2;
+      var box={x0:x0-1.5,y0:cy-h*.82,x1:x0+w+1.5,y1:cy+h*.24};
+      var pen=0;
+      if(box.x0<2)pen+=(2-box.x0)*80; if(box.x1>W-2)pen+=(box.x1-(W-2))*80;
+      if(box.y0<2)pen+=(2-box.y0)*80; if(box.y1>H-2)pen+=(box.y1-(H-2))*80;
+      for(var p=0;p<placed.length;p++) pen+=ov(box,placed[p])*(placed[p].soft?0.55:1);
+      pen+=ci*0.6; /* 同分时优先靠前的候选位 */
+      if(pen<bestScore){bestScore=pen;best={x:cx,y:cy,anchor:c[2],box:box};}
+      if(pen<=ci*0.6+0.01)break;
+    }
+    placed.push(best.box);
+    it.lx=best.x;it.ly=best.y;it.anchor=best.anchor;it.show=true;it.clean=bestScore<8;
+  });
+  return items;
+}
+
+/* ---------- 散点 / 气泡图 ---------- */
+function scatter(host,o){
+  var W=o.w||940,H=o.h||460,PL=o.pl||58,PR=o.pr||22,PT=o.pt||18,PB=o.pb||46;
+  var pts=o.pts,fs=o.fs||10.5;
+  var xs=pts.map(function(p){return o.xLog?Math.log(Math.max(p.x,1e-6))/Math.LN10:p.x;});
+  var ys=pts.map(function(p){return o.yLog?Math.log(Math.max(p.y,1e-6))/Math.LN10:p.y;});
+  var x0=o.x0!=null?(o.xLog?Math.log(o.x0)/Math.LN10:o.x0):Math.min.apply(null,xs)-.4;
+  var x1=o.x1!=null?(o.xLog?Math.log(o.x1)/Math.LN10:o.x1):Math.max.apply(null,xs)+.4;
+  var y0=o.y0!=null?(o.yLog?Math.log(o.y0)/Math.LN10:o.y0):Math.min.apply(null,ys)-.3;
+  var y1=o.y1!=null?(o.yLog?Math.log(o.y1)/Math.LN10:o.y1):Math.max.apply(null,ys)+.3;
+  var X=function(v){var t=o.xLog?Math.log(Math.max(v,1e-6))/Math.LN10:v;return PL+(t-x0)/(x1-x0)*(W-PL-PR);};
+  var Y=function(v){var t=o.yLog?Math.log(Math.max(v,1e-6))/Math.LN10:v;return H-PB-(t-y0)/(y1-y0)*(H-PT-PB);};
+  var svg=S('svg',{viewBox:'0 0 '+W+' '+H,width:W,height:H,role:'img','aria-label':o.alt||o.title||'散点图'});
+  var g=S('g');svg.appendChild(g);
+  /* 象限底色与注释 */
+  if(o.qx!=null&&o.qy!=null){
+    var qx=X(o.qx),qy=Y(o.qy);
+    g.appendChild(S('rect',{x:PL,y:PT,width:Math.max(0,qx-PL),height:Math.max(0,qy-PT),fill:'var(--dv1)','fill-opacity':.03}));
+    g.appendChild(S('rect',{x:qx,y:qy,width:Math.max(0,W-PR-qx),height:Math.max(0,H-PB-qy),fill:'var(--dv1)','fill-opacity':.03}));
+    if(o.qHi)g.appendChild(S('rect',{x:PL,y:PT,width:Math.max(0,qx-PL),height:Math.max(0,qy-PT),
+      fill:'var(--dv3)','fill-opacity':.085,rx:4}));
+    g.appendChild(S('line',{x1:qx,y1:PT,x2:qx,y2:H-PB,stroke:'var(--dvaxis)','stroke-dasharray':'3 4','stroke-opacity':.7}));
+    g.appendChild(S('line',{x1:PL,y1:qy,x2:W-PR,y2:qy,stroke:'var(--dvaxis)','stroke-dasharray':'3 4','stroke-opacity':.7}));
+  }
+  /* 网格与轴 */
+  (o.xTicks||[]).forEach(function(t){var x=X(t.v);
+    g.appendChild(S('line',{x1:x,y1:PT,x2:x,y2:H-PB,stroke:'var(--dvgrid)'}));
+    g.appendChild(S('text',{x:x,y:H-PB+15,'text-anchor':'middle','font-size':10.5,fill:'var(--ink3)'},t.t));});
+  (o.yTicks||[]).forEach(function(t){var y=Y(t.v);
+    g.appendChild(S('line',{x1:PL,y1:y,x2:W-PR,y2:y,stroke:'var(--dvgrid)'}));
+    g.appendChild(S('text',{x:PL-7,y:y+3.5,'text-anchor':'end','font-size':10.5,fill:'var(--ink3)'},t.t));});
+  g.appendChild(S('line',{x1:PL,y1:H-PB,x2:W-PR,y2:H-PB,stroke:'var(--dvaxis)'}));
+  g.appendChild(S('line',{x1:PL,y1:PT,x2:PL,y2:H-PB,stroke:'var(--dvaxis)'}));
+  if(o.xLabel)g.appendChild(S('text',{x:(PL+W-PR)/2,y:H-8,'text-anchor':'middle','font-size':11,fill:'var(--dvlab)'},o.xLabel));
+  if(o.yLabel)g.appendChild(S('text',{x:14,y:(PT+H-PB)/2,'text-anchor':'middle','font-size':11,fill:'var(--dvlab)',
+    transform:'rotate(-90 14 '+((PT+H-PB)/2)+')'},o.yLabel));
+  var seeds=[];
+  (o.quads||[]).forEach(function(q){
+    var qx=q.px!=null?q.px:X(q.x), qy=q.py!=null?q.py:Y(q.y), qfs=q.fs||11, an=q.anchor||'middle';
+    g.appendChild(S('text',{x:qx,y:qy,'text-anchor':an,'font-size':qfs,fill:q.color||'var(--ink3)',
+      'font-weight':q.bold?700:400},q.text));
+    var qw=tw(q.text,qfs), x0=an==='start'?qx:an==='end'?qx-qw:qx-qw/2;
+    seeds.push({x0:x0-3,y0:qy-qfs,x1:x0+qw+3,y1:qy+qfs*.35});});
+  /* 点：大的先画，小的压在上面 */
+  var order=pts.map(function(p,i){return i;}).sort(function(a,b){return (pts[b].r||5)-(pts[a].r||5);});
+  var labels=[];
+  pts.forEach(function(p){var cx=X(p.x),cy=Y(p.y),r=(p.r||5);
+    seeds.push({x0:cx-r,y0:cy-r,x1:cx+r,y1:cy+r,soft:1});});
+  order.forEach(function(i){
+    var p=pts[i],cx=X(p.x),cy=Y(p.y),r=p.r||5;
+    var c=S('circle',{cx:cx,cy:cy,r:r,fill:p.fill===false?'none':p.c,'fill-opacity':p.fill===false?0:(p.o==null?.62:p.o),
+      stroke:p.c,'stroke-width':p.fill===false?1.9:1.1,'class':'k-dot'});
+    if(p.tip)bindTip(c,p.tip);
+    if(o.onClick)c.addEventListener('click',function(){o.onClick(p);});
+    g.appendChild(c);
+    if(p.label)labels.push({text:p.label,x:cx,y:cy,r:r,c:p.lc||'var(--ink2)',p:p});
+  });
+  placeLabels(labels,W,H,fs,seeds).forEach(function(t){
+    if(!t.show)return;
+    var e=S('text',{x:t.lx,y:t.ly,'text-anchor':t.anchor,'font-size':fs,fill:t.c,
+      stroke:'var(--dvhalo)','stroke-width':2.6,'paint-order':'stroke','stroke-linejoin':'round',
+      'style':'pointer-events:none'},t.text);
+    g.appendChild(e);
+  });
+  host.innerHTML='';host.appendChild(svg);
+  return svg;
+}
+
+/* ---------- 横向时间轴 ---------- */
+function timeline(host,o){
+  var rows=o.rows,rh=o.rh||21,PL=o.pl||168,PR=24,PT=30,PB=26;
+  var W=o.w||900,H=PT+rows.length*rh+PB;
+  var y0=o.from,y1=o.to;
+  var X=function(v){return PL+(v-y0)/(y1-y0)*(W-PL-PR);};
+  var svg=S('svg',{viewBox:'0 0 '+W+' '+H,width:W,height:H,role:'img','aria-label':o.alt||'时间轴'});
+  for(var yr=Math.ceil(y0);yr<=y1;yr++){
+    var x=X(yr);
+    svg.appendChild(S('line',{x1:x,y1:PT-8,x2:x,y2:H-PB+4,stroke:yr===o.now?'var(--dvaxis)':'var(--dvgrid)',
+      'stroke-dasharray':yr===o.now?'':'2 3'}));
+    svg.appendChild(S('text',{x:x,y:PT-13,'text-anchor':'middle','font-size':10.5,fill:'var(--ink3)'},String(yr)));
+  }
+  if(o.mark!=null){var mx=X(o.mark);
+    svg.appendChild(S('line',{x1:mx,y1:PT-8,x2:mx,y2:H-PB+4,stroke:'var(--dv3)','stroke-width':1.4,'stroke-dasharray':'5 3'}));
+    svg.appendChild(S('text',{x:mx+4,y:H-PB+16,'font-size':10.5,fill:'var(--dv3)','font-weight':600},o.markText||''));}
+  rows.forEach(function(r,i){
+    var y=PT+i*rh+rh/2;
+    svg.appendChild(S('text',{x:PL-9,y:y+3.5,'text-anchor':'end','font-size':11,fill:'var(--ink2)'},r.label));
+    var a=X(Math.max(y0,r.from)),b=X(Math.min(y1,r.to));
+    if(r.to<=r.from+0.01){ /* 已超越：画一个实心点 */
+      svg.appendChild(S('circle',{cx:a,cy:y,r:5,fill:r.c}));
+    }else{
+      var bar=S('rect',{x:a,y:y-6,width:Math.max(3,b-a),height:12,rx:6,fill:r.c,'fill-opacity':.75,'class':'k-dot'});
+      if(r.tip)bindTip(bar,r.tip);
+      svg.appendChild(bar);
+      if(r.open)svg.appendChild(S('path',{d:'M'+(b)+' '+(y-6)+'L'+(b+9)+' '+y+'L'+b+' '+(y+6)+'Z',fill:r.c,'fill-opacity':.75}));
+    }
+    if(r.right)svg.appendChild(S('text',{x:Math.min(W-PR,b+(r.open?13:7)),y:y+3.5,'font-size':10.5,fill:'var(--ink3)'},r.right));
+  });
+  host.innerHTML='';host.appendChild(svg);
+  return svg;
+}
+
+/* ---------- 哑铃图 ---------- */
+function dumbbell(host,o){
+  var rows=o.rows,rh=o.rh||24,PL=o.pl||120,PR=o.pr||64,PT=34,PB=30;
+  var W=o.w||880,H=PT+rows.length*rh+PB;
+  var lo=o.min,hi=o.max;
+  var X=function(v){return PL+(Math.max(lo,Math.min(hi,v))-lo)/(hi-lo)*(W-PL-PR);};
+  var svg=S('svg',{viewBox:'0 0 '+W+' '+H,width:W,height:H,role:'img','aria-label':o.alt||'哑铃图'});
+  (o.ticks||[]).forEach(function(t){var x=X(t);
+    svg.appendChild(S('line',{x1:x,y1:PT-10,x2:x,y2:H-PB+2,stroke:'var(--dvgrid)'}));
+    svg.appendChild(S('text',{x:x,y:PT-15,'text-anchor':'middle','font-size':10.5,fill:'var(--ink3)'},String(t)));});
+  rows.forEach(function(r,i){
+    var y=PT+i*rh+rh/2, xa=X(r.a), xb=X(r.b);
+    svg.appendChild(S('text',{x:PL-9,y:y+3.5,'text-anchor':'end','font-size':11.5,fill:'var(--ink2)'},r.label));
+    svg.appendChild(S('line',{x1:xa,y1:y,x2:xb,y2:y,stroke:r.c,'stroke-width':2.4,'stroke-opacity':.5}));
+    var p1=S('circle',{cx:xa,cy:y,r:4.6,fill:'var(--panel)',stroke:'var(--ink3)','stroke-width':1.6,'class':'k-dot'});
+    var p2=S('circle',{cx:xb,cy:y,r:5.4,fill:r.c,'class':'k-dot'});
+    if(r.tipA)bindTip(p1,r.tipA); if(r.tipB)bindTip(p2,r.tipB);
+    svg.appendChild(p1);svg.appendChild(p2);
+    var dir=(xb>xa)?1:-1;
+    svg.appendChild(S('text',{x:Math.max(xa,xb)+9,y:y+3.7,'font-size':10.5,fill:r.c,'font-weight':600},r.right||''));
+  });
+  if(o.xLabel)svg.appendChild(S('text',{x:(PL+W-PR)/2,y:H-8,'text-anchor':'middle','font-size':11,fill:'var(--dvlab)'},o.xLabel));
+  host.innerHTML='';host.appendChild(svg);
+  return svg;
+}
+
+/* ---------- 分层依赖图（自上而下 9 层） ---------- */
+function dag(host,o){
+  var layers=o.layers, edges=o.edges;
+  var NW=o.nw||118, NH=o.nh||34, GX=o.gx||13, LY=o.ly||96;
+  var maxN=Math.max.apply(null,layers.map(function(l){return l.nodes.length;}));
+  var PLft=o.plft||118;
+  var W=Math.max(o.wmin||860, PLft+maxN*(NW+GX)+30);
+  var H=42+layers.length*LY;
+  var pos={}, byId={};
+  layers.forEach(function(l,li){
+    var n=l.nodes.length, span=n*(NW+GX)-GX;
+    var startX=PLft+((W-PLft-30)-span)/2;
+    l.nodes.forEach(function(nd,ni){
+      pos[nd.id]={x:startX+ni*(NW+GX),y:34+li*LY,li:li,ni:ni,node:nd};
+      byId[nd.id]=nd;
+    });
+  });
+  /* 邻接 */
+  var down={},up={};
+  edges.forEach(function(e){ (down[e[0]]=down[e[0]]||[]).push(e[1]); (up[e[1]]=up[e[1]]||[]).push(e[0]); });
+  var svg=S('svg',{viewBox:'0 0 '+W+' '+H,width:W,height:H,role:'img','aria-label':o.alt||'产业链依赖图'});
+  /* 层带 */
+  layers.forEach(function(l,li){
+    var y=34+li*LY;
+    svg.appendChild(S('rect',{x:PLft-8,y:y-11,width:W-PLft-22,height:NH+22,rx:8,
+      fill:'var(--panel)','fill-opacity':li%2?.55:.9,stroke:'var(--line)','stroke-opacity':.55}));
+    svg.appendChild(S('text',{x:8,y:y+13,'font-size':10.5,fill:'var(--ink3)','font-weight':600},l.short));
+    svg.appendChild(S('text',{x:8,y:y+26,'font-size':9.5,fill:'var(--ink3)','fill-opacity':.72},l.tier));
+  });
+  var gEdge=S('g',{'stroke-linecap':'round',fill:'none'});svg.appendChild(gEdge);
+  var gNode=S('g');svg.appendChild(gNode);
+  var epath={};
+  edges.forEach(function(e){
+    var a=pos[e[0]],b=pos[e[1]];if(!a||!b)return;
+    var x1=a.x+NW/2,y1=a.y+NH,x2=b.x+NW/2,y2=b.y;
+    var dy=(y2-y1)*.45;
+    var p=S('path',{d:'M'+x1+' '+y1+'C'+x1+' '+(y1+dy)+','+x2+' '+(y2-dy)+','+x2+' '+y2,
+      stroke:'var(--dvaxis)','stroke-width':1,'stroke-opacity':.3});
+    gEdge.appendChild(p); (epath[e[0]+'>'+e[1]]=p);
+  });
+  var boxes={};
+  layers.forEach(function(l){l.nodes.forEach(function(nd){
+    var p=pos[nd.id];
+    var g=S('g',{'class':'k-dot',transform:'translate('+p.x+','+p.y+')'});
+    var rect=S('rect',{width:NW,height:NH,rx:7,fill:nd.bg,stroke:nd.color,'stroke-width':1.2});
+    g.appendChild(rect);
+    var name=nd.label, fs=11;
+    while(tw(name,fs)>NW-12&&fs>8.6)fs-=.5;
+    if(tw(name,fs)>NW-12){var cut=name;while(tw(cut+'…',fs)>NW-12&&cut.length>2)cut=cut.slice(0,-1);name=cut+'…';}
+    g.appendChild(S('text',{x:NW/2,y:15,'text-anchor':'middle','font-size':fs,'font-weight':620,fill:nd.color},name));
+    var kpi=nd.kpi||'';var kfs=8.8;
+    if(tw(kpi,kfs)>NW-10){var c2=kpi;while(tw(c2+'…',kfs)>NW-10&&c2.length>2)c2=c2.slice(0,-1);kpi=c2+'…';}
+    g.appendChild(S('text',{x:NW/2,y:27,'text-anchor':'middle','font-size':kfs,fill:'var(--ink3)'},kpi));
+    if(nd.tip)bindTip(g,nd.tip);
+    g.addEventListener('click',function(){o.onClick&&o.onClick(nd);focus(nd.id);});
+    gNode.appendChild(g);boxes[nd.id]={g:g,rect:rect,nd:nd};
+  });});
+  var cur=null, dimFn=null;
+  function walk(id,map,acc){ (map[id]||[]).forEach(function(x){ if(!acc[x]){acc[x]=1;walk(x,map,acc);} }); return acc; }
+  function focus(id){
+    if(cur===id){cur=null;paint(null);return;} cur=id;paint(id);
+  }
+  function base(k){return dimFn?(dimFn(boxes[k].nd)?1:0.14):1;}
+  function paint(id){
+    if(!id){
+      Object.keys(boxes).forEach(function(k){boxes[k].g.style.opacity=base(k);boxes[k].rect.setAttribute('stroke-width',1.2);});
+      Object.keys(epath).forEach(function(k){epath[k].setAttribute('stroke','var(--dvaxis)');
+        epath[k].setAttribute('stroke-opacity',.3);epath[k].setAttribute('stroke-width',1);});
+      o.onFocus&&o.onFocus(null);return;
+    }
+    var d=walk(id,down,{}),u=walk(id,up,{});
+    Object.keys(boxes).forEach(function(k){
+      var on=(k===id)||d[k]||u[k];
+      boxes[k].g.style.opacity=on?base(k):Math.min(base(k),.16);
+      boxes[k].rect.setAttribute('stroke-width',k===id?2.6:1.2);
+    });
+    Object.keys(epath).forEach(function(k){
+      var ab=k.split('>'),a=ab[0],b=ab[1];
+      var onD=(a===id||d[a])&&(d[b]||b===id||false);
+      var onU=(b===id||u[b])&&(u[a]||a===id||false);
+      var on=onD||onU;
+      epath[k].setAttribute('stroke',on?(onD?'var(--dv6)':'var(--dv1)'):'var(--dvaxis)');
+      epath[k].setAttribute('stroke-opacity',on?.72:.07);
+      epath[k].setAttribute('stroke-width',on?1.7:1);
+    });
+    o.onFocus&&o.onFocus({id:id,down:Object.keys(d),up:Object.keys(u)});
+  }
+  host.innerHTML='';host.appendChild(svg);
+  return {focus:focus,clear:function(){cur=null;paint(null);},pos:pos,boxes:boxes,
+    setDim:function(fn){dimFn=fn;paint(cur);},
+    downstream:function(id){return Object.keys(walk(id,down,{}));},
+    upstream:function(id){return Object.keys(walk(id,up,{}));}};
+}
+
+/* ---------- 主题切换后重画所有图 ---------- */
+var REDRAW=[];
+function onRedraw(fn){REDRAW.push(fn);}
+function redrawAll(){REDRAW.forEach(function(f){try{f();}catch(e){}});}
+
+/* ---------- 深链：读 hash 参数 ---------- */
+function hash(){var h=location.hash.replace(/^#/,'');var o={};
+  if(!h)return o;h.split('&').forEach(function(p){var i=p.indexOf('=');
+    if(i>0)o[decodeURIComponent(p.slice(0,i))]=decodeURIComponent(p.slice(i+1));});return o;}
+
+return {esc:esc,el:el,S:S,tw:tw,nav:nav,toc:toc,sortable:sortable,wrapTables:wrapTables,scatter:scatter,timeline:timeline,
+        dumbbell:dumbbell,dag:dag,bindTip:bindTip,tipOn:tipOn,tipOff:tipOff,placeLabels:placeLabels,
+        onRedraw:onRedraw,redrawAll:redrawAll,setTheme:setTheme,hash:hash};
+})();
+</script>
 <script>
-const ST={
- lead:['中国领先','--lead','--leadb'],
- brk:['已突围','--brk','--brkb'],
- near:['接近','--near','--nearb'],
- chase:['追赶中','--chase','--chaseb'],
- block:['被卡死','--block','--blockb']
-};
-const TIER={
- up:['上游','--up','工具与原料 —— 决定「能不能造」'],
- mid:['中游','--mid','设计与制造 —— 决定「造得出多好」'],
- down:['下游','--down','系统与应用 —— 决定「卖给谁、赚多少」']
-};
+const ST=CNS.chainStatus;
+const TIER=CNS.chainTier;
 
 // c: 所属链路 all=通用底座, ai, auto, robot
-const DATA=[
-{tier:'up',stage:'第 1 级 · 设计工具与 IP',flowNote:'EDA 决定芯片能不能被设计出来 —— 全链条起点',nodes:[
- {n:'EDA 工具',st:'block',kpi:'国产约 20% · 华大九天亏损',c:['ai','auto','robot'],
-  cn:['华大九天（亏损）','概伦电子','广立微','芯华章'],ov:['Synopsys 32% · 营业利润率仅10.4%','Cadence 23%','Siemens 14%'],
-  d:'全球集中度最高的一格，三家合计 69%。❗<b>2026-08-12 实测修正：Synopsys 毛利率 82.6% 但营业利润率仅 10.4%、ROE 3.8%、最近一季 EPS 同比 -96%</b>——「利润率最高」是错的，研发与并购摊销吃掉了绝大部分毛利。<b>华大九天当前处于亏损</b>（PE -2479，市值 539 亿）。模拟全流程已可用，数字先进节点全流程仍空白。壁垒是数十年工艺库与设计习惯，<b>不随时间自然收敛</b>。'},
- {n:'半导体 IP',st:'chase',kpi:'Arm 生态主导',c:['ai','auto','robot'],
-  cn:['芯原股份','平头哥（自研）'],ov:['Arm','Synopsys IP','Cadence IP'],
-  d:'芯原更接近 IP 平台与设计服务，不是传统全流程 EDA。RISC-V 是国产绕开 Arm 授权的主要路径，但生态成熟度仍有差距。'}
-]},
-{tier:'up',stage:'第 2 级 · 半导体设备',flowNote:'设备决定产线能建到什么制程 —— 全球 1333 亿美元，利润率约 50%',nodes:[
- {n:'光刻机',st:'block',kpi:'国产化率个位数 · 代差约 8 年',c:['ai','auto','robot'],
-  cn:['上海微电子（未上市）','芯上微装（拟2027 IPO）'],ov:['ASML 53%毛利','尼康','佳能'],
-  d:'⚠ <b>全链条差距最大的一格。</b>SSA800 28nm 浸没式 DUV 已于 2026 年初交付中芯上机测试，良率超 90%、国产化率超 85%，可支持 7nm 多重曝光。但<b>产能 10 片/小时 vs ASML 170 片/小时</b>，EUV 无产品。ASML 在 EUV 上是全球唯一供应商。'},
- {n:'刻蚀设备',st:'brk',kpi:'成熟 50–60% · 先进 <15%',c:['ai','auto','robot'],
-  cn:['中微公司 全球7.7%','北方华创'],ov:['Lam Research','AMAT','TEL'],
-  d:'<b>国产化最成功的前道设备。</b>中微 5nm CCP 刻蚀机已达国际水平并进入台积电验证流程。<b>2026-08-12 实测中微 PE 133.71 vs 泛林 53.23 = 2.51x</b>——设备环节对海外的溢价约 2.3 倍，远低于设计环节的 6–7 倍。受益于 3D NAND 层数增加与长鑫长存扩产。'},
- {n:'薄膜沉积',st:'chase',kpi:'CVD/ALD 仅 5–10%',c:['ai','auto','robot'],
-  cn:['拓荆科技','北方华创'],ov:['AMAT','Lam','ASM International'],
-  d:'<b>市场第二大（282 亿美元）但渗透率最低</b>的一格。拓荆 PECVD 国内第一，ALD 与高深宽比填充仍是硬骨头。市场大×渗透低，空间与难度同样大。'},
- {n:'量测检测',st:'chase',kpi:'国产化率低两位数',c:['ai','auto','robot'],
-  cn:['中科飞测','精测电子'],ov:['KLA','Onto Innovation','AMAT'],
-  d:'KLA 垄断度最高的环节之一。<b>先进节点的套刻精度量测与电子束检测基本空白。</b>制程越先进，量测设备价值量占比越高，这一格的长期空间常被低估。'},
- {n:'清洗设备',st:'brk',kpi:'国产化率 50–60%',c:['ai','auto','robot'],
-  cn:['盛美上海 全球14.3%','至纯科技','北方华创'],ov:['SCREEN','TEL','Lam'],
-  d:'<b>已实质突围。</b>盛美 SAPS/TEBO 兆声波清洗是差异化技术路径而非模仿，2025 营收 67.86 亿、国内第三。母体 ACM Research 在纳斯达克上市（ACMR）。'},
- {n:'CMP 设备',st:'chase',kpi:'成熟 15–25% · 先进 <10%',c:['ai','auto','robot'],
-  cn:['华海清科'],ov:['AMAT','荏原 Ebara'],
-  d:'华海清科国内第一。逻辑、存储、先进封装都需要多次平坦化，先进封装扩产会拉动需求。'},
- {n:'涂胶显影',st:'chase',kpi:'成熟 10–15%',c:['ai','auto','robot'],
-  cn:['芯源微'],ov:['TEL 超 85%'],
-  d:'东京电子全球份额超 85%，垄断度极高。难点在于<b>必须与光刻机联机验证</b>——光刻机不突破，track 也难独立突破。'},
- {n:'离子注入 / 测试设备',st:'chase',kpi:'离子注入成熟 10–20%',c:['ai','auto','robot'],
-  cn:['万业企业/凯世通','长川科技','华峰测控'],ov:['AMAT','Axcelis','Advantest','Teradyne'],
-  d:'高能注入机基本空白。测试端 Advantest 与 Teradyne 双寡头，华峰测控在模拟与功率测试机国内领先，SoC 与 HBM 测试仍是短板。'}
-]},
-{tier:'up',stage:'第 3 级 · 半导体材料',flowNote:'材料是产线的持续性弹药 —— 全球 732 亿美元，国产化率整体不足 20%',nodes:[
- {n:'大硅片',st:'chase',kpi:'8寸 55% · 12寸仅 10% · 沪硅亏损',c:['ai','auto','robot'],
-  cn:['沪硅产业（亏损）','立昂微','中欣晶圆'],ov:['信越','SUMCO','环球晶圆'],
-  d:'<b>两极分化格。</b>8 英寸已实质替代，12 英寸仅 10%。<b>2026-08-12 实测沪硅产业 PE -48.7，确认持续亏损；PB 5.16 是全部国产标的中最低</b>——「份额追上不等于盈利追上」的实证。'},
- {n:'光刻胶',st:'block',kpi:'ArF 仅 2% · EUV 研发中',c:['ai','auto','robot'],
-  cn:['南大光电','彤程新材','晶瑞电材'],ov:['JSR','东京应化','信越'],
-  d:'⚠ <b>材料端差距最大、分层最陡的一格。</b>g/i 线 30%、KrF 10%、ArF 2%、EUV 研发阶段。2025 年底南大光电成为国内首家 ArF 量产企业并通过中芯与长江存储验证——0 到 1 已完成，1 到 N 需要时间。'},
- {n:'电子特气',st:'near',kpi:'国产化率约 30%',c:['ai','auto','robot'],
-  cn:['华特气体','金宏气体','中船特气'],ov:['林德','液化空气','空气化工'],
-  d:'认证周期 2–3 年/品种 × 数十个品种，<b>时间由流程决定而非技术</b>。大宗气体国产化率高，超纯氨、六氟化钨等高端品种仍依赖进口。'},
- {n:'CMP 抛光材料',st:'chase',kpi:'国产化率 <30%',c:['ai','auto','robot'],
-  cn:['安集科技','鼎龙股份'],ov:['Entegris','Fujimi','杜邦'],
-  d:'鼎龙抛光垫实现替代并<b>维持 35–45% 高毛利</b>——高毛利本身说明壁垒真实、竞争尚未充分。'},
- {n:'溅射靶材',st:'brk',kpi:'江丰晶圆制造靶材 38%',c:['ai','auto','robot'],
-  cn:['江丰电子 38%','有研新材'],ov:['JX金属','霍尼韦尔'],
-  d:'<b>材料端国产化最成功的一格</b>，已进入全球主流晶圆厂供应链。制约是天花板——全球市场仅约 20 亿美元。'},
- {n:'湿电子化学品 / 掩膜版 / 封装基板',st:'chase',kpi:'高端等级与 ABF 载板仍依赖进口',c:['ai','auto','robot'],
-  cn:['江化微','格林达','清溢光电','深南电路','兴森科技'],ov:['关东化学','巴斯夫','Photronics','揖斐电','欣兴'],
-  d:'通用湿化学品国产化率高，G4/G5 超高纯等级仍依赖进口。高端半导体掩膜版基本空白。AI 芯片带动 ABF 载板需求暴增，但高层数仍由揖斐电、新光、欣兴主导。'}
-]},
-{tier:'mid',stage:'第 4 级 · 芯片设计',flowNote:'拿到 EDA 与 IP 后开始设计 —— 这一层决定产品定义，也是利润最集中的地方',nodes:[
- {n:'AI 加速芯片',st:'near',kpi:'国产在华 52.3% · 国产GPU三家亏损',c:['ai','robot'],
-  cn:['华为昇腾 37%','寒武纪 PE208','海光 PE245','摩尔线程（亏损）','沐曦（亏损）','壁仞'],ov:['NVIDIA >80% · PE仅33.36','AMD','Google TPU','Broadcom'],
-  d:'⭐ <b>全球链最大的单一利润池。</b>2026-08-12 实测英伟达毛利率 74.1%、营业利润率 65.6%、ROE 114.3%，<b>但 PE 只有 33.36——低于 AMAT 49.35、泛林 53.23，「英伟达贵」在这个时点是错的</b>。国产在华份额首破 52.3%（昇腾 37%），<b>但摩尔线程 PE -363、沐曦 PE -436 均亏损，两家合计市值 5,553 亿元，市场用 PB 22 倍定价</b>；寒武纪 PE 208、PB 51.23（行业 PB 排名 168/172）。国产全球份额仍是个位数——<b>利润来源是 CUDA 不是硅片</b>。'},
- {n:'服务器 CPU',st:'near',kpi:'信创市场已成规模',c:['ai'],
-  cn:['海光信息','飞腾信息','龙芯中科'],ov:['Intel Xeon','AMD EPYC','Ampere'],
-  d:'海光走 x86 授权路线，生态兼容是优势也是风险；龙芯自主指令集自主度最高但生态最小。<b>这是两种权衡，不是优劣。</b>'},
- {n:'智驾芯片',st:'lead',kpi:'全阶 地平线 31.94% 第一',c:['auto'],
-  cn:['地平线 31.94%','华为 8.74%','黑芝麻智能'],ov:['英伟达 29.38%','Mobileye 9.17%'],
-  d:'⭐ <b>中国已在全阶市场领先。</b>地平线累计出货超 1100 万套，征程 6M 订单超 250 万颗。<b>但城区 NOA 高阶市场英伟达 39.43% 反超、地平线仅 22.82%</b>——量在国产手上，高价位利润在英伟达手上。'},
- {n:'内存接口芯片',st:'brk',kpi:'澜起为全球三强之一',c:['ai'],
-  cn:['澜起科技'],ov:['Rambus','瑞萨（原IDT）'],
-  d:'国产芯片设计里全球竞争力最强的环节之一。DDR5 代际升级与服务器内存扩容直接拉动需求，受益于存储超级周期。'}
-]},
-{tier:'mid',stage:'第 5 级 · 晶圆制造与存储',flowNote:'设计图纸在这里变成硅片 —— 需要第 1–3 级的全部投入',nodes:[
- {n:'晶圆代工',st:'near',kpi:'中芯全球 4.8–6% 第三',c:['ai','auto','robot'],
-  cn:['中芯国际','华虹公司','晶合集成'],ov:['台积电 64%毛利','三星代工','格芯','联电'],
-  d:'台积电毛利率 62–66%，中芯约 20%——<b>差距来自没有 EUV，只能靠 DUV 多重曝光</b>，成本结构天然更差。N+2（7nm 级）已实现，但 5nm 以下不是时间问题而是路径问题。成熟制程是真实优势，8 英寸产能利用率超 90%。'},
- {n:'DRAM',st:'brk',kpi:'长鑫全球 7.85% 第四',c:['ai','auto','robot'],
-  cn:['长鑫科技 688825'],ov:['三星','SK海力士 29.6%','美光 19.9%'],
-  d:'⭐ <b>国产进展最快的一格。</b>份额从 2025Q1 的 3% 升到 2026Q1 的 7.7–8%，2026Q1 DRAM 收入 73.09 亿美元、环比 +115%。<b>2026-08-12 实测市值 3.58 万亿、PE 126.95、PB 43.80（全表最高）</b>，对标美光 PE 19.46 = 6.52x 溢价。⚠ <b>美光营业利润率 80.4%、前瞻 PE 仅 5.55——周期股在盈利峰值时 PE 最低，那是风险信号。</b>'},
- {n:'NAND Flash',st:'brk',kpi:'长江存储全球 13%',c:['ai','auto','robot'],
-  cn:['长江存储（未上市）'],ov:['三星 29%','SK海力士 18%','铠侠 14%','美光 13%'],
-  d:'份额从 8% 升到 13%，与美光、闪迪并列。Xtacking 架构提供独立技术路径。<b>收敛快是因为不依赖 EUV。</b>2026-05 启动 IPO 辅导，估值预期约 3000 亿。'},
- {n:'HBM 高带宽内存',st:'block',kpi:'海力士 >70% · 营业利润率 76%',c:['ai'],
-  cn:['长鑫（追赶中）'],ov:['SK海力士 >70%','三星 35–40%','美光 5–10%'],
-  d:'⚠ <b>中国链最大的单一缺口，也是全球链利润最集中的位置。</b>SK 海力士 2026Q2 营业利润率 76%——超过英伟达 75% 的毛利率。HBM 占其 DRAM 收入约 42%。需要先进封装 + 极高良率 + 与 GPU 厂商联合认证，不是扩产能解决的。'}
-]},
-{tier:'mid',stage:'第 6 级 · 封装与测试',flowNote:'芯片与 HBM 在这里被封在一起 —— AI 芯片最硬的物理瓶颈',nodes:[
- {n:'传统封装测试',st:'brk',kpi:'长电全球 12.2% 第三',c:['ai','auto','robot'],
-  cn:['长电科技 12.2%','通富微电','华天科技'],ov:['日月光','安靠 Amkor','力成'],
-  d:'<b>传统封装替代已完成。</b>全球前三合计超 52%。通富微电是 AMD 主要封测合作方，CPU/GPU 封测经验是差异化优势。'},
- {n:'先进封装 CoWoS 级',st:'block',kpi:'台积电垄断 · 订满至 2026',c:['ai'],
-  cn:['长电、通富（追赶中）'],ov:['台积电 CoWoS/SoIC'],
-  d:'⚠ <b>AI 芯片的实际物理瓶颈。</b>所有高端 AI 芯片都要经过这一道，产能扩张受设备与良率限制。<b>这是国产 AI 芯片「设计得出、造不出来」的卡点</b>——在瓶颈缓解前，拿到 CoWoS 配额比芯片设计更好更重要。长电 2026 年固投约 100 亿投向先进封装。'}
-]},
-{tier:'down',stage:'第 7 级 · 硬件与基础设施',flowNote:'芯片被组装成算力系统 —— 从这里开始中国明显变强',nodes:[
- {n:'光模块 / 光互联',st:'lead',kpi:'中际旭创全球 23.4–27% 第一',c:['ai'],
-  cn:['中际旭创 第一','新易盛','天孚通信','光迅科技'],ov:['Coherent 约16%','Lumentum','Marvell'],
-  d:'⭐ <b>半导体链唯一全球第一。</b>800G 市占超 40%、1.6T 达 50–70%，技术已无代差。<b>2026-08-12 实测：中际旭创 PE 72.07 / 新易盛 55.59，而 Coherent 154.10、Lumentum 156.14——折价 0.47x 与 0.36x。</b>但行业分位显示旭创 PE 排名 22/98（便宜）、<b>PB 92/98、PS 88/98（最贵一档）</b>——低 PE 靠 29% 净利率撑起。<b>风险不在技术在结构：90% 以上收入来自境外，FCC 正讨论禁令，一旦利润率回落 PE 会自己变贵。</b>'},
- {n:'CPO 共封装光学',st:'lead',kpi:'中国占全球订单 >65%',c:['ai'],
-  cn:['中际旭创','新易盛','天孚通信'],ov:['Broadcom','Coherent'],
-  d:'🔮 <b>未来生态位候选。</b>2026 年全球约 80 亿美元（+433%），2027 年预计 400 亿。可降低数据中心功耗超 40%——电力成为瓶颈时省电即省钱。<b>证伪条件：良率可能把量产推迟到 2028–29；若 LPO 等方案解决功耗，CPO 紧迫性下降。</b>'},
- {n:'网络与交换',st:'chase',kpi:'国产主要在国内市场',c:['ai'],
-  cn:['中兴通讯','锐捷网络','新华三'],ov:['Broadcom','Arista','Cisco','NVIDIA NVLink'],
-  d:'Arista、Broadcom 毛利率 62–77%，<b>是被低估的高利润环节</b>——集群规模越大网络成本占比越高。国产在国内市场可替代，全球市场基本无份额。'},
- {n:'AI 服务器 / 整机',st:'near',kpi:'毛利率仅约 8–12%',c:['ai'],
-  cn:['浪潮信息','工业富联','中科曙光','联想'],ov:['Dell','HPE','超微 Supermicro'],
-  d:'<b>规模巨大、利润极薄的典型陷阱。</b>AI 服务器的价值几乎全部由内部 GPU 与 HBM 决定，整机厂只赚组装与集成费。国内竞争更充分，毛利率比海外还低。'},
- {n:'电力设备与液冷',st:'brk',kpi:'变压器交期 128 周（全球）',c:['ai'],
-  cn:['英维克','科华数据','中恒电气','申菱环境'],ov:['Vertiv','Eaton','施耐德','GE Vernova'],
-  d:'🔮 <b>正在成为全球新瓶颈。</b>已宣布的 2026 年 16GW 中仅约 5GW 在建，30–50% 管道面临延期——<b>原因是电力设备而非 GPU</b>。美国市场 2026 约 200 亿美元 → 2030 年 650 亿。<b>中国不缺电，所以这在国产链里是出口机会而非内需机会。</b>'},
- {n:'激光雷达',st:'lead',kpi:'中国占全球车载 80–95%',c:['auto','robot'],
-  cn:['禾赛 全球43%','速腾聚创','华为'],ov:['Luminar（2025-12 破产）','Valeo'],
-  d:'⭐ <b>全清单中国优势最彻底的一格——海外龙头已经破产。</b>禾赛全球 ADAS 主雷达 43% 第一、中国 55%，出货指引 300–350 万台。速腾 2026Q1 机器人激光雷达出货 18.55 万台（+1458.8%）。<b>但全球市场 2025 年才刚破 10 亿美元，赢的是小池子。</b>'},
- {n:'机器人零部件',st:'near',kpi:'丝杠国产良率 60%（海外 85%）',c:['robot'],
-  cn:['减速器/丝杠/电机国产厂商','速腾（传感器）'],ov:['哈默纳科','纳博特斯克','THK'],
-  d:'🔮 中国 2025 出货约 1.8 万台（+650%），2026 预计 6.25 万台。<b>成本曲线与激光雷达高度相似</b>——宇树单价从 2023 年 59.34 万元降到 2026 年中 2.99 万元。但传感器海外定价仍是国产 3 倍以上，丝杠良率仍有差距。'}
-]},
-{tier:'down',stage:'第 8 级 · 平台与系统',flowNote:'硬件被组织成可用的算力与整车平台',nodes:[
- {n:'智算中心与云',st:'chase',kpi:'2026 中国智能算力 1460 EFLOPS',c:['ai'],
-  cn:['阿里云 35.8%','华为云','腾讯云','三大运营商'],ov:['AWS','Azure','GCP','CoreWeave'],
-  d:'全球六大买方 2026 年资本开支超 <b>7600 亿美元</b>（2025 年 4100 亿），<b>既是最大买方也是利润池的最终定价者</b>。中国 2025H1 AI 云市场 223 亿元，阿里云一家超过第 2–4 名之和——<b>需求端集中度风险高于美国。</b>'},
- {n:'操作系统 / 数据库',st:'chase',kpi:'信创高、商业市场低',c:['ai'],
-  cn:['麒麟软件','统信软件','达梦数据','东方通'],ov:['微软','Red Hat','Oracle','IBM'],
-  d:'⚠ 党政与金融信创已成规模，商业市场仍由 Oracle、微软主导。<b>差距在生态不在功能</b>：迁移成本、第三方软件兼容、开发者规模——不是年限能解决的类型。'},
- {n:'智驾域控制器',st:'lead',kpi:'中国 Tier1 主导',c:['auto'],
-  cn:['德赛西威','经纬恒润','华为'],ov:['博世','大陆','安波福'],
-  d:'绑定本土车企的迭代速度。<b>海外 Tier1 的开发节奏跟不上中国车企的年度改款周期</b>，这是中国在这一格领先的结构性原因。'},
- {n:'算法与数据闭环',st:'near',kpi:'路况复杂度是中国优势',c:['auto'],
-  cn:['华为 ADS','小鹏','蔚来','Momenta','地平线'],ov:['Tesla FSD','Mobileye','Waymo'],
-  d:'<b>硬件商品化后，价值会向这一层转移。</b>中国优势是路况复杂度与数据规模，劣势是数据出境限制与训练算力受限。'}
-]},
-{tier:'down',stage:'第 9 级 · 应用与终端',flowNote:'最终变现的地方 —— 也是整条链估值的最终依据',nodes:[
- {n:'大模型',st:'near',kpi:'两边都未形成稳定利润池',c:['ai'],
-  cn:['DeepSeek','通义','豆包','智谱','Kimi'],ov:['OpenAI','Anthropic','Google DeepMind','xAI'],
-  d:'⚠ <b>整条链最大的单一系统性风险。</b>7600 亿美元资本开支的最终依据是这些算力能产生足够下游收入，但模型层多数仍在亏损。中国价格战比美国更激烈，开源模型进一步压缩闭源定价空间。<b>这是唯一一个「上游判断全对、结论仍可能错」的变量。</b>'},
- {n:'AI 应用与 Agent',st:'near',kpi:'商业模式仍在验证',c:['ai'],
-  cn:['字节','阿里','腾讯','各垂直应用'],ov:['Microsoft Copilot','Anthropic','OpenAI'],
-  d:'决定整条链能否闭环。2026 年 7 月底全球芯片股的大幅回调，本质上就是市场开始对「AI 收入能否追上 AI 投入」打问号。'},
- {n:'智能汽车 / 自动驾驶',st:'lead',kpi:'2026 城区 NOA 预计 650 万辆',c:['auto'],
-  cn:['比亚迪','理想','小鹏','蔚来','小米'],ov:['Tesla','传统车企'],
-  d:'⭐ 2026H1 中国城区 NOA 交付 204.69 万辆（同比 +约70%）。<b>整车环节利润率普遍薄，价值捕获在于能否把智驾变成品牌溢价而非成本项。</b>'},
- {n:'人形机器人',st:'lead',kpi:'中国 2026 预计出货 6.25 万台',c:['robot'],
-  cn:['宇树科技（已过会）','优必选','众多创业公司'],ov:['特斯拉 Optimus','Figure','1X'],
-  d:'🔮 宇树 2025 年全球出货第一、<b>毛利率超 60%</b>，2026-07 科创板过会拟募 42 亿+。特斯拉 Optimus Gen3 2026 年目标约 1.5 万台。<b>证伪条件：若 2027 年前仍无规模化真实商业场景，这就只是一场制造业内卷。</b>'}
-]}
-];
+const DATA=CNS.stages;
 
 let fc='all', fs='all', sel=null;
 
@@ -388,6 +822,83 @@ Array.prototype.forEach.call(document.querySelectorAll('.chip'),function(b){
   };
 });
 render();
+</script>
+<script>/* ===== 06 页：真正的依赖流程图（分层 DAG + 下游影响高亮 + 详情面板） ===== */
+(function(){
+K.nav('06',1,'cn-substitution.html');
+var esc=K.esc, ST=CNS.chainStatus, TIER=CNS.chainTier;
+var NODE={}; CNS.stages.forEach(function(g){g.nodes.forEach(function(n){NODE[n.n]={n:n,g:g};});});
+var fc='all', fs='all', G=null;
+
+function layers(){
+  return CNS.stages.map(function(g){
+    var p=g.stage.split(' · ');
+    return {short:(p[1]||g.stage), tier:(p[0]||'')+' · '+TIER[g.tier][0],
+      nodes:g.nodes.map(function(n){
+        var s=ST[n.st];
+        return {id:n.n,label:n.n,kpi:n.kpi,color:'var('+s[1]+')',bg:'var('+s[2]+')',st:n.st,c:n.c,raw:n,stage:g,
+          tip:'<b>'+esc(n.n)+'</b> <span class="k-tk">'+s[0]+'</span><br>'+esc(n.kpi)+
+              '<br>🇨🇳 '+esc(n.cn.join('、'))+'<br>🌍 '+esc(n.ov.join('、'))+
+              '<br><span class="k-tk">点一下：看它卡住谁 · 详情在下方</span>'};
+      })};
+  });
+}
+function drawDag(){
+  G=K.dag(document.getElementById('dag'),{layers:layers(),edges:CNS.edges,
+    nw:122,nh:36,gx:12,ly:98,plft:120,wmin:900,
+    onClick:function(nd){panel(nd);},
+    onFocus:function(f){if(!f)clearPanel();}});
+  applyDim();
+}
+function applyDim(){
+  if(!G)return;
+  G.setDim(function(nd){
+    if(fc!=='all'&&(nd.c||[]).indexOf(fc)<0)return false;
+    if(fs!=='all'&&nd.st!==fs)return false;
+    return true;});
+}
+function clearPanel(){
+  document.getElementById('nodepanel').innerHTML=
+   '<p class="ph">点流程图上任意一个节点：<b>上游画红线、下游画蓝线</b>，其余节点淡出，'+
+   '这里显示它的中国／海外代表公司与说明。<b>被卡死的节点最值得点</b>——一眼看清它卡住了下游哪些环节。</p>';
+}
+function panel(nd){
+  var n=nd.raw, s=ST[n.st];
+  var dn=G.downstream(n.n), up=G.upstream(n.n);
+  var blocked=dn.map(function(k){return NODE[k]&&NODE[k].n;}).filter(Boolean);
+  var el=document.getElementById('nodepanel');
+  el.innerHTML=
+   '<div class="pnl" style="--sc:var('+s[1]+');--scb:var('+s[2]+')">'+
+   '<div class="ph2"><span class="pn">'+esc(n.n)+'</span><span class="pst">'+s[0]+'</span>'+
+     '<span class="pstage">'+esc(nd.stage.stage)+'</span>'+
+     '<button class="pcl" type="button">清除选择 ✕</button></div>'+
+   '<div class="pkpi">'+esc(n.kpi)+'</div>'+
+   '<div class="prow"><span class="f">🇨🇳 中国</span><span class="v">'+esc(n.cn.join('、'))+'</span></div>'+
+   '<div class="prow"><span class="f">🌍 海外</span><span class="v">'+esc(n.ov.join('、'))+'</span></div>'+
+   '<div class="pd">'+n.d+'</div>'+
+   '<div class="pdep">'+
+     '<div><b>上游依赖 '+up.length+' 个</b>'+(up.length?'：'+up.map(esc).join('、'):'——它是链条起点')+'</div>'+
+     '<div style="margin-top:5px"><b>下游受影响 '+dn.length+' 个</b>'+
+       (dn.length?'：'+blocked.map(function(x){var t=ST[x.st];
+          return '<span class="pchip" style="background:var('+t[2]+');color:var('+t[1]+')">'+esc(x.n)+'</span>';}).join('')
+        :'——它是链条终点')+'</div>'+
+     (n.st==='block'&&dn.length?'<div class="pwarn">⚠ 这是一个<b>被卡死</b>的节点，上面 '+dn.length+
+        ' 个下游环节的产能与进度都受它约束。</div>':'')+
+   '</div></div>';
+  el.querySelector('.pcl').onclick=function(){G.clear();clearPanel();};
+  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+clearPanel();drawDag();K.onRedraw(drawDag);
+
+/* 筛选条同时作用于流程图与下方明细网格 */
+[].slice.call(document.querySelectorAll('.ctrl .chip')).forEach(function(b){
+  var old=b.onclick;
+  b.addEventListener('click',function(){
+    if(b.dataset.c!==undefined)fc=b.dataset.c; else fs=b.dataset.s;
+    applyDim();if(G)G.clear();clearPanel();
+  });
+});
+})();
 </script>
 </body>
 </html>

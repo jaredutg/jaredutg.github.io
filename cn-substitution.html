@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>国产替代投资研究 · 目录</title>
-<meta name="description" content="对六个 AI 模型关于国产替代投资回答的整合、事实校正与量化分析：103 家公司、36 个环节、全产业链流程图与利润池地图。">
+<meta name="description" content="对六个 AI 模型关于国产替代投资回答的整合、事实校正与量化分析：103 家公司、36 个环节、全产业链依赖流程图与利润池地图。">
 <style>
 :root{
  --bg:#faf9f7;--panel:#fff;--ink:#1f1e1c;--ink2:#57534e;--ink3:#8a8480;
@@ -13,15 +13,21 @@
  --blue:#41608c;--blueb:#eef2f8;--gold:#9a7112;--goldb:#fbf4e2;
  --accent:#1f1e1c;
 }
-@media(prefers-color-scheme:dark){:root{
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
  --bg:#191817;--panel:#221f1d;--ink:#f0ece7;--ink2:#b6afa8;--ink3:#857d76;
  --line:#332f2c;--line2:#443e3a;
  --g1:#63b585;--g1b:#1a271f;--g4:#e07070;--g4b:#2c1919;
  --blue:#89aad6;--blueb:#1b222c;--gold:#d9b45c;--goldb:#2a2416;
  --accent:#f0ece7;}}
+:root[data-theme="dark"]{
+ --bg:#191817;--panel:#221f1d;--ink:#f0ece7;--ink2:#b6afa8;--ink3:#857d76;
+ --line:#332f2c;--line2:#443e3a;
+ --g1:#63b585;--g1b:#1a271f;--g4:#e07070;--g4b:#2c1919;
+ --blue:#89aad6;--blueb:#1b222c;--gold:#d9b45c;--goldb:#2a2416;
+ --accent:#f0ece7;}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.65;
- font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
  -webkit-font-smoothing:antialiased}
 .wrap{max-width:940px;margin:0 auto;padding:44px 22px 80px}
 h1{font-size:29px;margin:0 0 8px;letter-spacing:-.015em}
@@ -42,6 +48,7 @@ h2{font-size:18px;margin:38px 0 12px;letter-spacing:-.01em}
 .card p{margin:0;font-size:12.9px;color:var(--ink2);line-height:1.6}
 .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
 .tag{font-size:10.5px;padding:2px 7px;border-radius:4px;background:var(--blueb);color:var(--blue);white-space:nowrap}
+.tag.new{background:var(--g1b);color:var(--g1);font-weight:650}
 .kf{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-top:8px}
 .kf h3{margin:0 0 7px;font-size:15px}
 .kf p{margin:0;font-size:13px;color:var(--ink2);line-height:1.7}
@@ -57,65 +64,80 @@ th{text-align:left;font-size:11.5px;font-weight:650;color:var(--ink3);letter-spa
  padding:8px 8px;border-bottom:1px solid var(--line2)}
 td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
 .st{font-size:10.5px;font-weight:700;padding:1.5px 6px;border-radius:4px;white-space:nowrap}
+.tw{overflow-x:auto}
+.tog{position:fixed;top:14px;right:14px;font:inherit;font-size:12px;cursor:pointer;background:var(--panel);
+ border:1px solid var(--line);color:var(--ink2);border-radius:7px;padding:4px 10px;z-index:9}
+.tog:hover{color:var(--ink);border-color:var(--line2)}
 footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink3);line-height:1.75}
-@media(max-width:640px){.wrap{padding:26px 14px 60px}h1{font-size:22px}}
+@media(max-width:640px){.wrap{padding:26px 14px 60px}h1{font-size:22px}.tog{position:static;margin-bottom:14px}}
+@media print{.tog{display:none}}
 </style>
 </head>
 <body>
+<button class="tog" id="tog" type="button">主题</button>
 <div class="wrap">
 
 <h1>国产替代投资研究</h1>
 <p class="sub">对六个 AI 模型（GPT · oops5 · Fable5 · Gemini · DeepSeek · GLM5.2）关于国产替代投资回答的整合、事实校正与量化分析</p>
-<p class="meta">编制于 2026 年 8 月 ｜ 103 家公司 · 36 个环节 · 全产业链 41 节点 ｜ <b>估值数据已于 2026-08-12 用金融数据接口重取</b> ｜ 七份文档，均为单文件离线可用</p>
+<p class="meta">编制于 2026 年 8 月 ｜ 2026-09-02 改版 ｜ 103 家公司 · 36 个环节 · 全产业链 41 节点 · 63 条依赖 ｜ 八份文档 ｜ <b>估值数据 2026-08-12 用金融数据接口同日重取</b> ｜ 全部单文件离线可用</p>
 
 <div class="warn">
 <b>免责声明</b>　本站内容不是投资建议，编制者不是投资顾问，<b>不对任何标的给出买入或卖出意见</b>。所有数据来自公开行业报告与公司公告，口径不统一、时点混合，且部分为估算与推演（已逐项标注）。个股决策请以交易所与公司公告为准，风险自担。
 </div>
 
-<h2>文档目录</h2>
+<div class="kf hl" style="margin-bottom:14px"><h3>✦ 2026-09-02 改版：这一版改了什么</h3>
+<p><b>一、修了一个把图画没的 bug。</b>02 号文件里 36 个环节 × 3 根条形，共 108 个填充块<b>宽高全是 0</b>——用的是行内元素 <code>&lt;i&gt;</code>，CSS 的 <code>height:100%</code> 对它无效，读者看到的是 108 条空轨道。现已修复，并把 4 个「全球规模无可比口径」的环节明确标出，不再画成空条。</p>
+<p><b>二、七份文件改由同一份数据生成。</b>此前同一家公司的估值在 02 / 04 / 07 各存一份、xlsx 又一份，改一处就漏三处。现在全部从 <code>data.js</code> 渲染，<b>PE / PB / 市值只有一个来源</b>（07 号的同日实测）。对账时抓到一处实错：01 号文件把<b>沪硅产业</b>的「PE −48.7、PB 5.16、持续亏损」错抄到了<b>华特气体</b>那一行——华特气体实测 PE 159.10、PB 10.58，并未亏损，已在页面上标注更正。</p>
+<p><b>三、数据表有了网页版。</b>七张表在浏览器里直接查、排序、搜索，不用先下 Excel；Excel 版仍然保留在页内下载。</p>
+<p><b>四、加了六张能回答问题的图。</b>突围地图（02）、追赶时间轴与溢价倍数散点（04）、依赖流程图（06）、利润池叠放对比（05）、新旧估值哑铃图（07）、六模型共识矩阵（01）。全部手写 SVG、零外部依赖，离线可用。</p>
+<p><b>五、页面顶部只留一行提示</b>，原来那几大块免责与修正说明整段搬到了每页页尾的「口径 · 修正 · 免责」一节，点顶部那行就能跳过去。</p>
+<p><b>六、全系列统一了导航、目录、深浅色与配色</b>，表格可排序、宽表在自己的框里横向滚动，手机与打印都做过。</p>
+</div>
+
 <div class="kf rd" style="margin-bottom:14px"><h3>⚠ 2026-08-12 数据修正：我自己也错了三条</h3><p>此前各页的估值数据来自 5 月券商文章与 4–8 月财经报道，时点混杂且多为转述。接入金融数据接口后同日重取，发现<b>一条核心论断方向是错的</b>：此前写「英伟达约 45x、AMAT 约 20–25x，国产设备对海外溢价 4–8 倍」，实测<b>英伟达 PE 仅 33.36，而 AMAT 49.35、泛林 53.23、ASML 59.16——三家设备商 PE 全部高于英伟达</b>。设备环节真实溢价约 <b>2.3 倍</b>；4–8 倍集中在<b>芯片设计与制造</b>（寒武纪 6.25x、海光 7.35x、中芯 5.88x、长鑫 6.52x）。</p><p>另两条：<b>中际旭创折价更深（0.47x）但按 PB/PS 是行业最贵一档</b>（PE 排 22/98、PB 92/98、PS 88/98）——低 PE 靠 29% 净利率撑起；<b>Synopsys 毛利率 82.6% 但营业利润率仅 10.4%</b>，「EDA 利润率最高」只对了一半，利润池此前高估约 8 倍。还发现<b>四家公司在亏损</b>（摩尔线程、沐曦、华大九天、沪硅产业，合计市值 6,959 亿元）而此前完全未标注。</p><p><b>七份文件已全部实质更新</b>，不只是加提示。完整修正说明见 <b>07 号文件</b>。不依赖估值的判断（份额、国产化率、技术代差、利润分配结构）仍然成立。</p></div>
 
+<h2>文档目录</h2>
 
 <a class="card" href="cn-substitution-06-full-chain-flow.html" style="--c:var(--gold);--cb:var(--goldb)">
  <div class="ch"><span class="num">06</span><span class="tt">全产业链流程图</span></div>
- <p><b>建议从这里开始。</b>从 EDA 到人形机器人的 9 级 41 个环节完整流程，每个节点标注中国与海外代表公司、国产状态与关键指标。可按 AI／智能汽车／机器人链路筛选。</p>
- <div class="tags"><span class="tag">总览</span><span class="tag">可筛选</span><span class="tag">中国 vs 海外</span></div>
+ <p><b>建议从这里开始。</b>从 EDA 到人形机器人的 9 级 41 个环节，<b>这一版画成了真正的依赖图</b>：63 条上下游连线，点任意节点就看到它卡住了下游哪几格——点「光刻机」会亮起 18 个受影响环节。可按 AI／智能汽车／机器人链路筛选。</p>
+ <div class="tags"><span class="tag new">新：依赖流程图</span><span class="tag">总览</span><span class="tag">可筛选</span><span class="tag">中国 vs 海外</span></div>
 </a>
 
 <a class="card" href="cn-substitution-07-measured-valuation.html" style="--c:var(--g4);--cb:var(--g4b)">
  <div class="ch"><span class="num">07</span><span class="tt">实测估值数据 · 修正版</span></div>
- <p><b>估值问题看这一份。</b>31 家国产 + 9 家海外的同日实测市值、PE、PB、溢价倍数；被推翻的三条结论；四家亏损公司；海外对标的毛利率与营业利润率落差对比。<b>凡涉及具体 PE 倍数与相对估值排序，以此页为准。</b></p>
- <div class="tags"><span class="tag">同日实测</span><span class="tag">数据修正</span><span class="tag">40 家公司</span></div>
+ <p><b>估值问题看这一份。</b>31 家国产 + 9 家海外的同日实测市值、PE、PB、溢价倍数；被推翻的三条结论现在有一张<b>哑铃图</b>——每家一行，空心点是此前写法、实心点是实测，线段长度就是错的幅度。<b>凡涉及具体 PE 倍数与相对估值排序，以此页为准。</b></p>
+ <div class="tags"><span class="tag new">新：新旧估值哑铃图</span><span class="tag">同日实测</span><span class="tag">40 家公司</span></div>
 </a>
 
 <a class="card" href="cn-substitution-01-value-chain.html" style="--c:var(--blue);--cb:var(--blueb)">
  <div class="ch"><span class="num">01</span><span class="tt">六模型整合与事实校正</span></div>
- <p>六份回答合并去重后的 103 家公司清单，9 层价值链，共识度标注（几个模型提到过），以及<b>上市状态的事实校正</b>——六个模型在长鑫、摩尔线程上集体过时，沐曦则被全部遗漏。</p>
- <div class="tags"><span class="tag">103 家公司</span><span class="tag">共识度</span><span class="tag">分歧点</span></div>
+ <p>六份回答合并去重后的 103 家公司清单，9 层价值链，以及<b>上市状态的事实校正</b>——六个模型在长鑫、摩尔线程上集体过时，沐曦则被全部遗漏。新增<b>共识矩阵</b>：哪一个模型提到了哪一家，一格一格摊开，不再只有一个「几分之六」。</p>
+ <div class="tags"><span class="tag new">新：共识矩阵</span><span class="tag">103 家公司</span><span class="tag">分歧点</span></div>
 </a>
 
 <a class="card" href="cn-substitution-02-quantified.html" style="--c:var(--blue);--cb:var(--blueb)">
  <div class="ch"><span class="num">02</span><span class="tt">差距量化与突围地图</span></div>
- <p>36 个环节的全球市场规模、国产化率、技术代差；53 家重点公司的营收与全球／中国份额；突围评级。<b>查不到可靠数据的一律留空标「未核实」，不做推算填充。</b></p>
- <div class="tags"><span class="tag">国产化率</span><span class="tag">技术代差</span><span class="tag">突围评级</span></div>
+ <p>36 个环节的全球市场规模、国产化率、技术代差；53 家重点公司的营收与全球／中国份额。新增<b>突围地图</b>：36 个环节压在一张散点上，左上角那一格（盘子大 × 国产化率低）就是最值钱的地方。<b>查不到可靠数据的一律留空标「未核实」，不做推算填充。</b></p>
+ <div class="tags"><span class="tag new">新：突围地图</span><span class="tag">国产化率</span><span class="tag">技术代差</span><span class="tag">突围评级</span></div>
 </a>
 
-<a class="card" href="cn-substitution-03-data.xlsx" style="--c:var(--g1);--cb:var(--g1b)">
- <div class="ch"><span class="num">03</span><span class="tt">量化数据表（Excel）</span></div>
- <p><b>五个</b>工作表：说明与方法 ／ 环节量化 ／ 公司量化 ／ 下游价值链与利润池 ／ <b>实测估值 2026-08-12（40 家同日数据）</b>。公式是活的。</p>
- <div class="tags"><span class="tag">.xlsx 下载</span><span class="tag">可编辑</span></div>
+<a class="card" href="cn-substitution-03-data.html" style="--c:var(--g1);--cb:var(--g1b)">
+ <div class="ch"><span class="num">03</span><span class="tt">量化数据表</span></div>
+ <p><b>不用下 Excel 也能查。</b>七张表在网页上直接看：说明与方法 ／ 环节量化 ／ 公司量化 ／ 下游价值链与利润池 ／ 实测估值 2026-08-12 ／ <b>追赶年限</b> ／ <b>六模型共识</b>。点表头排序、框里搜索，页内也能<a href="cn-substitution-03-data.xlsx" style="color:inherit;text-decoration:underline">下载 Excel 版</a>（公式是活的）。</p>
+ <div class="tags"><span class="tag new">新：网页版</span><span class="tag">七张表</span><span class="tag">可排序可搜索</span><span class="tag">.xlsx 下载</span></div>
 </a>
 
 <a class="card" href="cn-substitution-04-catchup-valuation-etf.html" style="--c:var(--blue);--cb:var(--blueb)">
  <div class="ch"><span class="num">04</span><span class="tt">追赶时间 · 估值对比 · ETF</span></div>
- <p>30 个环节追平海外的年限估算；国产与海外对标的份额／收入／市值／市盈率正面对比；已上市与未上市估值总表；相对估值排序框架；ETF 覆盖度与三个盲区。</p>
- <div class="tags"><span class="tag">追赶年限</span><span class="tag">PE 对比</span><span class="tag">ETF</span></div>
+ <p>30 个环节追平海外的年限估算（新增<b>时间轴</b>，一眼看清 2028 前能追平的是哪几格）；国产与海外对标的正面对比；估值总表；<b>溢价倍数 × 突围度散点</b>——看市场有没有为「真的打下来了」付钱；ETF 覆盖度与三个盲区。五张表现在都能点表头排序。</p>
+ <div class="tags"><span class="tag new">新：时间轴 + 散点</span><span class="tag">追赶年限</span><span class="tag">PE 对比</span><span class="tag">ETF</span></div>
 </a>
 
 <a class="card" href="cn-substitution-05-downstream-profit-pools.html" style="--c:var(--blue);--cb:var(--blueb)">
  <div class="ch"><span class="num">05</span><span class="tt">下游价值链 · 利润池 · 生态位</span></div>
- <p>全球与中国两套可切换的价值链（标注市场规模与利润率）、利润池气泡地图、三类生态位（垄断型／黑马型／未来型）、AI 与自动驾驶详细展开、三年后利润分配推演。</p>
- <div class="tags"><span class="tag">利润分配</span><span class="tag">生态位</span><span class="tag">推演</span></div>
+ <p>全球与中国两套可切换的价值链、利润池气泡地图（标签重叠与截断已修，加了图例，并可<b>把全球与中国叠在同一坐标系</b>对比）、三类生态位、AI 与自动驾驶详细展开、三年后利润分配推演。</p>
+ <div class="tags"><span class="tag new">新：叠放对比</span><span class="tag">利润分配</span><span class="tag">生态位</span><span class="tag">推演</span></div>
 </a>
 
 <h2>五个核心发现</h2>
@@ -144,6 +166,7 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);font-si
 <div class="kf rd">
 <h3>五、越绿的地方池子越小</h3>
 <p>把 41 个环节按国产状态着色后，整张图的形状是：<b>越往下游中国越强，越往上游中国越弱</b>。</p>
+<div class="tw">
 <table>
 <thead><tr><th>状态</th><th>环节数</th><th>典型环节</th></tr></thead>
 <tbody>
@@ -154,15 +177,28 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);font-si
 <tr><td><span class="st" style="background:var(--g4b);color:var(--g4)">被卡死</span></td><td>5</td><td><b>EDA、光刻机、光刻胶、HBM、CoWoS 先进封装</b></td></tr>
 </tbody>
 </table>
+</div>
 <p style="margin-top:12px">但形状背后有个冷酷的换算：激光雷达中国占全球 80–95%，全球市场 2025 年才刚破 10 亿美元；而深红那几格——AI 加速芯片约 2000 亿美元、HBM／存储约 3800 亿美元、晶圆代工约 1600 亿美元。<b>中国赢下的每一格，规模都比输掉的那几格小一到两个数量级。用国产化率当投资标尺会系统性高估下游、低估上游，因为国产化率不含权重，而利润池含权重。</b></p>
 </div>
 
 <footer>
-<b>方法</b>　六份回答按环节拆分 → 公司维度去重 → 统计提及模型数作为共识度 → 上市状态与股票代码逐一网络核查 → 分歧点单独保留而非平均化 → 加入市场规模、国产化率、技术代差、估值与利润率的量化 → 扩展到下游价值链与生态位推演。<br>
-<b>已知局限</b>　（1）共识度只衡量「被提到」，不衡量正确性——六个模型在长鑫的上市状态上就集体错了。（2）六份回答同源于一篇文章，一致不等于独立验证。（3）国产化率各家口径差异极大（半导体设备整体从 35% 到 &gt;50% 都有）。（4）估值数据混合 2026 年 5 月与 7–8 月来源，而 7 月底全球芯片股经历大幅回调。（5）「未来生态位」与三年后推演是<b>推演不是预测</b>，每条都附了证伪条件。（6）全球链与中国链的市场规模单位不同（亿美元 vs 亿元），不可直接比较绝对值。<br>
+<b>方法</b>　六份回答按环节拆分 → 公司维度去重 → 统计提及模型数作为共识度 → 上市状态与股票代码逐一网络核查 → 分歧点单独保留而非平均化 → 加入市场规模、国产化率、技术代差、估值与利润率的量化 → 扩展到下游价值链与生态位推演。<b>2026-09-02 起，七个页面与数据表由同一份 data.js 生成，估值只有一个来源。</b><br>
+<b>已知局限</b>　（1）共识度只衡量「被提到」，不衡量正确性——六个模型在长鑫的上市状态上就集体错了。（2）六份回答同源于一篇文章，一致不等于独立验证。（3）国产化率各家口径差异极大（半导体设备整体从 35% 到 &gt;50% 都有）。（4）估值为 2026-08-12 单日快照，之后未再更新。（5）「未来生态位」与三年后推演是<b>推演不是预测</b>，每条都附了证伪条件。（6）全球链与中国链的市场规模单位不同（亿美元 vs 亿元），叠放图里的折算仅为放在同一坐标系看形状，绝对值不可直接比较。（7）追平年限、突围地图的坐标、时间轴的起止年份都由估算区间换算而来，是数量级参考不是时间表。<br>
 <b>主要来源</b>　SEMI、TrendForce／CFM 闪存市场、Yole、Bernstein Research、LightCounting、高工智能汽车研究院、中国信通院、麦姆斯咨询、集微咨询、前瞻产业研究院，及上交所披露与各公司年报（2026 年 8 月检索）。<br><br>
-本站由 Claude 编制。内容不构成投资建议。
+本站由 Claude 编制。内容不构成投资建议。<br><span style="opacity:.75"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">苏ICP备2026059001号</a></span>
 </footer>
 </div>
+<script>
+(function(){
+ var r=document.documentElement,b=document.getElementById('tog');
+ function ls(){try{return localStorage;}catch(e){return null;}}
+ function get(){try{var s=ls();return (s&&s.getItem('cns-theme'))||'auto';}catch(e){return 'auto';}}
+ function set(v){ if(v==='auto')r.removeAttribute('data-theme'); else r.setAttribute('data-theme',v);
+  try{var s=ls();if(s)s.setItem('cns-theme',v);}catch(e){}
+  b.textContent=v==='auto'?'主题 · 跟随系统':(v==='dark'?'主题 · 深色':'主题 · 浅色'); }
+ b.onclick=function(){var o=get();set(o==='auto'?'light':o==='light'?'dark':'auto');};
+ set(get());
+})();
+</script>
 </body>
 </html>

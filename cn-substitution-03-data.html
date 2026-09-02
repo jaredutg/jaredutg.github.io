@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>国产替代 · 量化数据表</title>
+<meta name="description" content="国产替代研究系列的全部结构化数据：环节量化、公司量化、下游利润池、同日实测估值、追赶年限、六模型共识，七张表在线可查。">
+<style>
+:root{
+ --bg:#faf9f7;--panel:#fff;--ink:#1f1e1c;--ink2:#57534e;--ink3:#8a8480;
+ --line:#e5e1dc;--line2:#d6d1ca;
+ --g1:#2f7d4f;--g1b:#e8f3ec;--g2:#8a8a1f;--g2b:#f5f5e4;
+ --g3:#b8722e;--g3b:#fbf0e5;--g4:#a83232;--g4b:#fbeaea;
+ --blue:#41608c;--blueb:#eef2f8;--gold:#9a7112;--goldb:#fbf4e2;
+ --pur:#7b4397;--purb:#f4edf8;
+ --accent:#1f1e1c;
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --bg:#191817;--panel:#221f1d;--ink:#f0ece7;--ink2:#b6afa8;--ink3:#857d76;
+ --line:#332f2c;--line2:#443e3a;
+ --g1:#63b585;--g1b:#1a271f;--g2:#c3c35c;--g2b:#26260f;
+ --g3:#dd9a5e;--g3b:#2b2117;--g4:#e07070;--g4b:#2c1919;
+ --blue:#89aad6;--blueb:#1b222c;--gold:#d9b45c;--goldb:#2a2416;
+ --pur:#b98cd4;--purb:#251d2b;
+ --accent:#f0ece7;}}
+:root[data-theme="dark"]{--bg:#191817;--panel:#221f1d;--ink:#f0ece7;--ink2:#b6afa8;--ink3:#857d76;
+ --line:#332f2c;--line2:#443e3a;
+ --g1:#63b585;--g1b:#1a271f;--g2:#c3c35c;--g2b:#26260f;
+ --g3:#dd9a5e;--g3b:#2b2117;--g4:#e07070;--g4b:#2c1919;
+ --blue:#89aad6;--blueb:#1b222c;--gold:#d9b45c;--goldb:#2a2416;
+ --pur:#b98cd4;--purb:#251d2b;
+ --accent:#f0ece7;}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.65;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:1400px;margin:0 auto;padding:30px 20px 80px}
+h1{font-size:26px;margin:0 0 6px;letter-spacing:-.01em}
+.sub{color:var(--ink2);font-size:14px;margin:0 0 3px}
+.meta{color:var(--ink3);font-size:12.5px;margin:0 0 22px}
+h2{font-size:19px;margin:34px 0 4px;letter-spacing:-.01em}
+h2 .n{font-size:12.5px;font-weight:400;color:var(--ink3);margin-left:9px}
+.lead{color:var(--ink2);font-size:13.4px;margin:0 0 12px;line-height:1.72}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.tab{padding:6px 13px;border:1px solid var(--line2);border-radius:20px;background:var(--panel);
+ cursor:pointer;font:inherit;font-size:12.6px;color:var(--ink2);transition:.12s;white-space:nowrap}
+.tab:hover{border-color:var(--ink3);color:var(--ink)}
+.tab.on{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.tab .c{opacity:.6;font-size:11px;margin-left:4px}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 10px}
+.bar input{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line2);border-radius:8px;
+ background:var(--panel);color:var(--ink);min-width:240px;flex:1 1 240px;max-width:420px}
+.bar input:focus{outline:none;border-color:var(--ink3)}
+.cnt{font-size:12px;color:var(--ink3)}
+.dl{font-size:12.4px;text-decoration:none;color:var(--g1);background:var(--g1b);
+ border:1px solid color-mix(in srgb,var(--g1) 30%,transparent);border-radius:8px;padding:6px 12px;white-space:nowrap}
+.dl:hover{border-color:var(--g1)}
+table{width:100%;border-collapse:collapse;font-size:12.7px}
+th{text-align:left;font-size:11.3px;font-weight:650;color:var(--ink3);letter-spacing:.02em;
+ padding:8px 8px;border-bottom:1px solid var(--line2);white-space:nowrap;vertical-align:bottom}
+td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:hover{background:color-mix(in srgb,var(--blueb) 55%,transparent)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.mono{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--ink3);white-space:nowrap}
+td.long{min-width:200px;max-width:330px;color:var(--ink2);line-height:1.58;white-space:normal;word-break:break-word}
+/* 覆盖 kit 的 max-content：备注列吃剩余宽度，其余列 nowrap 自适应 */
+.wrap .k-tw>table{min-width:1120px;table-layout:auto}
+td.long,th.longc{width:330px}
+.tgl{font:inherit;font-size:12.2px;cursor:pointer;background:var(--panel);border:1px solid var(--line2);
+ color:var(--ink2);border-radius:8px;padding:6px 12px;white-space:nowrap}
+.tgl:hover{color:var(--ink);border-color:var(--ink3)}
+.tgl.on{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+td.nm{font-weight:620;white-space:nowrap}
+.tg{font-size:10.5px;font-weight:700;padding:1.5px 6px;border-radius:4px;white-space:nowrap;display:inline-block}
+.t1{background:var(--g1b);color:var(--g1)}.t2{background:var(--g2b);color:var(--g2)}
+.t3{background:var(--g3b);color:var(--g3)}.t4{background:var(--g4b);color:var(--g4)}
+.t5{background:var(--blueb);color:var(--blue)}.t6{background:var(--purb);color:var(--pur)}
+.na{color:var(--ink3);font-size:11.5px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:3px;background:var(--line)}
+.dot.on{background:var(--blue)}
+.mini{height:5px;background:var(--line);border-radius:3px;margin-top:3px;overflow:hidden;min-width:46px}
+.mini i{display:block;height:100%;border-radius:3px}
+.empty{padding:30px;text-align:center;color:var(--ink3);font-size:13px}
+.doc{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.doc dl{margin:0;display:grid;grid-template-columns:150px 1fr;gap:7px 16px;font-size:13px}
+.doc dt{font-weight:650;color:var(--ink2)}
+.doc dd{margin:0;color:var(--ink2);line-height:1.7}
+.doc h4{margin:16px 0 4px;font-size:13.5px;color:var(--ink)}
+.doc h4:first-child{margin-top:0}
+footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink3);line-height:1.75}
+@media(max-width:640px){.wrap{padding:22px 12px 60px}h1{font-size:21px}
+ .doc dl{grid-template-columns:1fr;gap:2px 0}.doc dt{margin-top:8px}}
+
+/* ==== 共用外壳 ==== */
+/* ===== 国产替代研究 · 共用外壳与图表样式 ===== */
+:root{
+ /* 统一 dataviz 调色板（浅色） */
+ --dv1:#41608c; --dv2:#2b7a8c; --dv3:#9a7112; --dv4:#7b4397; --dv5:#2f7d4f; --dv6:#b8492e;
+ --dvgrid:#e8e4df; --dvaxis:#b8b2ab; --dvlab:#57534e; --dvhalo:#faf9f7;
+}
+:root:not([data-theme="light"]) { }
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --dv1:#89aad6; --dv2:#6cc0d1; --dv3:#d9b45c; --dv4:#b98cd4; --dv5:#63b585; --dv6:#e08a6d;
+ --dvgrid:#2e2a27; --dvaxis:#5b544e; --dvlab:#b6afa8; --dvhalo:#191817;
+}}
+:root[data-theme="dark"]{
+ --dv1:#89aad6; --dv2:#6cc0d1; --dv3:#d9b45c; --dv4:#b98cd4; --dv5:#63b585; --dv6:#e08a6d;
+ --dvgrid:#2e2a27; --dvaxis:#5b544e; --dvlab:#b6afa8; --dvhalo:#191817;
+}
+
+/* ---------- 顶部一行提示 + 页尾长说明 ---------- */
+.k-notice{font-size:12px;color:var(--ink3);margin:-14px 0 22px;line-height:1.7}
+.k-notice a{color:var(--ink3);text-decoration:none;border-bottom:1px dotted currentColor;white-space:nowrap}
+.k-notice a:hover{color:var(--ink)}
+.k-tail{margin-top:46px;padding-top:6px;border-top:1px dashed var(--line2)}
+.k-tail>h2{font-size:16px}
+.k-tail .disc,.k-tail .warn,.k-tail .note,.k-tail .ten{font-size:12.2px}
+
+/* ---------- 顶部导航 ---------- */
+.k-nav{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--bg) 92%,transparent);
+ backdrop-filter:saturate(1.4) blur(8px);-webkit-backdrop-filter:saturate(1.4) blur(8px);
+ border-bottom:1px solid var(--line);margin:0 0 0}
+.k-navin{max-width:1400px;margin:0 auto;padding:7px 20px;display:flex;align-items:center;gap:10px;
+ font-size:12.5px;flex-wrap:wrap}
+.k-nav a{color:var(--ink2);text-decoration:none;padding:3px 8px;border-radius:6px;border:1px solid transparent;
+ white-space:nowrap;transition:.12s}
+.k-nav a:hover{background:var(--panel);border-color:var(--line);color:var(--ink)}
+.k-nav .k-here{font-weight:660;color:var(--ink);background:var(--panel);border-color:var(--line)}
+.k-nav .k-sp{flex:1 1 auto}
+.k-seq{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--ink3);
+ border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+.k-tog{font:inherit;font-size:12px;cursor:pointer;background:var(--panel);border:1px solid var(--line);
+ color:var(--ink2);border-radius:6px;padding:3px 9px;white-space:nowrap}
+.k-tog:hover{color:var(--ink);border-color:var(--line2)}
+
+/* ---------- 左侧粘性目录 ---------- */
+.k-toc{position:fixed;left:max(10px,calc(50% - var(--kw)/2 - 178px));top:96px;width:164px;z-index:40;
+ font-size:12px;line-height:1.45;max-height:calc(100vh - 130px);overflow-y:auto;
+ padding-right:6px;scrollbar-width:thin}
+.k-toc h6{margin:0 0 7px;font-size:10.5px;letter-spacing:.08em;color:var(--ink3);font-weight:650;text-transform:uppercase}
+.k-toc a{display:block;color:var(--ink3);text-decoration:none;padding:3.5px 8px;border-radius:5px;
+ border-left:2px solid transparent;transition:.12s}
+.k-toc a:hover{color:var(--ink);background:var(--panel)}
+.k-toc a.on{color:var(--ink);border-left-color:var(--accent);font-weight:600;background:var(--panel)}
+.k-tocm{display:none}
+/* 侧栏目录只在「正文两侧真的放得下」时才出现，由 JS 量出来打 html.k-wide */
+.k-toc{display:none}
+html.k-wide .k-toc{display:block}
+.k-tocm{display:block;position:sticky;top:38px;z-index:50;padding:6px 0 4px;background:var(--bg)}
+html.k-wide .k-tocm{display:none}
+.k-tocm select{font:inherit;font-size:12.5px;width:100%;max-width:420px;padding:5px 8px;border-radius:7px;
+ border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+
+/* ---------- 可排序表头 ---------- */
+th.k-s{cursor:pointer;user-select:none;position:relative;white-space:nowrap}
+th.k-s:hover{color:var(--ink)}
+th.k-s::after{content:"↕";opacity:.28;font-size:9px;margin-left:3px;vertical-align:1px}
+th.k-s.k-asc::after{content:"↑";opacity:.95}
+th.k-s.k-desc::after{content:"↓";opacity:.95}
+thead th{position:sticky;top:36px;background:var(--bg);z-index:5}
+/* .k-tw 是横向滚动容器，浏览器会把它也当成纵向滚动容器：
+   此时 top:36px 会把表头往下推 36px，正好盖住第一行。容器内一律贴 0。 */
+.k-tw thead th{top:0}
+
+/* ---------- 宽表格容器 ---------- */
+.k-tw{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+.k-tw>table{min-width:max-content}
+@media(max-width:520px){.k-tw>table{min-width:0}}
+
+/* ---------- 图表外壳 ---------- */
+.k-fig{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px 10px;margin:14px 0 18px}
+.k-fig h4{margin:0 0 2px;font-size:14px}
+.k-fig .k-cap{margin:0 0 10px;font-size:12px;color:var(--ink3);line-height:1.55}
+.k-figbody{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.k-figbody svg{display:block;max-width:100%;height:auto}
+.k-lg{display:flex;flex-wrap:wrap;gap:5px 14px;font-size:11.5px;color:var(--ink2);margin-top:9px;align-items:center}
+.k-lg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.k-lg .sq{border-radius:2px}
+.k-tip{position:fixed;pointer-events:none;opacity:0;transition:opacity .1s;z-index:200;max-width:290px;
+ background:var(--panel);border:1px solid var(--line2);border-radius:8px;padding:8px 10px;font-size:12px;
+ line-height:1.5;box-shadow:0 6px 24px rgba(0,0,0,.14);color:var(--ink)}
+.k-tip b{color:var(--ink)}
+.k-tip .k-tk{color:var(--ink3);font-size:11px}
+.k-dot{cursor:pointer;transition:opacity .12s}
+.k-dot:hover{opacity:.82}
+.k-hl{animation:k-flash 1.7s ease-out 1}
+@keyframes k-flash{0%,22%{box-shadow:0 0 0 3px color-mix(in srgb,var(--dv3) 62%,transparent)}100%{box-shadow:0 0 0 0 transparent}}
+
+/* ---------- 条形着色单元格 ---------- */
+.k-bc{position:relative;z-index:0}
+.k-bc::before{content:"";position:absolute;left:0;top:2px;bottom:2px;width:var(--w,0%);
+ background:color-mix(in srgb,var(--c,var(--dv1)) 17%,transparent);border-radius:3px;z-index:-1}
+
+/* ---------- 打印 ---------- */
+@media print{
+ :root{--bg:#fff;--panel:#fff}
+ .k-nav,.k-toc,.k-tocm,.k-tip,.k-noprint{display:none!important}
+ body{background:#fff}
+ .wrap{max-width:none;padding:0}
+ table{page-break-inside:auto} tr{page-break-inside:avoid}
+ .k-fig,.seg,.card,.etf{page-break-inside:avoid}
+ *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>量化数据表</h1>
+<p class="sub">国产替代研究系列的全部结构化数据 · 七张表在线可查、可排序、可搜索</p>
+<p class="meta">与七个网页同源于一份 <code>data.js</code> ｜ 估值取数日 2026-08-12（同日）｜ 与 Excel 版内容一致</p>
+
+<div class="tabs" id="tabs"></div>
+<div class="bar">
+  <input type="search" id="q" placeholder="在本表内搜索…（公司、环节、代码、说明都能搜）">
+  <button class="tgl" id="expand" type="button">展开长文本</button>
+  <span class="cnt" id="cnt"></span>
+  <a class="dl" id="dl" href="03_国产替代量化数据表.xlsx" download>⤓ 下载 Excel 版（公式是活的）</a>
+</div>
+<div class="k-figbody"><div id="view"></div></div>
+<div class="empty" id="empty" style="display:none">没有匹配的行</div>
+
+<footer id="foot"><br><span style="opacity:.75"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">苏ICP备2026059001号</a></span>
+</footer>
+</div>
+<script>/* 共用数据（由 src/data.js 构建注入，勿手改） */
+var CNS=(function(){var D={"meta":{"ver":"2026-09-02","priceDate":"2026-08-12","asOf":"2026-08","note":"本文件是国产替代研究七页的唯一数据源。quotes（实测估值）由 07 号文件的同日取数构成，02 / 04 / 07 三页的 PE / PB / 市值全部从这里派生，不再各存一份。"},"segments":[{"n":"光刻机","mkt":338,"cn":"—","loc":4,"locTxt":"个位数（<5%）","gapPct":92,"grade":"G4","gap":"<b>差距最大的一格。</b>SMEE SSA800 28nm 浸没式 DUV 已于 2026 年初交付中芯国际上机测试，测试良率超 90%、国产化率超 85%，可支持 7nm 多重曝光。但产能 <b>10 片/小时 vs ASML 170 片/小时</b>，EUV 无产品。业界估计代差约 8 年。","co":"上海微电子（未上市）"},{"n":"薄膜沉积 CVD/PVD/ALD","mkt":282,"cn":"—","loc":9,"locTxt":"CVD/ALD 5–10%；PVD 成熟 15–20%、先进 <10%","gapPct":70,"grade":"G3","gap":"市场规模第二大但国产化率极低，是<b>市场大×渗透低</b>组合最突出的一格。拓荆 PECVD 国内市占第一，ALD 与高深宽比填充仍依赖 AMAT / Lam / ASM International。","co":"拓荆科技 · 北方华创"},{"n":"刻蚀","mkt":226,"cn":"—","loc":45,"locTxt":"整体 >40%（另一口径 31%）；成熟 50–60%、先进 <15%","gapPct":35,"grade":"G1","gap":"<b>国产化最成功的前道设备。</b>中微 5nm CCP 刻蚀机达国际水平并进入台积电验证流程，受益 3D NAND 层数增加。先进逻辑制程刻蚀仍 <15%，与 Lam 差距集中在高深宽比与原子级精度。","co":"中微公司 · 北方华创"},{"n":"量测检测","mkt":173,"cn":"—","loc":12,"locTxt":"低两位数","gapPct":72,"grade":"G3","gap":"KLA 全球垄断度最高的环节之一。制程越先进、良率要求越高，量测设备价值量占比越高。中科飞测覆盖缺陷检测与膜厚量测，但先进节点的套刻精度量测、电子束检测仍基本空白。","co":"中科飞测 · 精测电子"},{"n":"测试设备（后道）","mkt":112,"cn":"—","loc":20,"locTxt":"约 20%（估算）","gapPct":60,"grade":"G3","gap":"Advantest 与 Teradyne 双寡头。华峰测控在模拟/功率测试机上国内领先，SoC 高端测试机与 HBM 测试仍是短板。","co":"长川科技 · 华峰测控"},{"n":"清洗设备","mkt":67,"cn":"—","loc":55,"locTxt":"50–60%","gapPct":25,"grade":"G1","gap":"<b>已实质突围。</b>盛美上海的 SAPS/TEBO 兆声波清洗形成差异化技术路径，2025 营收 67.86 亿、国内行业第三。与 SCREEN 的差距主要在先进节点的产能与客户覆盖，而非技术可行性。","co":"盛美上海 · 至纯科技 · 北方华创"},{"n":"CMP 设备","mkt":47,"cn":"—","loc":18,"locTxt":"成熟 15–25%、先进 <10%","gapPct":62,"grade":"G3","gap":"华海清科国内第一，但全球市场由 AMAT 与荏原（Ebara）主导。逻辑、存储、先进封装均需多次平坦化，先进封装扩产会拉动需求。","co":"华海清科"},{"n":"涂胶显影","mkt":40,"cn":"—","loc":12,"locTxt":"成熟 10–15%、先进 <10%","gapPct":75,"grade":"G3","gap":"东京电子（TEL）全球份额超 85%，是垄断度最高的单一环节之一。芯源微是国内唯一规模化供应商，但与光刻机联机的先进制程 track 仍未突破。","co":"芯源微"},{"n":"离子注入","mkt":27,"cn":"—","loc":14,"locTxt":"成熟 10–20%、先进 <5%","gapPct":72,"grade":"G3","gap":"AMAT 与 Axcelis 主导。凯世通（万业企业）与中科信在低能大束流机型上有进展，先进逻辑制程的高能注入机基本空白。","co":"万业企业/凯世通 · 中科信"},{"n":"热处理 / 炉管","mkt":35,"cn":"—","loc":35,"locTxt":"30–40%","gapPct":45,"grade":"G2","gap":"北方华创覆盖，国产化率中等偏上。与 Kokusai、TEL 的差距集中在先进制程的原子层级温控与均匀性。","co":"北方华创"},{"n":"去胶设备","mkt":18,"cn":"—","loc":80,"locTxt":"75–90%（中低端）；高端 <30%","gapPct":20,"grade":"G1","gap":"<b>国产化率最高的设备环节</b>，但市场规模小、技术壁垒相对低，投资价值有限。高端产品仍低于 30%。","co":"屹唐半导体等"},{"n":"半导体硅片","mkt":140,"cn":"—","loc":25,"locTxt":"8 英寸 55%、12 英寸仅 10%","gapPct":58,"grade":"G3","gap":"<b>典型的两极分化格。</b>8 英寸已实质替代，12 英寸国产化率仅 10%，且价格战下沪硅产业 2025 年净亏 15.08 亿。信越、SUMCO 在 12 英寸大直径、低缺陷密度上仍有明显优势。","co":"沪硅产业 · 中欣晶圆（未上市）· 立昂微 · 有研硅"},{"n":"光刻胶","mkt":25,"cn":"—","loc":9,"locTxt":"整体 <10%；g/i 线 30%、KrF 10%、ArF 2%、EUV 研发中","gapPct":85,"grade":"G4","gap":"<b>材料端差距最大的一格，且分层极其陡峭。</b>2025 年底南大光电成为国内首家 ArF 光刻胶量产企业，产品已通过中芯国际与长江存储验证——这是真突破，但 ArF 整体国产化率仍只有 2%。EUV 光刻胶尚在研发阶段，JSR、东京应化、信越垄断。","co":"南大光电 · 彤程新材 · 晶瑞电材"},{"n":"电子特气","mkt":60,"cn":"—","loc":30,"locTxt":"约 30%；超纯氨、六氟化钨等高端更低","gapPct":50,"grade":"G2","gap":"认证周期长、纯度要求高，是扩产的持续性消耗品。不同气体品种壁垒差异极大——大宗气体国产化率高，特种电子气体仍依赖林德、液化空气、空气化工。","co":"华特气体 · 金宏气体 · 中船特气 · 南大光电"},{"n":"CMP 抛光液 / 抛光垫","mkt":30,"cn":"—","loc":25,"locTxt":"<30%，明确的卡脖子环节","gapPct":58,"grade":"G3","gap":"安集科技在抛光液国内领先、鼎龙股份在抛光垫实现替代并维持 35–45% 高毛利，说明壁垒真实存在。整体国产化率仍不足 30%，Entegris（原 Cabot）与 Fujimi 主导。","co":"安集科技 · 鼎龙股份"},{"n":"溅射靶材","mkt":20,"cn":"—","loc":60,"locTxt":"较高；江丰在晶圆制造靶材市占 38%","gapPct":22,"grade":"G1","gap":"<b>材料端国产化最成功的一格。</b>江丰电子在晶圆制造靶材领域市占率达 38%，已进入全球主流晶圆厂供应链。但市场规模仅 20 亿美元左右，天花板明显。","co":"江丰电子 · 有研新材"},{"n":"湿电子化学品","mkt":50,"cn":"—","loc":40,"locTxt":"中低端高、高端（G4/G5 级）低","gapPct":42,"grade":"G2","gap":"通用湿化学品国产化率高，但先进制程要求的 G4/G5 超高纯等级仍依赖关东化学、Stella Chemifa、巴斯夫。","co":"江化微 · 晶瑞电材 · 格林达 · 上海新阳"},{"n":"掩膜版","mkt":50,"cn":"—","loc":15,"locTxt":"低（先进节点基本空白）","gapPct":70,"grade":"G3","gap":"Photronics、Hoya、Toppan 主导。清溢光电覆盖平板显示与成熟制程半导体掩膜版，高端半导体掩膜版尚未突破。","co":"清溢光电"},{"n":"封装基板","mkt":120,"cn":"—","loc":30,"locTxt":"约 30%（ABF 载板更低）","gapPct":55,"grade":"G3","gap":"AI 芯片带动 ABF 载板需求暴增。深南电路、兴森科技在切入，但高层数 ABF 载板仍由揖斐电、新光、欣兴主导。","co":"深南电路 · 兴森科技"},{"n":"EDA","mkt":133,"cn":"185亿元","loc":20,"locTxt":"国产 EDA 国内份额约 20%，支撑到 14nm","gapPct":78,"grade":"G3","gap":"<b>集中度最高的环节。</b>Synopsys 32% + Cadence 23% + Siemens 14% = 全球 69%。中国 EDA 市场 184.9 亿元、占全球 18.1%，但国产工具国内份额仅约 20%，且工艺支撑能力停在 14nm。模拟全流程华大九天已可用，数字先进节点全流程仍是空白。","co":"华大九天 · 概伦电子 · 广立微 · 芯华章（未上市）"},{"n":"DRAM","mkt":"超级周期","cn":"—","loc":8,"locTxt":"长鑫全球份额 7.7–8%（2026Q1）","gapPct":40,"grade":"G1","gap":"<b>已突围，且速度超预期。</b>长鑫全球份额从 2025Q1 的 3% 升至 2026Q1 的 7.7–8%，稳居全球第四，2026Q1 DRAM 收入 73.09 亿美元、环比 +115%。差距集中在 <b>HBM</b>——三星、海力士的 HBM3E/HBM4 是 AI 服务器刚需，长鑫在 HBM 上仍处追赶阶段，这是最关键的剩余缺口。","co":"长鑫科技 688825（2026-07 已上市）"},{"n":"NAND Flash","mkt":"超级周期","cn":"—","loc":13,"locTxt":"长江存储全球份额 13%（2026Q1）","gapPct":38,"grade":"G1","gap":"<b>已突围。</b>长江存储份额从 2025Q1 的 8% 升至 2026Q1 的 13%，与美光、闪迪并列，仅次于三星 29%、海力士 18%、铠侠 14%。Xtacking 架构在层数堆叠上有独特路径。仍未上市（2026-05 启动 IPO 辅导）。","co":"长江存储（未上市，IPO 辅导中）"},{"n":"晶圆代工","mkt":1600,"cn":"—","loc":6,"locTxt":"中芯全球约 6%（第三）；中国大陆产能份额 21%","gapPct":65,"grade":"G2","gap":"中芯国际 2025 营收 673.23 亿元（+16.5%），8 英寸产能利用率超 90%。制程上 N+2（7nm 级）靠 DUV 多重曝光实现，<b>无 EUV 意味着 5nm 以下路径受阻</b>，与台积电 2nm 量产存在约 3–4 代差距。Yole 预计 2030 年中国大陆产能份额达 30%、超越中国台湾成为全球最大代工中心。","co":"中芯国际 · 华虹公司 · 晶合集成"},{"n":"封装测试（OSAT）","mkt":470,"cn":"3332亿元","loc":20,"locTxt":"长电全球 12.2%（第三）","gapPct":45,"grade":"G1","gap":"<b>传统封装已突围</b>：长电科技全球份额 12.2%、仅次于日月光与安靠，前三合计超 52%。但 <b>CoWoS 级先进封装与 HBM 集成仍由台积电主导</b>，这是 AI 芯片的实际瓶颈之一。长电 2026 年固定资产投资预算约 100 亿元，重点投先进封装。","co":"长电科技 · 通富微电 · 华天科技"},{"n":"AI 加速芯片","mkt":"2000+","cn":"—","loc":52,"locTxt":"国产在华份额 52.3%（2026Q1，首破半数）","gapPct":55,"grade":"G2","gap":"<b>国内替代速度极快，全球份额仍微小。</b>2026Q1 国产 AI 芯片在中国市场占比首破 52.3%，昇腾 37%（占国产总量 70%），英伟达降至 15–20%，Bernstein 预计 2026 全年华为达 50%、英伟达降至 8%。但放到全球，英伟达份额仍超 80%，中国厂商全球份额个位数。核心约束：先进制程、HBM 供给、CUDA 生态、集群互联。","co":"华为昇腾（未上市）· 寒武纪 · 海光 · 摩尔线程 · 沐曦 · 壁仞"},{"n":"光模块 / 光互联","mkt":248,"cn":"—","loc":60,"locTxt":"中际旭创全球 23.4%，中国厂商合计约 60%","gapPct":5,"grade":"G1","gap":"<b>唯一做到全球第一的环节。</b>中际旭创全球市占 23.4%、连续五年出货量与营收双第一，800G 超 40%、1.6T 达 50–70%。技术上已无代差。<b>风险不在技术而在结构</b>：收入高度依赖北美云厂商，受 AI capex 波动与制裁预期双重压制——这正是五个模型建议减配的原因。","co":"中际旭创 · 新易盛 · 光迅科技 · 天孚通信"},{"n":"内存接口芯片","mkt":20,"cn":"—","loc":40,"locTxt":"澜起为全球三强之一","gapPct":20,"grade":"G1","gap":"澜起科技与 Rambus、瑞萨（原 IDT）构成全球三强格局，是国产芯片设计中全球竞争力最强的环节之一。DDR5 代际升级与服务器内存容量提升直接拉动需求。","co":"澜起科技"},{"n":"基础软件（OS/数据库）","mkt":"—","cn":"—","loc":25,"locTxt":"党政信创领域高、商业市场低","gapPct":65,"grade":"G3","gap":"党政与金融信创场景国产化率高（政策驱动），但商业市场仍由 Oracle、微软、Red Hat 主导。差距在生态而非功能：迁移成本、第三方软件兼容、开发者规模。","co":"麒麟软件 · 统信软件 · 达梦数据 · 东方通"},{"n":"HBM 高带宽内存","mkt":1600,"cn":"—","loc":5,"locTxt":"长鑫仍在追赶，公开份额个位数","gapPct":70,"grade":"G4","gap":"⚠ <b>下游补充。中国链最大的单一缺口，也是全球链利润最集中的位置。</b>SK 海力士全球份额超 70%、2026Q2 营业利润率 <b>76%</b>（超过英伟达 75% 的毛利率），HBM 占其 DRAM 收入约 42%。国产 DRAM 已做到全球第四，但 HBM 需要先进封装 + 极高良率 + 与 GPU 厂商联合认证，不是扩产能解决的。","co":"长鑫科技（追赶中）"},{"n":"智驾芯片 · 全阶","mkt":60,"cn":"—","loc":41,"locTxt":"自主品牌全阶市场国产合计约 41%","gapPct":30,"grade":"G1","gap":"<b>下游补充。中国已领先。</b>2026H1 自主品牌乘用车全阶市场：地平线 31.94% 第一，英伟达 29.38%，Mobileye 9.17%，华为 8.74%。地平线累计出货超 1100 万套。<b>但这是量的胜利，见下一行。</b>","co":"地平线 09660.HK · 华为 · 黑芝麻智能 02533.HK"},{"n":"智驾芯片 · 城区 NOA 高阶","mkt":40,"cn":"—","loc":40,"locTxt":"国产合计约 40%，但第一是英伟达","gapPct":52,"grade":"G2","gap":"<b>下游补充。格局与全阶市场相反。</b>英伟达 39.43% 第一，地平线 22.82%，华为 16.89%。<b>高阶单价是低阶数倍，利润集中在这一段</b>——份额第一在低价位段、利润第一在高价位段，与半导体链的「卖铲子」结构同理。2026H1 中国城区 NOA 交付 204.69 万辆（+约70%），全年预计 650 万辆。","co":"地平线 22.82% · 华为 16.89%"},{"n":"激光雷达","mkt":10,"cn":"—","loc":90,"locTxt":"中国厂商占全球车载 80–95%","gapPct":5,"grade":"G1","gap":"⭐ <b>下游补充。全清单中国优势最彻底的一格——海外龙头已经破产。</b>美国 Luminar 2025-12 申请 Chapter 11。禾赛全球 ADAS 主雷达 43% 第一（Yole）、中国 55%，出货指引 300–350 万台。<b>但全球市场 2025 年才刚破 10 亿美元</b>——赢的是小池子，且价格战使利润率偏低。","co":"禾赛科技 · 速腾聚创 · 华为"},{"n":"先进封装 CoWoS 级","mkt":150,"cn":"—","loc":5,"locTxt":"CoWoS 级基本空白","gapPct":75,"grade":"G4","gap":"⚠ <b>下游补充。</b>台积电 CoWoS/SoIC 产能已订满至 2026 年，是 AI 芯片最硬的物理瓶颈。国内封测传统封装已替代（长电全球 12.2%），<b>但 CoWoS 级完全依赖台积电——这是国产 AI 芯片「设计得出、造不出来」的实际卡点。</b>","co":"长电科技 · 通富微电（传统封装）"},{"n":"数据中心电力设备","mkt":200,"cn":"—","loc":60,"locTxt":"国内产能充裕，瓶颈弱","gapPct":25,"grade":"G1","gap":"🔮 <b>下游补充。正在成为全球新瓶颈。</b>2026 年变压器交期约 128 周、发电机升压机组约 144 周；已宣布 16GW 中仅约 5GW 在建，30–50% 管道面临延期——<b>原因是电力设备而非 GPU</b>。美国市场 2026 约 200 亿美元 → 2030 年 650 亿。<b>中国不缺电，所以这在国产链里是出口机会而非内需机会。</b>","co":"科华数据 · 中恒电气 · 英维克（出海逻辑）"},{"n":"CPO 共封装光学","mkt":80,"cn":"30–35亿元","loc":65,"locTxt":"中国占全球订单 >65%、产能 40–50%","gapPct":20,"grade":"G1","gap":"🔮 <b>下游补充。未来生态位候选。</b>2026 年全球约 80 亿美元（+433%），2027 年预计 400 亿。可降低数据中心功耗超 40%，在电力成为瓶颈时省电即省钱。<b>证伪条件：系统良率可能把量产推迟到 2028–2029；若可插拔光模块通过 LPO 等升级解决功耗，CPO 紧迫性大幅下降。</b>","co":"中际旭创 · 新易盛 · 天孚通信 · 光迅科技"},{"n":"人形机器人零部件","mkt":"—","cn":"—","loc":55,"locTxt":"丝杠国产良率约 60%（海外 85%）","gapPct":45,"grade":"G2","gap":"🔮 <b>下游补充。未来生态位候选。</b>中国 2025 出货约 1.8 万台（+650%），2026 预计 6.25 万台。宇树 2025 全球出货第一、毛利率超 60%，单价从 2023 年 59.34 万元降到 2026 年中 2.99 万元——<b>成本曲线与激光雷达高度相似</b>。<b>证伪条件：若 2027 年前仍无规模化真实商业场景，这只是制造业内卷。</b>传感器海外定价是国产 3 倍以上。","co":"宇树科技（2026-07 科创板过会）· 减速器与丝杠国产厂商"}],"focus":[{"n":"长鑫科技","cd":"688825.SH","seg":"DRAM","grade":"G1","rev":1150,"revP":"2026H1（预计）","gs":7.85,"cs":null,"conf":1,"gap":"全球第四大 DRAM 厂，份额 2025Q1 3% → 2026Q1 7.7–8%。2026Q1 DRAM 收入 73.09 亿美元、环比 +115%。<b>剩余缺口是 HBM</b>：三星/海力士 HBM3E/HBM4 是 AI 服务器刚需，长鑫仍在追赶。2026-07-27 上市首日 +465%，市值 3.28 万亿。","q":"688825.SH"},{"n":"中际旭创","cd":"300308.SZ","seg":"光模块","grade":"G1","rev":382.4,"revP":"2025 年报","gs":23.4,"cs":null,"conf":1,"gap":"<b>技术上已无代差。</b>全球市占 23.4%、连续五年出货量与营收双第一；800G 超 40%、1.6T 达 50–70%。对标 Coherent、Lumentum 已实现反超。风险在客户结构（北美云厂商依赖）而非技术。","q":"300308.SZ"},{"n":"长江存储","cd":"未上市","seg":"NAND","grade":"G1","rev":null,"revP":"—","gs":13,"cs":null,"conf":1,"gap":"全球 NAND 份额 8%（2025Q1）→ 13%（2026Q1），与美光、闪迪并列。Xtacking 架构提供差异化路径。2026-05 启动 IPO 辅导，预计 2026 下半年上市，估值预期约 3000 亿。"},{"n":"长电科技","cd":"600584.SH","seg":"封装测试","grade":"G1","rev":null,"revP":"2025 未核实","gs":12.2,"cs":null,"conf":1,"gap":"全球第三大 OSAT，仅次于日月光、安靠，前三合计超 52%。传统封装已完成替代。<b>差距在 CoWoS 级先进封装与 HBM 集成</b>，该领域仍由台积电主导。2026 年固投预算约 100 亿投向先进封装。","q":"600584.SH"},{"n":"北方华创","cd":"002371.SZ","seg":"半导体设备","grade":"G1","rev":393.53,"revP":"2025 年报 +30.85%","gs":3.8,"cs":null,"conf":1,"gap":"<b>全球设备第 7，唯一进入前十的中国公司</b>（约 51 亿美元）。平台型覆盖刻蚀/沉积/炉管/清洗。与 AMAT（约 270 亿美元）差距约 5 倍营收，产品线宽度与先进节点验证是主要缺口。","q":"002371.SZ"},{"n":"华为昇腾","cd":"未上市","seg":"AI 芯片","grade":"G1","rev":null,"revP":"未披露","gs":null,"cs":37,"conf":1,"gap":"中国 AI 芯片市场销售额份额 37%（2026Q1），占国产芯片总量 70%；Bernstein 预计 2026 全年达 50%。<b>与英伟达差距不在单卡算力而在三处</b>：先进制程受限、HBM 供给、CUDA 生态迁移成本。全球份额仍个位数。"},{"n":"盛美上海","cd":"688082.SH","seg":"清洗设备","grade":"G1","rev":67.86,"revP":"2025 年报","gs":14.3,"cs":55,"conf":1,"gap":"清洗设备国产化率 50–60%，公司国内行业第三、净利 13.95 亿。SAPS/TEBO 兆声波清洗为差异化技术路径，非简单模仿。与 SCREEN 差距在先进节点产能与全球客户覆盖。母体 ACM Research 在纳斯达克上市（ACMR）。","q":"688082.SH"},{"n":"中微公司","cd":"688012.SH","seg":"刻蚀设备","grade":"G1","rev":123.85,"revP":"2025 年报 +36.62%","gs":7.7,"cs":null,"conf":1,"gap":"<b>5nm CCP 刻蚀机已达国际水平并进入台积电验证流程</b>——这是国产前道设备最实质的技术认可。成熟制程刻蚀国产化率 50–60%，先进逻辑刻蚀仍 <15%，与 Lam 差距在高深宽比与原子级精度。","q":"688012.SH"},{"n":"江丰电子","cd":"300666.SZ","seg":"溅射靶材","grade":"G1","rev":null,"revP":"2025 未核实","gs":null,"cs":38,"conf":1,"gap":"<b>晶圆制造靶材国内市占 38%</b>，已进入全球主流晶圆厂供应链，是材料端国产化最成功的品类。制约在市场天花板——全球靶材市场仅约 20 亿美元。","q":"300666.SZ"},{"n":"澜起科技","cd":"688008.SH","seg":"内存接口","grade":"G1","rev":null,"revP":"2025 未核实","gs":40,"cs":null,"conf":2,"gap":"与 Rambus、瑞萨构成全球三强，是国产芯片设计里全球竞争力最强的环节之一。DDR5 代际升级与服务器内存容量提升直接拉动需求，受益于存储超级周期。","q":"688008.SH"},{"n":"中芯国际","cd":"688981.SH / 00981.HK","seg":"晶圆代工","grade":"G2","rev":673.23,"revP":"2025 年报 +16.5%","gs":6,"cs":null,"conf":1,"gap":"全球第三大代工厂。净利 50.41 亿（+36.3%），8 英寸产能利用率超 90%。<b>N+2（7nm 级）靠 DUV 多重曝光实现，无 EUV 意味着 5nm 以下路径受阻</b>，与台积电 2nm 量产约 3–4 代差距。成本与良率劣势随节点推进放大。","q":"688981.SH"},{"n":"华虹公司","cd":"688347.SH / 01347.HK","seg":"晶圆代工","grade":"G2","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"特色工艺路线，不追先进制程因而不直接受 EUV 限制。8 英寸产能利用率超 90%，与联电、格芯在成熟制程正面竞争，差距相对可控。","q":"688347.SH"},{"n":"华特气体","cd":"688268.SH","seg":"电子特气","grade":"G2","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"电子特气整体国产化率约 30%。已通过多家主流晶圆厂认证（认证周期通常 2–3 年，构成真实壁垒）。高端品种如超纯氨、六氟化钨国产化率更低。","q":"688268.SH"},{"n":"江化微","cd":"603078.SH","seg":"湿电子化学品","grade":"G2","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"通用湿化学品国产化率高，G4/G5 超高纯等级仍依赖关东化学、Stella Chemifa。差距在纯度稳定性与金属离子控制。"},{"n":"寒武纪","cd":"688256.SH","seg":"AI 芯片","grade":"G2","rev":64.97,"revP":"2025 年报 +453.21%","gs":null,"cs":8,"conf":1,"gap":"中国 AI 芯片销售额份额 7–9%（2026Q1），2025 营收同比 +453%。<b>与英伟达的核心差距是软件生态</b>——CUDA 迁移成本决定客户粘性。科创板首家万亿市值公司，估值已充分反映增长预期。","q":"688256.SH"},{"n":"海光信息","cd":"688041.SH","seg":"服务器 CPU","grade":"G2","rev":null,"revP":"2025 净利 25.42 亿","gs":null,"cs":null,"conf":2,"gap":"x86 授权路线，生态兼容性是最大优势也是最大风险（授权可持续性）。与 AMD EPYC、Intel Xeon 在单核性能与制程上有代差，但在信创市场已形成规模。","q":"688041.SH"},{"n":"拓荆科技","cd":"688072.SH","seg":"薄膜沉积","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"PECVD 国内市占第一，是薄膜沉积的国产独苗。<b>但薄膜沉积整体国产化率仅 5–10%</b>，市场规模 282 亿美元（第二大环节）。ALD 与高深宽比填充仍依赖 AMAT/Lam/ASM International——市场大×渗透低，空间与难度同样大。","q":"688072.SH"},{"n":"华海清科","cd":"688120.SH","seg":"CMP 设备","grade":"G3","rev":31.94,"revP":"2025Q1–Q3","gs":null,"cs":20,"conf":1,"gap":"CMP 国内第一，2025 前三季营收 31.94 亿、行业第 7。成熟制程国产化率 15–25%、先进制程 <10%，AMAT 与荏原主导。先进封装扩产会拉动平坦化需求。","q":"688120.SH"},{"n":"中科飞测","cd":"688361.SH","seg":"量测检测","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"KLA 是全球垄断度最高的设备商之一。公司覆盖缺陷检测与膜厚量测，<b>先进节点的套刻精度量测与电子束检测基本空白</b>。制程越先进，量测设备价值量占比越高，因此这一格的长期空间被低估。","q":"688361.SH"},{"n":"芯源微","cd":"688037.SH","seg":"涂胶显影","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":12,"conf":2,"gap":"东京电子全球份额超 85%，垄断度极高。芯源微是国内唯一规模化供应商，成熟制程国产化率 10–15%，<b>与光刻机联机的先进制程 track 尚未突破</b>。","q":"688037.SH"},{"n":"沪硅产业","loss":1,"cd":"688126.SH","seg":"半导体硅片","grade":"G3","rev":24.39,"revP":"2025 · 300mm 部分","gs":null,"cs":null,"conf":1,"gap":"300mm 硅片销量 641.63 万片（+27.01%），<b>但 2025 年净亏 15.08 亿</b>——12 英寸国产化率仅 10%、行业价格战叠加产能爬坡。信越、SUMCO 在大直径低缺陷密度上仍有明显优势。8 英寸已实质替代（55%）。","q":"688126.SH"},{"n":"南大光电","cd":"300346.SZ","seg":"光刻胶","grade":"G3","rev":null,"revP":"2025 营收 +18%","gs":null,"cs":2,"conf":1,"gap":"<b>2025 年底成为国内首家 ArF 光刻胶量产企业，已通过中芯国际与长江存储验证</b>——这是材料端最实质的突破。但 ArF 整体国产化率仍仅 2%，EUV 光刻胶尚在研发。JSR、东京应化、信越垄断。","q":"300346.SZ"},{"n":"安集科技","cd":"688019.SH","seg":"CMP 抛光液","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"抛光液国内领先，CMP 抛光材料整体国产化率 <30%，是明确的卡脖子环节。Entegris（原 Cabot Microelectronics）与 Fujimi 主导。","q":"688019.SH"},{"n":"鼎龙股份","cd":"300054.SZ","seg":"CMP 抛光垫","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":2,"gap":"抛光垫实现国产替代并<b>维持 35–45% 高毛利</b>——高毛利本身说明壁垒真实存在、竞争尚未充分。对标杜邦、陶氏。","q":"300054.SZ"},{"n":"华大九天","loss":1,"cd":"301269.SZ","seg":"EDA","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":7,"conf":2,"gap":"国内 EDA 份额约 7%（本土第一）。<b>模拟全流程已可用，数字先进节点全流程仍是空白</b>，国产 EDA 整体工艺支撑能力停在 14nm。全球 Synopsys 32% + Cadence 23% + Siemens 14% = 69%。","q":"301269.SZ"},{"n":"概伦电子","cd":"688206.SH","seg":"EDA","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"器件建模与特性测试是切入点，非全流程。对标 Synopsys、Cadence、Keysight 的相应模块。"},{"n":"广立微","cd":"301095.SZ","seg":"EDA","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"良率分析与晶圆级电性测试，对标 PDF Solutions。细分赛道，避开与三巨头正面竞争。"},{"n":"万业企业/凯世通","cd":"600641.SH","seg":"离子注入","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":14,"conf":2,"gap":"成熟制程离子注入国产化率 10–20%、先进 <5%。低能大束流机型有进展，高能注入机基本空白。<b>需分别考察设备验证、批量订单与上市公司业务结构</b>，不能仅按概念归类。"},{"n":"精测电子","cd":"300567.SZ","seg":"量测检测","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"通过子公司布局半导体量测。<b>公司还包含显示、新能源检测业务，并非纯半导体设备标的</b>，用整体营收算半导体份额会显著高估。"},{"n":"清溢光电","cd":"688138.SH","seg":"掩膜版","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":15,"conf":2,"gap":"覆盖平板显示与成熟制程半导体掩膜版，高端半导体掩膜版尚未突破。Photronics、Hoya、Toppan 主导。"},{"n":"深南电路","cd":"002916.SZ","seg":"封装基板","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"AI 芯片带动 ABF 载板需求暴增，是受益方向。高层数 ABF 载板仍由揖斐电、新光、欣兴主导，国产化率约 30%。"},{"n":"兴森科技","cd":"002436.SZ","seg":"封装基板","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"IC 封装基板切入者，与深南电路同赛道。差距在高层数与良率。"},{"n":"长川科技","cd":"300604.SZ","seg":"测试设备","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"测试机与分选机。Advantest、Teradyne 双寡头，SoC 高端测试机与 HBM 测试是短板。"},{"n":"华峰测控","cd":"688200.SH","seg":"测试设备","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"模拟与功率测试机国内领先，是国产测试设备中壁垒较高的细分。SoC 测试仍与泰瑞达有差距。"},{"n":"通富微电","cd":"002156.SZ","seg":"封装测试","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"AMD 的主要封测合作方，CPU/GPU 封测经验是差异化优势。先进封装能力与台积电 CoWoS 仍有明显差距。","q":"002156.SZ"},{"n":"兆易创新","cd":"603986.SH","seg":"利基存储","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"NOR Flash 与 MCU 为主，对标华邦、旺宏、英飞凌。<b>不是三星、海力士意义上的主流大宗 DRAM 厂商</b>，与长鑫不在同一价值层级。","q":"603986.SH"},{"n":"摩尔线程","loss":1,"cd":"688795.SH","seg":"AI 芯片","grade":"G3","rev":17.36,"revP":"2026H1 +147.42%","gs":null,"cs":null,"conf":1,"gap":"2026H1 营收 17.36 亿、毛利 9.89 亿（+103.78%），已超 2025 全年。国产 GPU 第一股。与英伟达差距同样集中在制程、HBM 与生态；相对昇腾的差距在客户规模与集群验证。","q":"688795.SH"},{"n":"沐曦股份","loss":1,"cd":"688802.SH","seg":"AI 芯片","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"国产 GPU 四小龙之一，上市首日 +692.95%。<b>六份原始回答全部遗漏此公司</b>。技术差距与摩尔线程类似，估值同样已充分反映预期。","q":"688802.SH"},{"n":"壁仞科技","cd":"06082.HK","seg":"AI 芯片","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"港股 GPU 第一股，18C 机制下最大规模新股（募资 55.83 亿港元）。差距同上。港股上市使其成为境外资金可直接参与的国产 GPU 标的。"},{"n":"龙芯中科","cd":"688047.SH","seg":"CPU","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"LoongArch 自主指令集，<b>自主度最高但生态最小</b>——与海光的 x86 兼容路线是两种权衡。性能与 Intel/AMD 主流产品有明显代差。"},{"n":"新易盛","cd":"300502.SZ","seg":"光模块","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"⚠ 谨慎层。技术上与海外无代差，但同样高度依赖北美云厂商资本开支，属全球 AI capex 链而非国产自主可控链。","q":"300502.SZ"},{"n":"浪潮信息","cd":"000977.SZ","seg":"AI 服务器","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"整机集成环节，技术壁垒相对低、利润率薄。对标戴尔、慧与、超微，差距不在技术而在供应链议价与全球渠道。","q":"000977.SZ"},{"n":"工业富联","cd":"601138.SH","seg":"服务器代工","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"⚠ 组装集成，利润率低且受地缘博弈影响。<b>营收含大量非 AI 业务</b>，用整体营收算 AI 份额会严重高估。","q":"601138.SH"},{"n":"达梦数据","cd":"688692.SH","seg":"数据库","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"党政与金融信创场景已形成规模，商业市场仍由 Oracle 主导。<b>差距在生态而非功能</b>：迁移成本、第三方软件兼容、开发者规模。","q":"688692.SH"},{"n":"中控技术","cd":"688777.SH","seg":"工业软件","grade":"G3","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"DCS 国内领先，与霍尼韦尔、艾默生、罗克韦尔的差距在高端流程行业的可靠性积累与全球案例库。"},{"n":"上海微电子 SMEE","cd":"未上市","seg":"光刻机","grade":"G4","rev":null,"revP":"未披露","gs":null,"cs":4,"conf":1,"gap":"<b>全表差距最大的一家。</b>SSA800 28nm 浸没式 DUV 2026 年初交付中芯上机测试，良率超 90%、国产化率超 85%，可支持 7nm 多重曝光——这是真进展。但<b>产能 10 片/小时 vs ASML 170 片/小时</b>，EUV 无产品，业界估计代差约 8 年。母公司短期无上市计划，分拆芯上微装拟 2027 报科创板。"},{"n":"彤程新材","cd":"603650.SH","seg":"光刻胶","grade":"G4","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"半导体光刻胶整体国产化率 <10%，KrF 仅 10%、ArF 2%、EUV 研发阶段。这是材料端分层最陡峭、差距最大的一格。"},{"n":"晶瑞电材","cd":"300655.SZ","seg":"光刻胶","grade":"G4","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":0,"gap":"同上。g/i 线光刻胶国产化率 30% 尚可，KrF/ArF 及以上差距显著。"},{"n":"芯华章","cd":"未上市","seg":"EDA","grade":"G4","rev":null,"revP":"未披露","gs":null,"cs":null,"conf":0,"gap":"验证 EDA 切入。国产 EDA 工艺支撑停在 14nm，数字先进节点全流程空白，是软件端最难补的缺口。"},{"n":"禾赛科技","cd":"HSAI / 02525.HK","seg":"激光雷达","grade":"G1","rev":null,"revP":"2025 未核实","gs":43,"cs":55,"conf":1,"gap":"⭐ <b>全球 ADAS 主激光雷达出货第一（43%，Yole）</b>，中国 55%、约为第二名三倍。出货指引上调至 300–350 万台、产能 400 万台。<b>海外龙头 Luminar 已于 2025-12 破产</b>——这是全清单里中国优势最彻底的一格。但全球市场 2025 年才刚破 10 亿美元，池子小。"},{"n":"速腾聚创","cd":"02498.HK","seg":"激光雷达","grade":"G1","rev":null,"revP":"2025 未核实","gs":null,"cs":null,"conf":1,"gap":"车载与机器人双线。<b>2026Q1 机器人激光雷达出货 18.55 万台，同比 +1458.8%</b>——说明车载练出的成本曲线正在外溢到车以外的场景。价格战使行业整体利润率偏低。"},{"n":"地平线机器人","cd":"09660.HK","seg":"智驾芯片","grade":"G1","rev":null,"revP":"2025 未核实","gs":null,"cs":31.94,"conf":1,"gap":"<b>自主品牌全阶市场 31.94% 第一</b>，超过英伟达 29.38%；累计出货超 1100 万套，征程 6M 订单超 250 万颗。<b>但城区 NOA 高阶市场只有 22.82%、落后英伟达 39.43%</b>——量在手上，高价位利润不在。接下来两年能否把这个 22.82% 推上去，决定它是走量厂商还是平台。"},{"n":"宇树科技","cd":"科创板 已过会","seg":"人形机器人","grade":"G1","rev":null,"revP":"未披露","gs":null,"cs":null,"conf":1,"gap":"🔮 2025 年全球人形机器人出货第一、<b>毛利率超 60%</b>，单价从 2023 年 59.34 万元降到 2026 年中 2.99 万元。2026-07 科创板 IPO 过会，拟募资 42 亿元以上。<b>成本曲线与激光雷达高度相似，但商业场景尚未验证。</b>"}],"quotes":[{"n":"NVIDIA","cd":"NVDA","reg":"ov","seg":"AI 加速芯片","mc":52681,"pe":33.36,"pb":26.96,"fpe":24.81,"rel":null,"old":"约 45x","d":"<b>全表最大市值，PE 却只有 33.36。</b>最近一季净利同比 +214.5%、营收 +85.2%，利润增速把 PE 摊薄了。毛利率 74.1%、营业利润率 65.6%、ROE 114.3%。"},{"n":"台积电","cd":"TSM","reg":"ov","seg":"晶圆代工","mc":21704,"pe":36.9,"pb":11.94,"fpe":25.32,"rel":null,"old":"约 20–30x","d":"毛利率 64.2%、营业利润率 60.3%。最近一季净利同比 +77.4%。"},{"n":"美光","cd":"MU","reg":"ov","seg":"存储 / HBM","mc":9809,"pe":19.46,"pb":9.65,"fpe":5.55,"rel":null,"old":"前瞻 <10x","d":"⚠ <b>营业利润率 80.4%，全表最高</b>，高于 SK 海力士的 76%。最近一季净利同比 <b>+1369%</b>。前瞻 PE 5.55 是全表最低——<b>周期股在盈利峰值时 PE 最低，这是风险不是便宜。</b>"},{"n":"ASML","cd":"ASML","reg":"ov","seg":"光刻机","mc":6658,"pe":59.16,"pb":26.51,"fpe":38.46,"rel":null,"old":"约 53%（毛利率）","d":"毛利率 52.7%、营业利润率 37.1%。EUV 全球唯一供应商，但 PE 高于英伟达。"},{"n":"应用材料","cd":"AMAT","reg":"ov","seg":"半导体设备","mc":4173,"pe":49.35,"pb":17.34,"fpe":33.11,"rel":null,"old":"约 20–25x ✗","d":"❗<b>此前记录错误约一倍。</b>实测 49.35，高于英伟达。毛利率 49.0%、营业利润率 31.9%。"},{"n":"泛林 Lam","cd":"LRCX","reg":"ov","seg":"刻蚀设备","mc":3897,"pe":53.23,"pb":30.74,"fpe":33.22,"rel":null,"old":"约 25–30x ✗","d":"❗<b>此前记录错误约一倍。</b>实测 53.23。毛利率 50.5%、营业利润率 37.4%、ROE 65.1%。"},{"n":"Synopsys","cd":"SNPS","reg":"ov","seg":"EDA","mc":787,"pe":94.25,"pb":2.59,"fpe":23.87,"rel":null,"old":"约 85%（毛利率）","d":"⚠ 毛利率 82.6% 但<b>营业利润率仅 10.4%、ROE 3.8%</b>，最近一季 EPS 同比 <b>-96%</b>。毛利率高不等于赚钱。"},{"n":"Coherent","cd":"COHR","reg":"ov","seg":"光模块","mc":636,"pe":154.1,"pb":6.95,"fpe":38.31,"rel":null,"old":"前瞻 49x / TTM >180x","d":"毛利率 37.0%、营业利润率 13.6%。中际旭创的主要对标。"},{"n":"Lumentum","cd":"LITE","reg":"ov","seg":"光模块","mc":633,"pe":156.14,"pb":23.29,"fpe":47.17,"rel":null,"old":"159x","d":"毛利率 40.8%、营业利润率 21.8%。最近一季营收同比 +90.1%。"},{"n":"长鑫科技","cd":"688825.SH","reg":"cn","seg":"DRAM","mc":35794.65,"pe":126.95,"pb":43.8,"rel":6.52,"relv":"美光 19.46","old":"推算 2026E 约 22–25x","d":"❗<b>此前按 2026E 推算 22–25x，TTM 口径实测 126.95。</b>两者不矛盾（一个用预测利润、一个用过去12个月），但目录页只写了低的那个，会误导。PB 43.80 是全表最高。"},{"n":"中芯国际","cd":"688981.SH","reg":"cn","seg":"晶圆代工","mc":10954.73,"pe":217.12,"pb":7.31,"rel":5.88,"relv":"台积电 36.90","old":"234x","d":"PB 仅 7.31，远低于同业。<b>代工是重资产周期股，PE 口径本身失真</b>，PB 或 EV/EBITDA 更合适——这一点此前已标注，实测印证。"},{"n":"华虹公司","cd":"688347.SH","reg":"cn","seg":"晶圆代工","mc":4747.47,"pe":962.17,"pb":10.49,"rel":26.1,"relv":"台积电 36.90","old":"未核实","d":"⚠ PE 962 说明利润接近于零。特色工艺路线不受 EUV 限制，但盈利能力与台积电差距巨大。"},{"n":"兆易创新","cd":"603986.SH","reg":"cn","seg":"利基存储","mc":2899.4,"pe":100.86,"pb":11.47,"rel":5.18,"relv":"美光 19.46","old":"未核实","d":"NOR Flash 与 MCU 为主，与长鑫不在同一价值层级。"},{"n":"北方华创","cd":"002371.SZ","reg":"cn","seg":"半导体设备","mc":5515.24,"pe":98.91,"pb":14.04,"rel":2,"relv":"AMAT 49.35","old":"90x（5月 81x）","d":"Longbridge：合理区间 48.65–81.88，<b>当前高于区间上沿，处近一年 93% 分位</b>（仅 6.9% 的时间比现在贵）。行业排名 20/69，行业中位数 93.93。"},{"n":"中微公司","cd":"688012.SH","reg":"cn","seg":"刻蚀设备","mc":3648.9,"pe":133.71,"pb":15.01,"rel":2.51,"relv":"泛林 53.23","old":"110.5x","d":"实测高于此前记录 21%。5nm CCP 刻蚀已进台积电验证，基本面支撑相对实。"},{"n":"拓荆科技","cd":"688072.SH","reg":"cn","seg":"薄膜沉积","mc":2043.56,"pe":124.28,"pb":28.2,"rel":2.52,"relv":"AMAT 49.35","old":"95.41x","d":"❗此前写「当前 PE 与 2026E 基本持平，几乎未透支未来」——实测 124.28，比 5 月记录高 30%，那个结论已不成立。"},{"n":"盛美上海","cd":"688082.SH","reg":"cn","seg":"清洗设备","mc":1515.84,"pe":89.74,"pb":10.38,"rel":1.82,"relv":"AMAT 49.35","old":"未核实","d":"<b>设备环节相对海外溢价最低的一家（1.82x）</b>，PB 10.38 也是设备股里较低的。"},{"n":"华海清科","cd":"688120.SH","reg":"cn","seg":"CMP 设备","mc":1356.49,"pe":123.59,"pb":17.57,"rel":2.5,"relv":"AMAT 49.35","old":"未核实"},{"n":"中科飞测","cd":"688361.SH","reg":"cn","seg":"量测检测","mc":1225.32,"pe":null,"pb":24.16,"rel":null,"old":"未核实","d":"⚠ <b>实测 PE 2.17，几乎确定包含大额非经常性收益，不可用于比较</b>，本表按存疑处理。"},{"n":"芯源微","cd":"688037.SH","reg":"cn","seg":"涂胶显影","mc":683.99,"pe":969.45,"pb":24.42,"rel":19.6,"relv":"AMAT 49.35","old":"未核实","d":"⚠ PE 969 说明利润极薄。东京电子在该环节全球份额超 85%，国产化率仅 10–15%。"},{"n":"江丰电子","cd":"300666.SZ","reg":"cn","seg":"溅射靶材","mc":728.7,"pe":132,"pb":14.06,"rel":null,"old":"未核实","d":"晶圆制造靶材国内市占 38%，材料端国产化最成功的一格，但全球市场仅约 20 亿美元。"},{"n":"鼎龙股份","cd":"300054.SZ","reg":"cn","seg":"CMP 抛光垫","mc":740.5,"pe":89.2,"pb":13.56,"rel":null,"old":"未核实","d":"此前记录毛利率 35–45%，实测 PE 89.20 在材料股中偏低。"},{"n":"雅克科技","cd":"002409.SZ","reg":"cn","seg":"前驱体 / 电子材料","mc":738.59,"pe":73.37,"pb":9.12,"rel":null,"old":"未核实","d":"<b>材料环节 PE 最低的一家。</b>"},{"n":"安集科技","cd":"688019.SH","reg":"cn","seg":"CMP 抛光液","mc":571.71,"pe":69.51,"pb":12.46,"rel":null,"old":"未核实","d":"PE 69.51，全部国产半导体材料股中第二低。"},{"n":"南大光电","cd":"300346.SZ","reg":"cn","seg":"光刻胶","mc":409.44,"pe":117.52,"pb":11.37,"rel":null,"old":"2025 营收 +18%","d":"2025 年底成为国内首家 ArF 光刻胶量产企业，已通过中芯与长江存储验证。"},{"n":"华特气体","cd":"688268.SH","reg":"cn","seg":"电子特气","mc":198.61,"pe":159.1,"pb":10.58,"rel":null,"old":"未核实","d":"<b>市值最小的重点标的（198.61 亿），但 PE 159.10 偏高。</b>"},{"n":"沪硅产业","cd":"688126.SH","reg":"cn","seg":"半导体硅片","mc":867.9,"pe":null,"pb":5.16,"loss":1,"rel":null,"old":"2025 净亏 15.08 亿","d":"❗<b>实测 PE -48.7，确认持续亏损。</b>PB 5.16 是全部国产标的中最低。12 英寸国产化率仅 10% + 价格战，「份额追上不等于盈利追上」的实证。","peNeg":-48.7},{"n":"海光信息","cd":"688041.SH","reg":"cn","seg":"服务器 CPU","mc":6686.19,"pe":245.27,"pb":28.46,"rel":7.35,"relv":"英伟达 33.36","old":"266x","d":"<b>国产盈利公司中 PE 最高的一家。</b>245 倍隐含的增速预期与其实际增速存在明显落差。"},{"n":"寒武纪","cd":"688256.SH","reg":"cn","seg":"AI 加速芯片","mc":6945.02,"pe":208.43,"pb":51.23,"rel":6.25,"relv":"英伟达 33.36","old":"305x","d":"实测低于此前记录（305x → 208.43），说明 5–8 月间盈利改善或股价回落。<b>但 PB 51.23、行业 PB 排名 168/172、PS 排名 167/172，按这两个口径是全行业最贵的一档。</b>"},{"n":"澜起科技","cd":"688008.SH","reg":"cn","seg":"内存接口","mc":2629.41,"pe":102.81,"pb":12.61,"rel":null,"old":"未核实","d":"全球三强之一，受益存储超级周期。PE 102.81 在设计股中偏低。"},{"n":"摩尔线程","cd":"688795.SH","reg":"cn","seg":"AI GPU","mc":2690.86,"pe":null,"pb":22.1,"loss":1,"rel":null,"old":"仍亏损","d":"❗实测 PE -362.94，<b>确认亏损</b>。市场用 PB 22.10 定价。2026H1 营收 17.36 亿（+147%），亏损收窄但未转正。","peNeg":-362.94},{"n":"沐曦股份","cd":"688802.SH","reg":"cn","seg":"AI GPU","mc":2861.88,"pe":null,"pb":21.85,"loss":1,"rel":null,"old":"未核实","d":"❗实测 PE -436.41，<b>确认亏损</b>，市值反超摩尔线程。六个模型全部遗漏此公司，02 号文件补入时也未标注亏损。","peNeg":-436.41},{"n":"华大九天","cd":"301269.SZ","reg":"cn","seg":"EDA","mc":538.83,"pe":null,"pb":10.36,"loss":1,"rel":null,"old":"未核实","d":"❗实测 PE -2479.19，<b>确认亏损</b>。国产 EDA 龙头在一个连 Synopsys 都只有 10.4% 营业利润率的赛道里，规模小两个数量级。","peNeg":-2479.19},{"n":"中际旭创","cd":"300308.SZ","reg":"cn","seg":"光模块","mc":10773.26,"pe":72.07,"pb":30.27,"rel":0.47,"relv":"Coherent 154.10","cheap":1,"old":"61x","d":"⭐ <b>相对对标折价 0.47x。</b>但行业分位显示：PE 排名 22/98（便宜）、<b>PB 排名 92/98、PS 排名 88/98（最贵一档）</b>。低 PE 靠 29% 净利率撑起，利润率一旦回落 PE 立刻变贵。"},{"n":"新易盛","cd":"300502.SZ","reg":"cn","seg":"光模块","mc":5970.21,"pe":55.59,"pb":29.3,"rel":0.36,"relv":"Coherent 154.10","cheap":1,"old":"未核实","d":"⭐ <b>折价最深的一家（0.36x），PE 比中际旭创还低 23%。</b>但 PB 29.30 与旭创相当，同样是高利润率撑出来的低 PE。"},{"n":"工业富联","cd":"601138.SH","reg":"cn","seg":"AI 服务器代工","mc":13017.72,"pe":27.75,"pb":7.41,"rel":null,"cheap":1,"old":"未核实","d":"⭐ <b>全表 PE 最低（27.75），且是国产第二大市值（1.30 万亿）。</b>低 PE 对应的是薄利——整机代工毛利率个位数，营收含大量非 AI 业务。<b>便宜有便宜的理由。</b>"},{"n":"长电科技","cd":"600584.SH","reg":"cn","seg":"封装测试","mc":1398.96,"pe":84.68,"pb":4.86,"rel":null,"old":"未核实","d":"<b>PB 4.86，国产标的中第二低。</b>全球第三大 OSAT，传统封装已完成替代，CoWoS 级仍依赖台积电。"},{"n":"通富微电","cd":"002156.SZ","reg":"cn","seg":"封装测试","mc":null,"pe":65.96,"pb":6.09,"rel":null,"old":"未核实","d":"AMD 主要封测合作方。PE 65.96、PB 6.09，均低于行业。"},{"n":"浪潮信息","cd":"000977.SZ","reg":"cn","seg":"AI 服务器","mc":1101.65,"pe":43.12,"pb":4.94,"rel":null,"cheap":1,"old":"未核实","d":"PE 43.12、PB 4.94，均处全表低位。整机环节薄利的估值体现。"},{"n":"达梦数据","cd":"688692.SH","reg":"cn","seg":"数据库","mc":269.76,"pe":47.34,"pb":6.94,"rel":null,"old":"未核实","d":"PE 47.34 在国产软件股中不算高。信创场景已成规模，商业市场仍由 Oracle 主导。"}],"poolsG":[{"n":"EDA / 半导体 IP","mkt":133,"mg":10.4,"mt":"o","t":"mono","d":"❗<b>2026-08-12 实测修正。</b>此前本层按「毛利率约 85%」计算利润池，得出 113 亿美元。实测 Synopsys 毛利率 82.6%（对），<b>但营业利润率仅 10.4%、ROE 3.8%、最近一季 EPS 同比 -96%</b>——研发与并购摊销吃掉了绝大部分毛利。改用营业利润率后，本层利润池从 113 亿降到约 <b>14 亿美元</b>，<b>此前高估约 8 倍</b>。Synopsys 32% + Cadence 23% + Siemens 14% = 全球 69%。规模最小是对的，「利润率最高」是错的。","ov":["Synopsys","Cadence","Siemens EDA","Arm"],"cn":["华大九天","概伦电子","芯原"]},{"n":"半导体设备","mkt":1333,"mg":35.5,"mt":"o","t":"mono","d":"<b>2026-08-12 实测：</b>ASML 毛利率 52.7% / 营业利润率 37.1%，AMAT 49.0% / 31.9%，泛林 50.5% / 37.4%。本层按三家营业利润率均值 35.5% 计。ASML 在 EUV 上是<b>全球唯一供应商</b>。⚠ <b>实测三家 PE 均高于英伟达</b>（49.35 / 53.23 / 59.16 vs 33.36）——市场给设备的估值本来就高于给 GPU 的估值。光刻 338 亿、薄膜沉积 282 亿、刻蚀 226 亿合计占前道六成以上。","ov":["ASML","AMAT","Lam","KLA","TEL"],"cn":["北方华创","中微","拓荆","盛美"]},{"n":"半导体材料","mkt":732,"mg":38,"mt":"g","t":"thin","d":"晶圆制造材料 458 亿加封装材料 274 亿。<b>单个品类规模小、认证周期长、利润率中等</b>——壁垒真实但天花板明确。","ov":["信越","SUMCO","JSR","Entegris","默克"],"cn":["沪硅产业","南大光电","江丰","安集"]},{"n":"晶圆代工","mkt":1600,"mg":64,"mt":"g","t":"mono","d":"台积电毛利率 62.3–66%，在重资产行业里是异常值。<b>CoWoS 与 SoIC 先进封装产能已订满至 2026 年</b>——这是当前 AI 芯片最硬的物理瓶颈之一。","ov":["TSMC","三星代工","Intel Foundry"],"cn":["中芯国际","华虹"]},{"n":"HBM / 存储","mkt":3800,"mg":80.4,"mt":"o","t":"dark","d":"<b>2026 年整条链利润率最高的环节，且比此前描述的更极端。</b>SK 海力士 2026Q2 营业利润率 76%；<b>2026-08-12 实测美光营业利润率 80.4%</b>，最近一季净利同比 <b>+1369%</b>——本层已按美光更新。HBM 全球份额：海力士超 70%、三星 35–40%、美光 5–10%。⚠ <b>美光 PE 仅 19.46、前瞻 PE 5.55，是全部对标公司中最低——周期股在盈利峰值时 PE 最低，这是风险信号不是便宜。</b>","ov":["SK海力士","三星","美光"],"cn":["长鑫科技","长江存储"]},{"n":"AI 加速芯片","mkt":2000,"mg":65.6,"mt":"o","t":"mono","d":"<b>2026-08-12 实测：</b>英伟达毛利率 <b>74.1%</b>、<b>营业利润率 65.6%</b>、ROE 114.3%、营收 TTM $2534.9 亿。本层已统一为营业利润率口径。全球份额超 80%。<b>利润来源不是硅片而是 CUDA</b>——迁移成本远高于换卡的价差。⚠ <b>但实测 PE 只有 33.36，低于 AMAT 49.35、泛林 53.23、ASML 59.16——「英伟达贵」在这个时点上是错的</b>，它的利润增速（最近一季净利 +214.5%）把 PE 摊薄了。","ov":["NVIDIA","AMD","Google TPU","Broadcom ASIC"],"cn":["华为昇腾","寒武纪","海光","摩尔线程"]},{"n":"网络 / 交换","mkt":500,"mg":70,"mt":"g","t":"mono","d":"Arista、Broadcom 毛利率 62–77%。<b>集群规模越大，网络在总成本中占比越高</b>，是 AI 训练从单机走向万卡集群后被重估的环节。","ov":["Broadcom","Arista","Cisco","NVIDIA NVLink"],"cn":["中兴","锐捷","新华三"]},{"n":"光模块 / 光互联","mkt":248,"mg":40,"mt":"g","t":"dark","d":"<b>中国主导的唯一全球第一环节。</b>中际旭创全球 23.4–27%，800G 超 40%、1.6T 达 50–70%。2026Q1 营收 195 亿元（+192%）、净利 57 亿元（+262%）。风险是美国 FCC 正讨论禁止中国产光模块。","ov":["Coherent","Lumentum","Marvell"],"cn":["中际旭创","新易盛","天孚","光迅"]},{"n":"电力设备","mkt":200,"mg":25,"mt":"o","t":"fut","d":"<b>正在成为新瓶颈。</b>变压器交期约 128 周、发电机升压机组约 144 周，高容量机组排到四到五年后。已宣布 2026 年 16GW 中仅约 5GW 在建，30–50% 管道面临延期。美国市场 2026 年约 200 亿美元，2030 年预计 650 亿美元。","ov":["Eaton","Schneider","Vertiv","GE Vernova","Caterpillar"],"cn":["科华数据","中恒电气","英维克"]},{"n":"服务器 / 整机","mkt":3000,"mg":12,"mt":"g","t":"thin","d":"<b>规模巨大、利润极薄</b>——AI 服务器的价值几乎全部由内部的 GPU 和 HBM 决定，整机厂只赚组装与集成费。这是「高营收低利润」的典型陷阱。","ov":["Dell","HPE","Supermicro","Quanta"],"cn":["工业富联","浪潮信息","联想","中科曙光"]},{"n":"云服务","mkt":7600,"mg":32,"mt":"o","t":"mono","d":"微软、亚马逊、谷歌、Meta、Oracle、CoreWeave 六家 2026 年资本开支超 <b>7600 亿美元</b>（2025 年为 4100 亿）。<b>他们既是整条链最大的买方，也是利润池的最终定价者</b>——如果他们的投资回报不达预期，上游所有环节的估值同时承压。","ov":["AWS","Azure","GCP","Oracle","CoreWeave"],"cn":["阿里云","华为云","腾讯云"]},{"n":"模型层","mkt":600,"mg":-20,"mt":"o","t":"fut","d":"OpenAI、Anthropic 等。<b>收入高速增长但多数仍在亏损</b>——训练成本与推理成本同时上升。这一层是否最终能形成稳定利润池，是整个 AI 资本开支叙事能否闭环的关键。","ov":["OpenAI","Anthropic","Google DeepMind","xAI"],"cn":["DeepSeek","阿里通义","字节豆包","智谱"]}],"poolsC":[{"n":"EDA / IP","mkt":185,"mg":60,"mt":"g","t":"thin","d":"中国 EDA 市场 184.9 亿元、占全球 18.1%，但<b>国产工具国内份额仅约 20%，工艺支撑停在 14nm</b>。利润率低于海外三巨头，因为缺少全流程定价权。<b>这是中国链利润最薄弱的起点。</b>","ov":["Synopsys 32%","Cadence 23%","Siemens 14%"],"cn":["华大九天 约7%","概伦电子","广立微"]},{"n":"半导体设备","mkt":2800,"mg":40,"mt":"g","t":"dark","d":"国产设备在中国 WFE 市场份额 <b>2020 年 10%、2024 年 17%、2025 年跃升至 26%</b>，爬升速度超市场预期。长鑫与长存扩产直接拉动订单，头部厂商 Q2–Q3 订单同比增速预计 40–50% 以上。<b>这是中国链目前最确定的利润增长点。</b>","ov":["AMAT / Lam / TEL 仍占 74%"],"cn":["北方华创","中微","拓荆","盛美","华海清科"]},{"n":"半导体材料","mkt":1100,"mg":30,"mt":"g","t":"thin","d":"中国大陆市场约 156 亿美元（同比 +12.5%）。<b>国产化率整体不足 20%</b>，且 12 英寸硅片因价格战导致龙头亏损（沪硅 2025 年净亏 15.08 亿元）——<b>份额上升不等于利润上升</b>，这是中国链最典型的内卷格。","ov":["信越","SUMCO","JSR"],"cn":["沪硅（亏损）","南大光电","江丰 38%","鼎龙 毛利35–45%"]},{"n":"晶圆代工","mkt":900,"mg":20,"mt":"g","t":"thin","d":"中芯 2025 年营收 673.23 亿元、净利 50.41 亿元。<b>毛利率远低于台积电，因为缺 EUV 只能靠 DUV 多重曝光，成本结构天然更差</b>。8 英寸产能利用率超 90%，成熟制程是真实优势。","ov":["TSMC 毛利 62–66%"],"cn":["中芯国际","华虹","晶合集成"]},{"n":"存储制造","mkt":2500,"mg":60,"mt":"o","t":"dark","d":"<b>中国链利润率最高的环节，与全球链一致。</b>长鑫 2026H1 营收 1100–1200 亿元、净利 660–750 亿元，全球 DRAM 份额 7.85%（第四）。长江存储 NAND 全球 13%。<b>剩余缺口是 HBM，也正是全球链利润最集中的地方。</b>","ov":["三星","SK海力士","美光"],"cn":["长鑫科技 688825","长江存储（未上市）"]},{"n":"AI 加速芯片","mkt":1500,"mg":45,"mt":"g","t":"dark","d":"<b>国产在华份额 2026Q1 首破 52.3%</b>，昇腾 37%（占国产总量 70%），英伟达降至 15–20%。Bernstein 预计 2026 全年华为达 50%、英伟达 8%。<b>但全球份额仍是个位数——行政力量能替代本土市场，替代不了 CUDA 生态。</b>","ov":["NVIDIA 15–20%","AMD 10–12%"],"cn":["昇腾 37%","寒武纪 7–9%","海光","摩尔线程","沐曦","壁仞"]},{"n":"光模块","mkt":1800,"mg":35,"mt":"g","t":"mono","d":"<b>中国链唯一的全球垄断位置。</b>中际旭创全球第一，800G 超 40%、1.6T 达 50–70%。但 90% 以上收入来自境外，<b>本质是全球 AI 资本开支链而非国产自主可控链</b>——FCC 若禁令落地，这个位置会被直接切断。","ov":["Coherent 约16%","Lumentum"],"cn":["中际旭创 23.4–27%","新易盛","天孚通信"]},{"n":"智驾芯片","mkt":400,"mg":40,"mt":"g","t":"dark","d":"<b>自主品牌全阶市场地平线 31.94% 第一</b>，超过英伟达 29.38%。但城区 NOA 高阶市场英伟达 39.43% 反超，地平线 22.82%。<b>量在国产手上，高价位利润仍在英伟达手上。</b>","ov":["英伟达 全阶29.38% / 高阶39.43%","Mobileye 9.17%"],"cn":["地平线 31.94%","华为 8.74%","黑芝麻智能"]},{"n":"激光雷达","mkt":80,"mg":20,"mt":"g","t":"dark","d":"<b>中国厂商占全球车载市场 80–95%，海外龙头 Luminar 已于 2025 年 12 月破产。</b>禾赛全球 ADAS 主雷达 43% 第一。<b>但全球市场规模 2025 年才刚突破 10 亿美元</b>——赢下的是一个小池子，且价格战使利润率偏低。","ov":["Luminar（已破产）","Valeo"],"cn":["禾赛 43%","速腾聚创","华为"]},{"n":"服务器 / 整机","mkt":2200,"mg":8,"mt":"g","t":"thin","d":"<b>比全球链更薄。</b>国内 AI 服务器竞争充分、政企招标压价，整机厂利润率普遍个位数。营收规模大但对利润贡献有限。","ov":["Dell","HPE","Supermicro"],"cn":["浪潮信息","工业富联","中科曙光","联想"]},{"n":"智能算力 / 云","mkt":3000,"mg":15,"mt":"o","t":"fut","d":"2025 年中国智能算力 1037.3 EFlops（+43%），2026 年预计 1460 EFLOPS（+41%）。2025H1 中国 AI 云市场 223 亿元，<b>阿里云 35.8% 超过第 2–4 名之和</b>。阿里未来三年投入超 3800 亿元，腾讯 2026 年 AI 投入翻倍。<b>需求端集中在少数几家，客户集中度风险高于美国六大买方结构。</b>","ov":["AWS 营业利润率 30–37%"],"cn":["阿里云 35.8%","华为云","腾讯云","三大运营商","地方国资智算中心"]},{"n":"大模型 / 应用","mkt":500,"mg":-15,"mt":"o","t":"fut","d":"价格战比美国更激烈，API 价格已多轮下调。<b>多数厂商仍在亏损，且开源模型进一步压缩了闭源模型的定价空间</b>。这一层能否形成利润池，直接决定上游算力投入的可持续性。","ov":["OpenAI","Anthropic"],"cn":["DeepSeek","通义","豆包","智谱","Kimi"]}],"niche":{"mono":["垄断型","--mono","--monob"],"dark":["黑马型","--dark","--darkb"],"fut":["未来型","--fut","--futb"],"thin":["薄利","--thin","--thinb"]},"catchup":[{"s":"光模块 / 光互联","loc":"全球第一 23.4–27%","yr":"已超越","sp":0,"note":"800G 市占 42%、1.6T 超 50%，技术无代差。<b>剩余风险不是技术追赶，是 FCC 可能禁止中国产光模块</b>。","g":"t1"},{"s":"内存接口芯片","loc":"全球三强","yr":"已追平","sp":0,"note":"澜起与 Rambus、瑞萨构成全球三强。DDR5 升级与服务器内存扩容直接受益。","g":"t1"},{"s":"溅射靶材","loc":"晶圆制造靶材国内 38%","yr":"已基本追平","sp":5,"note":"已进入全球主流晶圆厂供应链。<b>制约是市场天花板</b>——全球仅约 20 亿美元。","g":"t1"},{"s":"清洗设备","loc":"50–60%","yr":"已基本追平","sp":8,"note":"盛美 SAPS/TEBO 兆声波是<b>差异化技术路径而非模仿</b>，剩余差距在先进节点产能与全球客户覆盖。","g":"t1"},{"s":"封装测试（传统）","loc":"长电全球 12.2%","yr":"已追平","sp":5,"note":"全球第三，前三合计超 52%。传统封装替代已完成。","g":"t1"},{"s":"NAND Flash","loc":"全球 13%","yr":"2–4 年","sp":20,"note":"份额一年从 8% 升到 13%，Xtacking 架构提供独立路径。收敛快是因为<b>不依赖 EUV</b>。","g":"t1"},{"s":"刻蚀设备","loc":"成熟 50–60%、先进 <15%","yr":"2–4 年（先进制程）","sp":22,"note":"中微 5nm CCP 已达国际水平并进入台积电验证——<b>技术已跑通，缺的是量产份额</b>，这类差距收敛最快。","g":"t1"},{"s":"DRAM（不含 HBM）","loc":"全球 7.7–8%","sp":28,"yr":"3–5 年","note":"份额一年从 3% 到 8%，全球第四。制程落后 1–2 代但产能扩张激进。","g":"t2"},{"s":"DRAM 之 HBM","loc":"追赶阶段","yr":"5–8 年","sp":55,"note":"⚠ <b>这是存储环节唯一的实质缺口。</b>HBM 需要先进封装 + 极高良率 + 与 GPU 厂商的联合认证，三项都不是单靠扩产能解决的。海力士 HBM 全球 50–55%。","g":"t3"},{"s":"热处理 / 炉管","loc":"30–40%","yr":"3–5 年","sp":35,"note":"国产化率中等偏上，差距在先进制程的原子层级温控与均匀性。","g":"t2"},{"s":"先进封装（CoWoS 级）","loc":"传统已替代","yr":"3–5 年","sp":40,"note":"长电 2026 年固投约 100 亿投向先进封装。壁垒是台积电的产能与良率积累，非不可复制。","g":"t2"},{"s":"湿电子化学品","loc":"中低端高、G4/G5 低","yr":"3–5 年","sp":38,"note":"通用等级已替代，超高纯等级的金属离子控制是剩余难点。","g":"t2"},{"s":"半导体硅片（12 英寸）","loc":"8 寸 55%、12 寸 10%","yr":"4–6 年","sp":45,"note":"需求确定、技术路线清晰，缺的是良率与成本。但<b>沪硅 2025 净亏 15.08 亿</b>——价格战意味着追上份额不等于追上盈利。","g":"t3"},{"s":"电子特气","loc":"约 30%","yr":"4–6 年","sp":45,"note":"认证周期 2–3 年/品种 × 数十个品种，<b>时间由流程决定而非技术</b>，因此收敛速度稳定但不会突然加速。","g":"t3"},{"s":"CMP 设备","loc":"成熟 15–25%、先进 <10%","yr":"4–6 年","sp":50,"note":"华海清科国内第一，AMAT 与荏原主导。先进封装扩产会拉动需求。","g":"t3"},{"s":"封装基板（ABF）","loc":"约 30%","yr":"4–6 年","sp":48,"note":"AI 芯片带动 ABF 载板需求暴增，高层数良率是难点。","g":"t3"},{"s":"薄膜沉积 CVD/PVD/ALD","loc":"CVD/ALD 5–10%","yr":"5–8 年","sp":62,"note":"<b>市场第二大（282 亿美元）但渗透率最低</b>的一格。ALD 与高深宽比填充是硬骨头。空间大，难度同样大。","g":"t3"},{"s":"涂胶显影","loc":"成熟 10–15%","yr":"5–8 年","sp":65,"note":"东京电子全球超 85%。难点在于<b>必须与光刻机联机验证</b>——光刻机不突破，track 也难独立突破。","g":"t3"},{"s":"离子注入","loc":"成熟 10–20%、先进 <5%","yr":"5–8 年","sp":65,"note":"低能大束流有进展，高能注入机基本空白。","g":"t3"},{"s":"光刻胶 ArF","loc":"2%","yr":"5–8 年","sp":70,"note":"南大光电 2025 年底成为首家 ArF 量产企业并通过中芯、长存验证——<b>0 到 1 已完成，1 到 N 需要时间</b>。","g":"t3"},{"s":"量测检测","loc":"低两位数","yr":"6–10 年","sp":75,"note":"KLA 垄断度最高。<b>先进节点的套刻精度量测与电子束检测基本空白</b>，且制程越先进该环节价值量占比越高。","g":"t4"},{"s":"掩膜版（高端）","loc":"约 15%","yr":"6–9 年","sp":72,"note":"Photronics、Hoya、Toppan 主导，先进节点基本空白。","g":"t4"},{"s":"晶圆代工（先进制程）","loc":"中芯全球 4.8–6%","yr":"5–10 年 ⚠","sp":80,"note":"⚠ <b>强依赖 EUV。</b>N+2（7nm 级）靠 DUV 多重曝光实现，成本与良率劣势随节点推进放大。<b>没有 EUV，5nm 以下不是时间问题而是路径问题</b>。成熟制程另当别论——那里 2–3 年内可追平。","g":"t4"},{"s":"光刻机 DUV","loc":"个位数","yr":"5–8 年","sp":82,"note":"SSA800 28nm 浸没式 2026 年初交付中芯测试，良率超 90%、国产化率超 85%。但<b>产能 10 片/小时 vs ASML 170 片/小时</b>——差距在工程化与稼动率，不在原理。","g":"t4"},{"s":"光刻机 EUV","loc":"无产品","yr":"10–15 年 ⚠","sp":95,"note":"⚠ 全链条差距最大的一格。EUV 光源、多层膜反射镜、双工件台每一项都是独立的世界级难题，且供应链被完全封锁。","g":"t4"},{"s":"光刻胶 EUV","loc":"研发阶段","yr":"10 年+ ⚠","sp":92,"note":"⚠ 无 EUV 光刻机则无验证平台，与光刻机形成<b>互相锁死的依赖</b>。","g":"t4"},{"s":"EDA","loc":"国内约 20%，支撑到 14nm","yr":"8–12 年 ⚠","sp":85,"note":"⚠ <b>不是技术问题是生态问题。</b>Synopsys 32%+Cadence 23%+Siemens 14% = 全球 69%。数字先进节点全流程空白，工艺库与设计习惯积累了数十年，不随时间自然收敛。","g":"t4"},{"s":"AI 芯片（中国市场）","loc":"52.3%（2026Q1）","yr":"基本完成","sp":15,"note":"昇腾 37%、英伟达降至 15–20%。大摩预计自给率 2024 年 21% → 2030 年 86%。<b>在封闭市场里行政力量可以快速替代。</b>","g":"t1"},{"s":"AI 芯片（全球市场）","loc":"个位数","yr":"8–12 年 ⚠","sp":88,"note":"⚠ 英伟达全球份额仍超 80%。壁垒是 CUDA 生态与既有代码资产的迁移成本，<b>把国内份额 52% 读成「追平英伟达」是最常见的误读</b>。","g":"t4"},{"s":"基础软件 OS/数据库","loc":"信创高、商业市场低","yr":"生态问题 ⚠","sp":85,"note":"⚠ 党政金融信创已成规模，商业市场仍由 Oracle、微软主导。差距在迁移成本、第三方兼容与开发者规模，<b>不是年限能解决的类型</b>。","g":"t4"}],"companies":[{"n":"华大九天","code":"301269.SZ","s":"A","l":"eda","g":"EDA 平台","o":"Cadence · Synopsys · Siemens EDA","m":[0,1,5],"note":"国内平台型 EDA 之一；完整工具链覆盖与先进节点能力需按具体工具评价　❗<b>2026-08-12 实测：PE -2479，确认亏损</b>，市值 539 亿。对标 Synopsys 的营业利润率也只有 10.4%——这一格的问题不只是国产不行，整条赛道的盈利模型都很难。","q":"301269.SZ"},{"n":"概伦电子","code":"688206.SH","s":"A","l":"eda","g":"器件建模 / 特性测试","o":"Synopsys · Cadence · Keysight","m":[0,1]},{"n":"广立微","code":"301095.SZ","s":"A","l":"eda","g":"良率分析 EDA","o":"PDF Solutions · Synopsys 部分产品","m":[0,1]},{"n":"芯原股份","code":"688521.SH","s":"A","l":"eda","g":"半导体 IP 与设计服务","o":"Arm · Synopsys IP · Cadence IP","m":[0,5],"note":"更接近 IP 平台与设计服务，不是全流程 EDA 公司"},{"n":"芯华章","code":"—","s":"U","l":"eda","g":"验证 EDA","o":"Synopsys · Cadence · Siemens EDA","m":[1]},{"n":"国微思尔芯","code":"688176 关联","s":"A","l":"eda","g":"原型验证","o":"Synopsys · Cadence","m":[1]},{"n":"芯和半导体 Xpeedic","code":"—","s":"U","l":"eda","g":"射频 / 封装 / 系统仿真","o":"Ansys · Cadence · Keysight","m":[0]},{"n":"北方华创","code":"002371.SZ","s":"A","l":"equip","g":"平台型：刻蚀/沉积/炉管/清洗","o":"Applied Materials 应用材料 · Lam Research 泛林 · Tokyo Electron 东京电子 · Kokusai","m":[0,1,2,3,5],"note":"平台型设备企业，非单一品类公司　<b>2026-08-12 实测：PE 98.91，处近一年 93% 分位</b>（过去一年仅 6.9% 的时间比现在贵）；对标 AMAT 实测 49.35 = 2.00 倍，<b>而非此前各处所写的 4–8 倍</b>。","q":"002371.SZ"},{"n":"中微公司","code":"688012.SH","s":"A","l":"equip","g":"等离子刻蚀 · MOCVD","o":"Lam Research 泛林 · Applied Materials 应用材料 · Tokyo Electron","m":[0,1,2,3,5],"note":"受益 3D NAND 层数增加与工艺复杂度提升","q":"688012.SH"},{"n":"拓荆科技","code":"688072.SH","s":"A","l":"equip","g":"PECVD · ALD · SACVD 薄膜沉积","o":"Applied Materials · Lam Research · ASM International","m":[0,1,2,3,5],"q":"688072.SH"},{"n":"盛美上海","code":"688082.SH","s":"A","l":"equip","g":"清洗 · 电镀 · 先进封装设备","o":"SCREEN · Tokyo Electron · Lam Research","m":[0,1,2,5],"note":"母体 ACM Research 在纳斯达克上市（ACMR）——全表唯一可通过美股参与的设备标的","q":"688082.SH"},{"n":"上海微电子 SMEE","code":"—","s":"U","l":"equip","g":"光刻机 · 封装光刻","o":"ASML 阿斯麦 · Nikon 尼康 · Canon 佳能","m":[0,1,2,3,5],"note":"卡得最深也最难突破的一环。2024-10 撤回科创板辅导；分拆子公司芯上微装拟 2027 报科创板。封装及部分成熟制程有替代意义，不等于已替代 ASML 先进制程"},{"n":"芯源微","code":"688037.SH","s":"A","l":"equip","g":"涂胶显影 · 清洗","o":"Tokyo Electron 东京电子","m":[0,1,2],"note":"涂胶显影是光刻工序中除光刻机外的关键设备","q":"688037.SH"},{"n":"中科飞测","code":"688361.SH","s":"A","l":"equip","g":"缺陷检测 · 膜厚量测","o":"KLA 科磊 · Applied Materials · Onto Innovation","m":[0,1,2],"note":"制程越先进、良率要求越高，量测设备价值量越高","q":"688361.SH"},{"n":"华海清科","code":"688120.SH","s":"A","l":"equip","g":"CMP 化学机械抛光","o":"Applied Materials · Ebara 荏原","m":[0,1,5],"note":"逻辑、存储、先进封装均需多次平坦化","q":"688120.SH"},{"n":"万业企业 / 凯世通","code":"600641.SH","s":"A","l":"equip","g":"离子注入","o":"Applied Materials · Axcelis","m":[0,1,2],"note":"应分别考察设备验证、批量订单与上市公司业务结构，不能仅按概念归类"},{"n":"精测电子","code":"300567.SZ","s":"A","l":"equip","g":"量测检测（子公司）","o":"KLA · Onto Innovation","m":[0,1],"note":"还包含显示、新能源检测业务，并非纯半导体设备标的"},{"n":"至纯科技","code":"603690.SH","s":"A","l":"equip","g":"清洗设备 · 高纯工艺系统","o":"SCREEN · Tokyo Electron","m":[1]},{"n":"中科信","code":"—","s":"U","l":"equip","g":"离子注入","o":"Applied Materials · Axcelis","m":[1,2]},{"n":"睿励科学仪器","code":"—","s":"U","l":"equip","g":"光学量测","o":"KLA · Onto Innovation","m":[0]},{"n":"长川科技","code":"300604.SZ","s":"A","l":"pkg","g":"测试机 · 分选机","o":"Advantest 爱德万 · Teradyne 泰瑞达 · Cohu","m":[0]},{"n":"华峰测控","code":"688200.SH","s":"A","l":"pkg","g":"模拟/功率/SoC 测试系统","o":"Teradyne · Advantest","m":[0]},{"n":"联动科技","code":"301369.SZ","s":"A","l":"pkg","g":"半导体测试系统","o":"Teradyne · Advantest","m":[0]},{"n":"沪硅产业","code":"688126.SH","s":"A","l":"mat","g":"大尺寸半导体硅片","o":"Shin-Etsu 信越 · SUMCO 胜高 · GlobalWafers 环球晶圆 · Siltronic","m":[0,1,2,3,5],"q":"688126.SH"},{"n":"南大光电","code":"300346.SZ","s":"A","l":"mat","g":"光刻胶 · 电子特气 · 前驱体","o":"JSR · Tokyo Ohka 东京应化 · Shin-Etsu · Entegris 英特格","m":[0,1,2,5],"q":"300346.SZ"},{"n":"江丰电子","code":"300666.SZ","s":"A","l":"mat","g":"溅射靶材","o":"JX Advanced Metals 日矿金属 · Honeywell 霍尼韦尔 · Praxair","m":[0,1,2,3],"q":"300666.SZ"},{"n":"鼎龙股份","code":"300054.SZ","s":"A","l":"mat","g":"CMP 抛光垫 · 半导体材料","o":"DuPont 杜邦 · Dow 陶氏","m":[0,1,3,5],"q":"300054.SZ"},{"n":"安集科技","code":"688019.SH","s":"A","l":"mat","g":"CMP 抛光液 · 湿电子化学品","o":"Entegris（原 Cabot Microelectronics）· Fujimi · DuPont","m":[0,1,2],"q":"688019.SH"},{"n":"彤程新材","code":"603650.SH","s":"A","l":"mat","g":"半导体光刻胶（含北京科华）","o":"JSR · Tokyo Ohka 东京应化 · DuPont","m":[0,1,2]},{"n":"华特气体","code":"688268.SH","s":"A","l":"mat","g":"电子特气","o":"Linde 林德 · Air Liquide 液化空气 · Air Products 空气化工 · Merck","m":[0,1,2],"note":"特气认证周期长、纯度要求高，但不同气体品种壁垒差异很大　<b>⚑ 2026-09 校订：本页此前把沪硅产业的「PE -48.7、PB 5.16、持续亏损」错抄到本行</b>——华特气体 2026-08-12 实测为 PE 159.10、PB 10.58、市值 198.61 亿，<b>并未亏损</b>，但市值是重点标的中最小的一家。","q":"688268.SH"},{"n":"金宏气体","code":"688106.SH","s":"A","l":"mat","g":"电子特气","o":"Linde · Air Liquide · Air Products","m":[0,1,2]},{"n":"中船特气","code":"688146.SH","s":"A","l":"mat","g":"电子特气（含含氟气体）","o":"Linde · Air Liquide · SK Specialty","m":[0,1]},{"n":"雅克科技","code":"002409.SZ","s":"A","l":"mat","g":"前驱体 · 光刻胶 · 电子材料","o":"Merck 默克 · Entegris · Air Liquide","m":[0,5],"q":"002409.SZ"},{"n":"晶瑞电材","code":"300655.SZ","s":"A","l":"mat","g":"光刻胶 · 湿电子化学品","o":"JSR · Tokyo Ohka · Kanto Chemical 关东化学","m":[0,2]},{"n":"江化微","code":"603078.SH","s":"A","l":"mat","g":"湿电子化学品","o":"Kanto Chemical · Stella Chemifa · BASF 巴斯夫 · Entegris","m":[0,2]},{"n":"立昂微","code":"605358.SH","s":"A","l":"mat","g":"半导体硅片 + 功率器件","o":"GlobalWafers · SUMCO","m":[0,1]},{"n":"有研新材","code":"600206.SH","s":"A","l":"mat","g":"高纯金属材料 · 靶材","o":"JX Advanced Metals · Honeywell","m":[0,1]},{"n":"上海新阳","code":"300236.SZ","s":"A","l":"mat","g":"电镀液 · 清洗液 · 光刻胶","o":"DuPont · Entegris · JSR","m":[0]},{"n":"有研硅","code":"688432.SH","s":"A","l":"mat","g":"半导体硅片","o":"SUMCO · GlobalWafers","m":[0]},{"n":"TCL 中环","code":"002129.SZ","s":"A","l":"mat","g":"硅片（光伏为主）","o":"SUMCO · GlobalWafers","m":[1],"note":"原名中环股份。主业以光伏硅片为主，半导体硅片占比有限，不宜与沪硅产业并列"},{"n":"中欣晶圆","code":"—","s":"U","l":"mat","g":"大尺寸半导体硅片","o":"Shin-Etsu · SUMCO · GlobalWafers","m":[0],"note":"2025-10 办理北交所 IPO 辅导备案，仍未上市；2025 年营收 17.4 亿、同比 +30%"},{"n":"格林达","code":"603931.SH","s":"A","l":"mat","g":"湿电子化学品","o":"Kanto Chemical · BASF","m":[1]},{"n":"菲利华","code":"300395.SZ","s":"A","l":"mat","g":"高性能石英玻璃","o":"Heraeus 贺利氏 · Momentive 迈图","m":[0]},{"n":"神工股份","code":"688233.SH","s":"A","l":"mat","g":"大直径硅材料 · 硅零部件","o":"Hana Materials · Worldex","m":[0]},{"n":"清溢光电","code":"688138.SH","s":"A","l":"mat","g":"掩膜版","o":"Photronics · Hoya · Toppan","m":[3]},{"n":"华懋科技 / 徐州博康","code":"603306.SH","s":"A","l":"mat","g":"光刻胶（参股）","o":"JSR · Tokyo Ohka · Shin-Etsu","m":[1],"note":"通过参股方式布局，非并表主业"},{"n":"容大感光","code":"300576.SZ","s":"A","l":"mat","g":"PCB / 显示光刻胶","o":"部分海外感光材料企业","m":[0],"note":"与先进晶圆制造光刻胶并非同一产品层级"},{"n":"深南电路","code":"002916.SZ","s":"A","l":"mat","g":"封装基板 · 高端 PCB","o":"Ibiden 揖斐电 · Shinko 新光 · Unimicron 欣兴","m":[0]},{"n":"兴森科技","code":"002436.SZ","s":"A","l":"mat","g":"IC 封装基板 · PCB","o":"Ibiden · Kinsus · Unimicron","m":[0]},{"n":"中芯国际","code":"688981.SH / 00981.HK","s":"AH","l":"foundry","g":"逻辑代工","o":"TSMC 台积电 · Samsung Foundry 三星代工 · GlobalFoundries 格芯 · UMC 联电","m":[0,1,2,3,5],"note":"在最先进制程、设备可得性和全球客户结构上与台积电仍有明显差异","q":"688981.SH"},{"n":"华虹公司","code":"688347.SH / 01347.HK","s":"AH","l":"foundry","g":"特色工艺 · 功率 · 嵌入式存储","o":"UMC 联电 · GlobalFoundries · Tower Semiconductor","m":[0,2,5],"q":"688347.SH"},{"n":"晶合集成","code":"688249.SH","s":"A","l":"foundry","g":"显示驱动 · 电源管理代工","o":"UMC · Powerchip 力积电","m":[0]},{"n":"长鑫科技（长鑫存储 CXMT）","code":"688825.SH","s":"NEW","l":"mem","g":"DRAM（IDM 一体化）","o":"Samsung 三星 · SK Hynix 海力士 · Micron 美光","m":[0,1,2,3,4,5],"note":"★ 六模型唯一全票。2026-07-27 科创板上市，募资约 666 亿创科创板最大 IPO，首日 +465%，市值约 3.28 万亿。全球第四大 DRAM 厂。六份回答均标注「未上市」，已过时　<b>2026-08-12 实测：市值 3.58 万亿、PE 126.95、PB 43.80（全表最高）</b>，对标美光 PE 19.46 = 6.52 倍溢价。","q":"688825.SH"},{"n":"长江存储 YMTC","code":"—","s":"U","l":"mem","g":"3D NAND Flash","o":"Samsung 三星 · Kioxia 铠侠 · SK Hynix 海力士 / Solidigm · Micron 美光","m":[0,1,2,3,5],"note":"2026-05-19 启动 IPO 辅导（中信证券 + 中信建投），预计 2026 下半年上市，估值预期约 3000 亿。全球第六大 NAND 供应商"},{"n":"兆易创新","code":"603986.SH","s":"A","l":"mem","g":"NOR Flash · MCU · 利基 DRAM","o":"Winbond 华邦 · Macronix 旺宏 · Infineon · Microchip","m":[0,1,2,3,5],"note":"不是三星、海力士意义上的主流大宗 DRAM 厂商","q":"603986.SH"},{"n":"江波龙","code":"301308.SZ","s":"A","l":"mem","g":"存储模组 · 主控","o":"Kingston 金士顿 · Phison 群联 · Western Digital 部分产品","m":[0,1],"note":"采购颗粒后封装与品牌销售，与长鑫、长江存储处在不同价值层级"},{"n":"佰维存储","code":"688525.SH","s":"A","l":"mem","g":"存储模组 · 先进封装","o":"Kingston · Phison · Seagate 部分产品","m":[0,1],"note":"同上，模组层级"},{"n":"德明利","code":"001309.SZ","s":"A","l":"mem","g":"存储模组 · 主控","o":"Phison · Silicon Motion 慧荣","m":[1]},{"n":"福建晋华","code":"—","s":"U","l":"mem","g":"DRAM","o":"Micron 美光 · Samsung 三星 · SK Hynix 海力士","m":[0],"note":"外部限制与技术商业化进度不确定性较高"},{"n":"华为海思 / 昇腾","code":"—","s":"U","l":"chip","g":"AI GPU/NPU · 通用芯片","o":"NVIDIA 英伟达 · Google TPU · AMD Instinct","m":[0,2,3,5],"note":"核心约束：先进制程、HBM、封装、软件生态与集群互联"},{"n":"寒武纪","code":"688256.SH","s":"A","l":"chip","g":"云端 AI 加速芯片","o":"NVIDIA · AMD","m":[0,2,3,5],"note":"研发投入大，商业化、软件生态与盈利能力需持续验证；估值可能提前透支","q":"688256.SH"},{"n":"海光信息","code":"688041.SH","s":"A","l":"chip","g":"服务器 CPU · DCU","o":"AMD EPYC · Intel Xeon · AMD Instinct","m":[0,2,5],"q":"688041.SH"},{"n":"摩尔线程","code":"688795.SH","s":"NEW","l":"chip","g":"通用 GPU","o":"NVIDIA · AMD","m":[0,3],"note":"2025-12-05 科创板上市（国产 GPU 第一股）。2026H1 营收 17.36 亿、同比 +147%。正筹划发行 H 股。原回答标注上市状态不确定，已核实　❗<b>2026-08-12 实测：PE -362.94，确认亏损</b>，市值 2,691 亿、PB 22.10。","q":"688795.SH"},{"n":"沐曦股份","code":"688802.SH","s":"NEW","l":"chip","g":"通用 GPU","o":"NVIDIA · AMD","m":[],"note":"★ 六模型全部遗漏，为核查补漏。2025-12 科创板上市，首日 +692.95%，市值一度接近摩尔线程　❗<b>2026-08-12 实测：PE -436.41，确认亏损</b>，市值 2,862 亿、PB 21.85（市值已反超摩尔线程）。","q":"688802.SH"},{"n":"壁仞科技","code":"06082.HK","s":"H","l":"chip","g":"通用 GPU（壁砺系列）","o":"NVIDIA · AMD","m":[0],"note":"2026-01-02 港交所上市（港股 GPU 第一股），发行价 19.6 港元、募资 55.83 亿港元，18C 机制下最大规模新股"},{"n":"燧原科技","code":"待定","s":"IPO","l":"chip","g":"云端 AI 芯片 · 智算集群","o":"NVIDIA · AMD · Google TPU","m":[0],"note":"2026-07-09 注册获批，拟发行 6835 万股募资 60 亿，预计 8 月中旬上市。腾讯贡献超八成营收是审核关注点"},{"n":"澜起科技","code":"688008.SH","s":"A","l":"chip","g":"内存接口芯片 · 服务器平台","o":"Rambus · Renesas 瑞萨（原 IDT）","m":[0,1,2,5],"note":"DDR 代际升级与服务器内存容量提升会增加接口芯片需求","q":"688008.SH"},{"n":"龙芯中科","code":"688047.SH","s":"A","l":"chip","g":"自主指令系统 CPU","o":"Intel · AMD · Arm 生态处理器","m":[0]},{"n":"飞腾信息","code":"—","s":"U","l":"chip","g":"Arm 架构服务器/桌面 CPU","o":"Intel · AMD · Ampere Computing","m":[0]},{"n":"地平线机器人","code":"09660.HK","s":"H","l":"chip","g":"智能驾驶计算芯片","o":"NVIDIA Drive · Mobileye · Qualcomm 汽车平台","m":[0],"note":"车载 AI 国产替代，不属于数据中心 AI 主线"},{"n":"黑芝麻智能","code":"02533.HK","s":"H","l":"chip","g":"智能驾驶芯片","o":"NVIDIA Drive · Mobileye · Qualcomm","m":[0],"note":"同为车载主线"},{"n":"长电科技","code":"600584.SH","s":"A","l":"pkg","g":"封装测试 · 系统级封装","o":"ASE 日月光 · Amkor 安靠 · Powertech 力成","m":[0,5],"note":"能替代传统封装，不代表在 CoWoS 级先进封装与 HBM 集成上已完全替代","q":"600584.SH"},{"n":"通富微电","code":"002156.SZ","s":"A","l":"pkg","g":"CPU/GPU 封测（AMD 合作方）","o":"ASE 日月光 · Amkor 安靠","m":[0,5],"q":"002156.SZ"},{"n":"华天科技","code":"002185.SZ","s":"A","l":"pkg","g":"封装测试","o":"ASE · Amkor · Powertech","m":[0]},{"n":"浪潮信息","code":"000977.SZ","s":"A","l":"infra","g":"AI 服务器","o":"Dell 戴尔 · HPE 慧与 · Supermicro 超微","m":[0,5],"q":"000977.SZ"},{"n":"中科曙光","code":"603019.SH","s":"A","l":"infra","g":"服务器 · 高性能计算","o":"HPE · Dell · Supermicro","m":[0]},{"n":"联想集团","code":"00992.HK","s":"H","l":"infra","g":"服务器 · 整机","o":"Dell · HPE","m":[0],"note":"境外上市的中国公司"},{"n":"紫光股份 / 新华三","code":"000938.SZ","s":"A","l":"infra","g":"服务器 · 交换机 · 企业网络","o":"HPE · Cisco 思科 · Arista","m":[0]},{"n":"中兴通讯","code":"000063.SZ / 00763.HK","s":"AH","l":"infra","g":"通信设备 · 服务器","o":"Ericsson 爱立信 · Nokia 诺基亚 · Cisco","m":[0]},{"n":"锐捷网络","code":"301165.SZ","s":"A","l":"infra","g":"交换机 · 数据中心网络","o":"Cisco · Arista","m":[0]},{"n":"华为","code":"—","s":"U","l":"infra","g":"交换机 · 网络设备 · 云","o":"Cisco · Arista · Nokia · Ericsson","m":[0]},{"n":"工业富联","code":"601138.SH","s":"A","l":"infra","g":"AI 服务器代工","o":"Supermicro 超微 · Quanta 广达 · Wistron","m":[3,5],"caution":1,"note":"组装集成利润率低，且受地缘博弈影响","q":"601138.SH"},{"n":"立讯精密","code":"002475.SZ","s":"A","l":"infra","g":"连接器 · 整机代工","o":"Amphenol 安费诺 · TE Connectivity · Foxconn","m":[3],"caution":1},{"n":"中际旭创","code":"300308.SZ","s":"A","l":"infra","g":"光模块","o":"Coherent · Lumentum · Marvell 光通信芯片","m":[0,1,3,5],"caution":1,"note":"⚠ 谨慎层。有中国制造优势但收入高度依赖北美云厂商，更接近全球 AI capex 链而非国产自主可控链，受制裁预期压制　<b>2026-08-12 实测：PE 72.07 vs Coherent 154.10 = 折价 0.47 倍</b>；但行业 PE 排名 22/98（便宜）、PB 92/98、PS 88/98（最贵一档）——低 PE 靠 29% 净利率撑起。","q":"300308.SZ"},{"n":"新易盛","code":"300502.SZ","s":"A","l":"infra","g":"光模块","o":"Coherent · Lumentum","m":[0,1,3,5],"caution":1,"note":"⚠ 谨慎层，理由同上","q":"300502.SZ"},{"n":"光迅科技","code":"002281.SZ","s":"A","l":"infra","g":"光模块 · 光器件","o":"Coherent · Lumentum · Fabrinet","m":[0],"caution":1},{"n":"天孚通信","code":"300394.SZ","s":"A","l":"infra","g":"光器件","o":"Coherent · Lumentum","m":[5],"caution":1},{"n":"英维克","code":"002837.SZ","s":"A","l":"infra","g":"液冷 · 温控","o":"Vertiv 维谛 · Schneider 施耐德 · nVent","m":[0]},{"n":"申菱环境","code":"301018.SZ","s":"A","l":"infra","g":"数据中心温控","o":"Vertiv · Johnson Controls","m":[0]},{"n":"佳力图","code":"603912.SH","s":"A","l":"infra","g":"精密温控","o":"Vertiv · Schneider","m":[0]},{"n":"科华数据","code":"002335.SZ","s":"A","l":"infra","g":"UPS · 数据中心电源","o":"Vertiv 维谛 · Eaton 伊顿 · Schneider 施耐德","m":[0]},{"n":"科士达","code":"002518.SZ","s":"A","l":"infra","g":"UPS · 数据中心电源","o":"Vertiv · Eaton · Schneider","m":[0]},{"n":"中恒电气","code":"002364.SZ","s":"A","l":"infra","g":"高压直流电源","o":"Vertiv · Eaton","m":[0]},{"n":"麒麟软件","code":"—","s":"U","l":"sw","g":"操作系统","o":"Microsoft Windows · Red Hat Enterprise Linux","m":[0]},{"n":"统信软件","code":"—","s":"U","l":"sw","g":"操作系统","o":"Windows · Red Hat · Ubuntu 企业生态","m":[0]},{"n":"达梦数据","code":"688692.SH","s":"A","l":"sw","g":"数据库","o":"Oracle · Microsoft SQL Server · IBM Db2","m":[0],"q":"688692.SH"},{"n":"人大金仓 / 太极股份","code":"002368.SZ","s":"A","l":"sw","g":"数据库","o":"Oracle · IBM Db2 · PostgreSQL 商业发行版","m":[0],"note":"人大金仓未单独上市，相关体系涉及太极股份"},{"n":"东方通","code":"300379.SZ","s":"A","l":"sw","g":"中间件","o":"IBM WebSphere · Oracle WebLogic","m":[0]},{"n":"用友网络","code":"600588.SH","s":"A","l":"sw","g":"ERP · 企业管理软件","o":"SAP · Oracle 企业应用","m":[0]},{"n":"金蝶国际","code":"00268.HK","s":"H","l":"sw","g":"ERP · 云服务","o":"SAP · Oracle · Microsoft Dynamics","m":[0],"note":"香港上市的中国公司"},{"n":"中控技术","code":"688777.SH","s":"A","l":"sw","g":"工业自动化 · DCS","o":"Honeywell · Emerson 艾默生 · Rockwell · Siemens","m":[0]},{"n":"宝信软件","code":"600845.SH","s":"A","l":"sw","g":"工业软件 · 信息化","o":"Siemens · AVEVA · SAP","m":[0]},{"n":"广联达","code":"002410.SZ","s":"A","l":"sw","g":"建筑数字化软件","o":"Autodesk · Bentley Systems","m":[0]}],"models":["GPT","oops5","Fable5","Gemini","DeepSeek","GLM5.2"],"layers":[{"id":"eda","tag":"L1","name":"EDA / 半导体 IP","role":"设计端的软件铲子，制裁敏感度最高","seg":"前端设计与验证 · 逻辑综合 · 布局布线 · 物理验证 · 器件建模 · 良率分析 · IP 授权","n":5,"c":"--t1","bg":"--t1bg"},{"id":"equip","tag":"L1","name":"半导体设备","role":"六模型一致的第一优先级","seg":"光刻 · 涂胶显影 · <b>刻蚀</b> · 薄膜沉积 · 清洗 · <b>量测检测</b> · CMP · 离子注入 · 炉管 · 封测设备","n":6,"c":"--t1","bg":"--t1bg"},{"id":"mat","tag":"L1","name":"半导体材料","role":"扩产的持续性消耗品，验证周期长","seg":"大硅片 · 光刻胶 · 电子特气 · 湿电子化学品 · CMP 抛光液与垫 · 溅射靶材 · 前驱体 · 石英件 · 掩膜版 · 封装基板","n":6,"c":"--t1","bg":"--t1bg"},{"id":"foundry","tag":"L2","name":"晶圆制造 / 代工","role":"国产芯片落地的底座","seg":"先进制程逻辑代工 · 成熟制程 · 特色工艺 · 功率器件 · 显示驱动与电源管理","n":5,"c":"--t3","bg":"--t3bg"},{"id":"mem","tag":"L2","name":"存储制造","role":"六模型共同强调的超级利润池","seg":"DRAM · HBM · 3D NAND · NOR Flash 与利基存储 · 存储模组与主控","n":6,"c":"--t2","bg":"--t2bg"},{"id":"chip","tag":"L3","name":"芯片设计","role":"直面禁令的前线，估值波动最大","seg":"AI GPU / NPU · 服务器 CPU · 车载智驾芯片 · 内存接口 · 网络与接口芯片","n":5,"c":"--t3","bg":"--t3bg"},{"id":"pkg","tag":"L4","name":"先进封装与测试","role":"先进制程受限后重要性显著上升","seg":"倒装 / SiP · 2.5D 与 3D 封装 · HBM 集成 · 测试机与分选机","n":4,"c":"--t3","bg":"--t3bg"},{"id":"infra","tag":"L5","name":"AI 基础设施","role":"兑现清晰但竞争充分","seg":"AI 服务器 · 交换机与高速互联 · <span style='color:var(--warn)'>光模块（谨慎层）</span> · 液冷温控 · UPS 与数据中心电源 · 整机代工","n":3,"c":"--t4","bg":"--t4bg"},{"id":"sw","tag":"L6","name":"基础软件与工业软件","role":"依赖生态建设，最下游延伸","seg":"操作系统 · 数据库 · 中间件 · ERP · 工业自动化与工业软件","n":1,"c":"--t5","bg":"--t5bg"}],"margins":[{"n":"美光 MU","gm":72.6,"om":80.4,"roe":66.6,"rev":"$902.7 亿","d":"⚠ <b>营业利润率高于毛利率</b>——含大额投资收益或会计口径差异，也说明本轮存储周期的利润弹性极端。高于 SK 海力士的 76%。"},{"n":"英伟达 NVDA","gm":74.1,"om":65.6,"roe":114.3,"rev":"$2534.9 亿","d":"落差仅 8.5pct，运营效率极高。ROE 114.3% 为全表最高。"},{"n":"台积电 TSM","gm":64.2,"om":60.3,"roe":40,"rev":"NT$4.44 万亿","d":"落差 3.9pct，全表最小——重资产但运营极精简。"},{"n":"泛林 LRCX","gm":50.5,"om":37.4,"roe":65.1,"rev":"$232.3 亿","d":"落差 13.1pct。设备商的典型结构。"},{"n":"ASML","gm":52.7,"om":37.1,"roe":53.9,"rev":"€353.3 亿","d":"落差 15.6pct，EUV 研发投入巨大。"},{"n":"应用材料 AMAT","gm":49,"om":31.9,"roe":39.7,"rev":"$290.2 亿","d":"落差 17.1pct，设备三巨头中最大。"},{"n":"Lumentum LITE","gm":40.8,"om":21.8,"roe":22.8,"rev":"$24.9 亿","d":"落差 19.0pct。"},{"n":"Coherent COHR","gm":37,"om":13.6,"roe":4.7,"rev":"$66.0 亿","d":"落差 23.4pct，ROE 仅 4.7%。<b>中际旭创的对标其实盈利质量并不好</b>——这也是它 PE 高达 154 的原因之一。"},{"n":"Synopsys SNPS","gm":82.6,"om":10.4,"roe":3.8,"rev":"$86.8 亿","d":"⚠ <b>落差 72.2pct，全表最大。</b>毛利率最高但营业利润率倒数第一，最近一季 EPS 同比 -96%。用毛利率衡量 EDA 利润池会高估约 8 倍。"}],"grades":{"G1":["已突围","--g1","--g1b"],"G2":["接近","--g2","--g2b"],"G3":["追赶中","--g3","--g3b"],"G4":["被卡死","--g4","--g4b"]}};
+var qc={},qn={};(D.quotes||[]).forEach(function(q){qc[q.cd]=q;qn[q.n]=q;});
+D.q=function(k){return qc[k]||qn[k]||null;};
+D.fmtMC=function(q){if(!q||q.mc==null)return '—';var v=Math.round(q.mc).toLocaleString('en-US');return q.reg==='ov'?('$'+v+' 亿'):(v+' 亿元');};
+D.fmtPE=function(q){return !q?'—':(q.pe==null?(q.loss?'亏损':'存疑'):q.pe.toFixed(2)+'x');};
+D.fmtPB=function(q){return (!q||q.pb==null)?'—':q.pb.toFixed(2);};
+D.rel=function(a,b){var x=D.q(a),y=D.q(b);return (!x||!y||x.pe==null||y.pe==null||y.pe<=0)?null:x.pe/y.pe;};
+return D;})();</script>
+<script>/*! 国产替代研究 · 共用交互与图表（零依赖，全部手写 SVG） */
+var K=(function(){
+var NS='http://www.w3.org/2000/svg';
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function el(t,a,h){var e=document.createElement(t);if(a)for(var k in a)e.setAttribute(k,a[k]);if(h!=null)e.innerHTML=h;return e;}
+function S(t,a,txt){var e=document.createElementNS(NS,t);if(a)for(var k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;}
+/* CJK 偏宽，粗略量一下文字宽度 */
+function tw(s,fs){var w=0;for(var i=0;i<s.length;i++){var c=s.charCodeAt(i);w+=c>0x2e80?1:(c>=65&&c<=90?.62:.52);}return w*fs;}
+
+/* ---------- 主题 ---------- */
+var LS=(function(){try{localStorage.getItem('x');return localStorage;}catch(e){return null;}})();
+function getTheme(){try{return (LS&&LS.getItem('cns-theme'))||'auto';}catch(e){return 'auto';}}
+function setTheme(v){
+  var r=document.documentElement;
+  if(v==='auto'){r.removeAttribute('data-theme');}else{r.setAttribute('data-theme',v);}
+  try{if(LS)LS.setItem('cns-theme',v);}catch(e){}
+  var b=document.getElementById('k-tog');
+  if(b)b.textContent=v==='auto'?'主题 · 跟随系统':(v==='dark'?'主题 · 深色':'主题 · 浅色');
+  redrawAll();
+}
+function cycleTheme(){var o=getTheme();setTheme(o==='auto'?'light':o==='light'?'dark':'auto');}
+
+/* ---------- 顶部导航 ---------- */
+var DOCS=[
+ ['06','全产业链流程图','06_全产业链流程图.html','cn-substitution-06-full-chain-flow.html'],
+ ['07','实测估值数据','07_实测估值数据_修正版.html','cn-substitution-07-measured-valuation.html'],
+ ['01','六模型整合与校正','01_国产替代价值链整合.html','cn-substitution-01-value-chain.html'],
+ ['02','差距量化与突围地图','02_国产替代量化分析.html','cn-substitution-02-quantified.html'],
+ ['03','量化数据表','03_量化数据表.html','cn-substitution-03-data.html'],
+ ['04','追赶时间 · 估值 · ETF','04_追赶时间_估值对比_ETF.html','cn-substitution-04-catchup-valuation-etf.html'],
+ ['05','下游价值链 · 利润池','05_下游价值链_利润池_生态位.html','cn-substitution-05-downstream-profit-pools.html']
+];
+var MODE=0, IDX='00_README.md';
+function nav(cur,mode,idxHref){
+  MODE=mode||0; if(idxHref)IDX=idxHref;
+  var i=-1;for(var k=0;k<DOCS.length;k++)if(DOCS[k][0]===cur)i=k;
+  function href(d){return MODE===1?d[3]:d[2];}
+  var prev=i>0?DOCS[i-1]:null, next=(i>=0&&i<DOCS.length-1)?DOCS[i+1]:null;
+  var COL=(MODE===2); /* 离线合集：链接改成切换父页签 */
+  function A(d,label){ return COL? '<a href="#" data-go="'+esc(d[0])+'">'+esc(label)+'</a>'
+                                 : '<a href="'+esc(href(d))+'">'+esc(label)+'</a>'; }
+  var h='<div class="k-navin">';
+  h+=COL?'<a href="#" data-go="_idx" title="回目录">目录</a>':'<a href="'+esc(IDX)+'" title="回目录">目录</a>';
+  h+='<span class="k-seq">'+(i+1)+' / '+DOCS.length+'</span>';
+  h+=prev?A(prev,'← '+prev[0]+' '+prev[1]):'<a style="opacity:.32;pointer-events:none">← 上一篇</a>';
+  h+=next?A(next,next[0]+' '+next[1]+' →'):'<a style="opacity:.32;pointer-events:none">下一篇 →</a>';
+  h+='<span class="k-sp"></span>';
+  h+='<button class="k-tog" id="k-tog" type="button">主题</button></div>';
+  var n=el('nav',{'class':'k-nav'},h);
+  document.body.insertBefore(n,document.body.firstChild);
+  document.getElementById('k-tog').onclick=cycleTheme;
+  if(COL) [].slice.call(n.querySelectorAll('a[data-go]')).forEach(function(a){
+    a.onclick=function(e){e.preventDefault();
+      try{parent.postMessage({cns:'go',id:a.getAttribute('data-go')},'*');}catch(err){}};});
+  setTheme(getTheme());
+}
+
+/* ---------- 粘性目录（由 h2 生成） ---------- */
+function toc(scope){
+  var root=document.querySelector(scope||'.wrap');if(!root)return;
+  var hs=[].slice.call(root.querySelectorAll('h2'));if(hs.length<2)return;
+  var items=hs.map(function(h,i){
+    if(!h.id)h.id='s'+(i+1);
+    var t=h.cloneNode(true);var n=t.querySelector('.n');if(n)n.remove();
+    return {id:h.id,t:(t.textContent||'').trim().replace(/\s+/g,' '),el:h};
+  });
+  var w=getComputedStyle(root).maxWidth;
+  var wpx=/px/.test(w)?parseFloat(w):1100;
+  document.documentElement.style.setProperty('--kw',wpx+'px');
+  function fit(){ /* 正文两侧各留 186px 才放得下侧栏目录，否则用顶部下拉 */
+    document.documentElement.classList.toggle('k-wide',window.innerWidth>=wpx+372);
+  }
+  fit();window.addEventListener('resize',fit,{passive:true});
+  var side=el('nav',{'class':'k-toc'},'<h6>本页目录</h6>'+items.map(function(x){
+    return '<a href="#'+x.id+'" data-t="'+x.id+'">'+esc(x.t)+'</a>';}).join(''));
+  document.body.appendChild(side);
+  var m=el('div',{'class':'k-tocm k-noprint'},'<select aria-label="跳到章节"><option value="">本页目录 —— 跳到章节…</option>'+
+    items.map(function(x){return '<option value="'+x.id+'">'+esc(x.t)+'</option>';}).join('')+'</select>');
+  root.insertBefore(m,root.firstChild);
+  m.querySelector('select').onchange=function(){if(this.value)document.getElementById(this.value).scrollIntoView({behavior:'smooth'});};
+  var links=[].slice.call(side.querySelectorAll('a'));
+  function mark(){
+    var best=0,y=window.scrollY+120;
+    items.forEach(function(x,i){if(x.el.offsetTop<=y)best=i;});
+    links.forEach(function(a,i){a.classList.toggle('on',i===best);});
+  }
+  window.addEventListener('scroll',mark,{passive:true});mark();
+}
+
+/* ---------- 表头排序 ---------- */
+function sortable(tableSel,cfg,rows,render,opt){
+  var tb=document.querySelector(tableSel);if(!tb)return;
+  var table=tb.closest('table'),ths=[].slice.call(table.querySelectorAll('thead th'));
+  var st={k:(opt&&opt.k)||null,dir:(opt&&opt.dir)||1},base=rows.slice();
+  var filt=(opt&&opt.filter)||function(r){return r;};
+  ths.forEach(function(th,i){
+    var key=cfg[i];if(!key)return;
+    th.classList.add('k-s');th.tabIndex=0;
+    function go(){st.dir=st.k===key?-st.dir:(key.desc?-1:1);st.k=key;paint();}
+    th.onclick=go;th.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}};
+  });
+  function paint(){
+    var r=filt(base.slice());
+    if(st.k){var f=st.k.get;
+      r.sort(function(a,b){var va=f(a),vb=f(b);
+        if(va==null&&vb==null)return 0; if(va==null)return 1; if(vb==null)return -1;
+        var c=typeof va==='number'?va-vb:String(va).localeCompare(String(vb),'zh');
+        return c*st.dir;});}
+    ths.forEach(function(th,i){var key=cfg[i];if(!key)return;
+      th.classList.toggle('k-asc',st.k===key&&st.dir===1);
+      th.classList.toggle('k-desc',st.k===key&&st.dir===-1);});
+    render(r);
+  }
+  paint();
+  return {refresh:paint,setFilter:function(fn){filt=fn;paint();}};
+}
+
+/* ---------- 宽表格自己横向滚动，不让整页横向滚 ---------- */
+function wrapTables(scope){
+  var root=document.querySelector(scope||'.wrap');if(!root)return;
+  [].slice.call(root.querySelectorAll('table')).forEach(function(t){
+    if(t.parentElement&&t.parentElement.classList.contains('k-tw'))return;
+    var p=t.parentElement,ok=false;
+    while(p&&p!==root){var ox=getComputedStyle(p).overflowX;if(ox==='auto'||ox==='scroll'){ok=true;break;}p=p.parentElement;}
+    if(ok)return;
+    var w=document.createElement('div');w.className='k-tw';
+    t.parentNode.insertBefore(w,t);w.appendChild(t);
+  });
+}
+
+/* ---------- 提示气泡 ---------- */
+var TIP=null;
+function tip(){if(!TIP){TIP=el('div',{'class':'k-tip'});document.body.appendChild(TIP);}return TIP;}
+function tipOn(e,html){var t=tip();t.innerHTML=html;t.style.opacity=1;tipMove(e);}
+function tipMove(e){var t=tip();var x=e.clientX+14,y=e.clientY+14;
+  var b=t.getBoundingClientRect();
+  if(x+b.width>innerWidth-8)x=e.clientX-b.width-14;
+  if(y+b.height>innerHeight-8)y=Math.max(8,e.clientY-b.height-14);
+  t.style.left=x+'px';t.style.top=y+'px';}
+function tipOff(){if(TIP)TIP.style.opacity=0;}
+function bindTip(node,html){
+  node.addEventListener('mouseenter',function(e){tipOn(e,html);});
+  node.addEventListener('mousemove',tipMove);
+  node.addEventListener('mouseleave',tipOff);
+}
+
+/* ---------- 标签避让：候选位打分，取重叠最小的一个 ---------- */
+function placeLabels(items,W,H,fs,seeds){
+  var placed=(seeds||[]).slice();
+  var cand=[[1,0,'start',.35],[-1,0,'end',.35],[0,-1,'middle',-.55],[0,1,'middle',1.15],
+            [1,-1,'start',-.25],[-1,-1,'end',-.25],[1,1,'start',1.0],[-1,1,'end',1.0],
+            [1.9,0,'start',.35],[-1.9,0,'end',.35],[0,-1.9,'middle',-.55],[0,1.9,'middle',1.15]];
+  function ov(a,b){var w=Math.min(a.x1,b.x1)-Math.max(a.x0,b.x0),h=Math.min(a.y1,b.y1)-Math.max(a.y0,b.y0);
+    return (w>0&&h>0)?w*h:0;}
+  items.forEach(function(it){
+    var w=tw(it.text,fs),h=fs*1.15,best=null,bestScore=Infinity;
+    for(var ci=0;ci<cand.length;ci++){
+      var c=cand[ci],pad=it.r+5;
+      var cx=it.x+c[0]*pad, cy=it.y+c[1]*pad+c[3]*fs;
+      var x0=c[2]==='start'?cx:c[2]==='end'?cx-w:cx-w/2;
+      var box={x0:x0-1.5,y0:cy-h*.82,x1:x0+w+1.5,y1:cy+h*.24};
+      var pen=0;
+      if(box.x0<2)pen+=(2-box.x0)*80; if(box.x1>W-2)pen+=(box.x1-(W-2))*80;
+      if(box.y0<2)pen+=(2-box.y0)*80; if(box.y1>H-2)pen+=(box.y1-(H-2))*80;
+      for(var p=0;p<placed.length;p++) pen+=ov(box,placed[p])*(placed[p].soft?0.55:1);
+      pen+=ci*0.6; /* 同分时优先靠前的候选位 */
+      if(pen<bestScore){bestScore=pen;best={x:cx,y:cy,anchor:c[2],box:box};}
+      if(pen<=ci*0.6+0.01)break;
+    }
+    placed.push(best.box);
+    it.lx=best.x;it.ly=best.y;it.anchor=best.anchor;it.show=true;it.clean=bestScore<8;
+  });
+  return items;
+}
+
+/* ---------- 散点 / 气泡图 ---------- */
+function scatter(host,o){
+  var W=o.w||940,H=o.h||460,PL=o.pl||58,PR=o.pr||22,PT=o.pt||18,PB=o.pb||46;
+  var pts=o.pts,fs=o.fs||10.5;
+  var xs=pts.map(function(p){return o.xLog?Math.log(Math.max(p.x,1e-6))/Math.LN10:p.x;});
+  var ys=pts.map(function(p){return o.yLog?Math.log(Math.max(p.y,1e-6))/Math.LN10:p.y;});
+  var x0=o.x0!=null?(o.xLog?Math.log(o.x0)/Math.LN10:o.x0):Math.min.apply(null,xs)-.4;
+  var x1=o.x1!=null?(o.xLog?Math.log(o.x1)/Math.LN10:o.x1):Math.max.apply(null,xs)+.4;
+  var y0=o.y0!=null?(o.yLog?Math.log(o.y0)/Math.LN10:o.y0):Math.min.apply(null,ys)-.3;
+  var y1=o.y1!=null?(o.yLog?Math.log(o.y1)/Math.LN10:o.y1):Math.max.apply(null,ys)+.3;
+  var X=function(v){var t=o.xLog?Math.log(Math.max(v,1e-6))/Math.LN10:v;return PL+(t-x0)/(x1-x0)*(W-PL-PR);};
+  var Y=function(v){var t=o.yLog?Math.log(Math.max(v,1e-6))/Math.LN10:v;return H-PB-(t-y0)/(y1-y0)*(H-PT-PB);};
+  var svg=S('svg',{viewBox:'0 0 '+W+' '+H,width:W,height:H,role:'img','aria-label':o.alt||o.title||'散点图'});
+  var g=S('g');svg.appendChild(g);
+  /* 象限底色与注释 */
+  if(o.qx!=null&&o.qy!=null){
+    var qx=X(o.qx),qy=Y(o.qy);
+    g.appendChild(S('rect',{x:PL,y:PT,width:Math.max(0,qx-PL),height:Math.max(0,qy-PT),fill:'var(--dv1)','fill-opacity':.03}));
+    g.appendChild(S('rect',{x:qx,y:qy,width:Math.max(0,W-PR-qx),height:Math.max(0,H-PB-qy),fill:'var(--dv1)','fill-opacity':.03}));
+    if(o.qHi)g.appendChild(S('rect',{x:PL,y:PT,width:Math.max(0,qx-PL),height:Math.max(0,qy-PT),
+      fill:'var(--dv3)','fill-opacity':.085,rx:4}));
+    g.appendChild(S('line',{x1:qx,y1:PT,x2:qx,y2:H-PB,stroke:'var(--dvaxis)','stroke-dasharray':'3 4','stroke-opacity':.7}));
+    g.appendChild(S('line',{x1:PL,y1:qy,x2:W-PR,y2:qy,stroke:'var(--dvaxis)','stroke-dasharray':'3 4','stroke-opacity':.7}));
+  }
+  /* 网格与轴 */
+  (o.xTicks||[]).forEach(function(t){var x=X(t.v);
+    g.appendChild(S('line',{x1:x,y1:PT,x2:x,y2:H-PB,stroke:'var(--dvgrid)'}));
+    g.appendChild(S('text',{x:x,y:H-PB+15,'text-anchor':'middle','font-size':10.5,fill:'var(--ink3)'},t.t));});
+  (o.yTicks||[]).forEach(function(t){var y=Y(t.v);
+    g.appendChild(S('line',{x1:PL,y1:y,x2:W-PR,y2:y,stroke:'var(--dvgrid)'}));
+    g.appendChild(S('text',{x:PL-7,y:y+3.5,'text-anchor':'end','font-size':10.5,fill:'var(--ink3)'},t.t));});
+  g.appendChild(S('line',{x1:PL,y1:H-PB,x2:W-PR,y2:H-PB,stroke:'var(--dvaxis)'}));
+  g.appendChild(S('line',{x1:PL,y1:PT,x2:PL,y2:H-PB,stroke:'var(--dvaxis)'}));
+  if(o.xLabel)g.appendChild(S('text',{x:(PL+W-PR)/2,y:H-8,'text-anchor':'middle','font-size':11,fill:'var(--dvlab)'},o.xLabel));
+  if(o.yLabel)g.appendChild(S('text',{x:14,y:(PT+H-PB)/2,'text-anchor':'middle','font-size':11,fill:'var(--dvlab)',
+    transform:'rotate(-90 14 '+((PT+H-PB)/2)+')'},o.yLabel));
+  var seeds=[];
+  (o.quads||[]).forEach(function(q){
+    var qx=q.px!=null?q.px:X(q.x), qy=q.py!=null?q.py:Y(q.y), qfs=q.fs||11, an=q.anchor||'middle';
+    g.appendChild(S('text',{x:qx,y:qy,'text-anchor':an,'font-size':qfs,fill:q.color||'var(--ink3)',
+      'font-weight':q.bold?700:400},q.text));
+    var qw=tw(q.text,qfs), x0=an==='start'?qx:an==='end'?qx-qw:qx-qw/2;
+    seeds.push({x0:x0-3,y0:qy-qfs,x1:x0+qw+3,y1:qy+qfs*.35});});
+  /* 点：大的先画，小的压在上面 */
+  var order=pts.map(function(p,i){return i;}).sort(function(a,b){return (pts[b].r||5)-(pts[a].r||5);});
+  var labels=[];
+  pts.forEach(function(p){var cx=X(p.x),cy=Y(p.y),r=(p.r||5);
+    seeds.push({x0:cx-r,y0:cy-r,x1:cx+r,y1:cy+r,soft:1});});
+  order.forEach(function(i){
+    var p=pts[i],cx=X(p.x),cy=Y(p.y),r=p.r||5;
+    var c=S('circle',{cx:cx,cy:cy,r:r,fill:p.fill===false?'none':p.c,'fill-opacity':p.fill===false?0:(p.o==null?.62:p.o),
+      stroke:p.c,'stroke-width':p.fill===false?1.9:1.1,'class':'k-dot'});
+    if(p.tip)bindTip(c,p.tip);
+    if(o.onClick)c.addEventListener('click',function(){o.onClick(p);});
+    g.appendChild(c);
+    if(p.label)labels.push({text:p.label,x:cx,y:cy,r:r,c:p.lc||'var(--ink2)',p:p});
+  });
+  placeLabels(labels,W,H,fs,seeds).forEach(function(t){
+    if(!t.show)return;
+    var e=S('text',{x:t.lx,y:t.ly,'text-anchor':t.anchor,'font-size':fs,fill:t.c,
+      stroke:'var(--dvhalo)','stroke-width':2.6,'paint-order':'stroke','stroke-linejoin':'round',
+      'style':'pointer-events:none'},t.text);
+    g.appendChild(e);
+  });
+  host.innerHTML='';host.appendChild(svg);
+  return svg;
+}
+
+/* ---------- 横向时间轴 ---------- */
+function timeline(host,o){
+  var rows=o.rows,rh=o.rh||21,PL=o.pl||168,PR=24,PT=30,PB=26;
+  var W=o.w||900,H=PT+rows.length*rh+PB;
+  var y0=o.from,y1=o.to;
+  var X=function(v){return PL+(v-y0)/(y1-y0)*(W-PL-PR);};
+  var svg=S('svg',{viewBox:'0 0 '+W+' '+H,width:W,height:H,role:'img','aria-label':o.alt||'时间轴'});
+  for(var yr=Math.ceil(y0);yr<=y1;yr++){
+    var x=X(yr);
+    svg.appendChild(S('line',{x1:x,y1:PT-8,x2:x,y2:H-PB+4,stroke:yr===o.now?'var(--dvaxis)':'var(--dvgrid)',
+      'stroke-dasharray':yr===o.now?'':'2 3'}));
+    svg.appendChild(S('text',{x:x,y:PT-13,'text-anchor':'middle','font-size':10.5,fill:'var(--ink3)'},String(yr)));
+  }
+  if(o.mark!=null){var mx=X(o.mark);
+    svg.appendChild(S('line',{x1:mx,y1:PT-8,x2:mx,y2:H-PB+4,stroke:'var(--dv3)','stroke-width':1.4,'stroke-dasharray':'5 3'}));
+    svg.appendChild(S('text',{x:mx+4,y:H-PB+16,'font-size':10.5,fill:'var(--dv3)','font-weight':600},o.markText||''));}
+  rows.forEach(function(r,i){
+    var y=PT+i*rh+rh/2;
+    svg.appendChild(S('text',{x:PL-9,y:y+3.5,'text-anchor':'end','font-size':11,fill:'var(--ink2)'},r.label));
+    var a=X(Math.max(y0,r.from)),b=X(Math.min(y1,r.to));
+    if(r.to<=r.from+0.01){ /* 已超越：画一个实心点 */
+      svg.appendChild(S('circle',{cx:a,cy:y,r:5,fill:r.c}));
+    }else{
+      var bar=S('rect',{x:a,y:y-6,width:Math.max(3,b-a),height:12,rx:6,fill:r.c,'fill-opacity':.75,'class':'k-dot'});
+      if(r.tip)bindTip(bar,r.tip);
+      svg.appendChild(bar);
+      if(r.open)svg.appendChild(S('path',{d:'M'+(b)+' '+(y-6)+'L'+(b+9)+' '+y+'L'+b+' '+(y+6)+'Z',fill:r.c,'fill-opacity':.75}));
+    }
+    if(r.right)svg.appendChild(S('text',{x:Math.min(W-PR,b+(r.open?13:7)),y:y+3.5,'font-size':10.5,fill:'var(--ink3)'},r.right));
+  });
+  host.innerHTML='';host.appendChild(svg);
+  return svg;
+}
+
+/* ---------- 哑铃图 ---------- */
+function dumbbell(host,o){
+  var rows=o.rows,rh=o.rh||24,PL=o.pl||120,PR=o.pr||64,PT=34,PB=30;
+  var W=o.w||880,H=PT+rows.length*rh+PB;
+  var lo=o.min,hi=o.max;
+  var X=function(v){return PL+(Math.max(lo,Math.min(hi,v))-lo)/(hi-lo)*(W-PL-PR);};
+  var svg=S('svg',{viewBox:'0 0 '+W+' '+H,width:W,height:H,role:'img','aria-label':o.alt||'哑铃图'});
+  (o.ticks||[]).forEach(function(t){var x=X(t);
+    svg.appendChild(S('line',{x1:x,y1:PT-10,x2:x,y2:H-PB+2,stroke:'var(--dvgrid)'}));
+    svg.appendChild(S('text',{x:x,y:PT-15,'text-anchor':'middle','font-size':10.5,fill:'var(--ink3)'},String(t)));});
+  rows.forEach(function(r,i){
+    var y=PT+i*rh+rh/2, xa=X(r.a), xb=X(r.b);
+    svg.appendChild(S('text',{x:PL-9,y:y+3.5,'text-anchor':'end','font-size':11.5,fill:'var(--ink2)'},r.label));
+    svg.appendChild(S('line',{x1:xa,y1:y,x2:xb,y2:y,stroke:r.c,'stroke-width':2.4,'stroke-opacity':.5}));
+    var p1=S('circle',{cx:xa,cy:y,r:4.6,fill:'var(--panel)',stroke:'var(--ink3)','stroke-width':1.6,'class':'k-dot'});
+    var p2=S('circle',{cx:xb,cy:y,r:5.4,fill:r.c,'class':'k-dot'});
+    if(r.tipA)bindTip(p1,r.tipA); if(r.tipB)bindTip(p2,r.tipB);
+    svg.appendChild(p1);svg.appendChild(p2);
+    var dir=(xb>xa)?1:-1;
+    svg.appendChild(S('text',{x:Math.max(xa,xb)+9,y:y+3.7,'font-size':10.5,fill:r.c,'font-weight':600},r.right||''));
+  });
+  if(o.xLabel)svg.appendChild(S('text',{x:(PL+W-PR)/2,y:H-8,'text-anchor':'middle','font-size':11,fill:'var(--dvlab)'},o.xLabel));
+  host.innerHTML='';host.appendChild(svg);
+  return svg;
+}
+
+/* ---------- 分层依赖图（自上而下 9 层） ---------- */
+function dag(host,o){
+  var layers=o.layers, edges=o.edges;
+  var NW=o.nw||118, NH=o.nh||34, GX=o.gx||13, LY=o.ly||96;
+  var maxN=Math.max.apply(null,layers.map(function(l){return l.nodes.length;}));
+  var PLft=o.plft||118;
+  var W=Math.max(o.wmin||860, PLft+maxN*(NW+GX)+30);
+  var H=42+layers.length*LY;
+  var pos={}, byId={};
+  layers.forEach(function(l,li){
+    var n=l.nodes.length, span=n*(NW+GX)-GX;
+    var startX=PLft+((W-PLft-30)-span)/2;
+    l.nodes.forEach(function(nd,ni){
+      pos[nd.id]={x:startX+ni*(NW+GX),y:34+li*LY,li:li,ni:ni,node:nd};
+      byId[nd.id]=nd;
+    });
+  });
+  /* 邻接 */
+  var down={},up={};
+  edges.forEach(function(e){ (down[e[0]]=down[e[0]]||[]).push(e[1]); (up[e[1]]=up[e[1]]||[]).push(e[0]); });
+  var svg=S('svg',{viewBox:'0 0 '+W+' '+H,width:W,height:H,role:'img','aria-label':o.alt||'产业链依赖图'});
+  /* 层带 */
+  layers.forEach(function(l,li){
+    var y=34+li*LY;
+    svg.appendChild(S('rect',{x:PLft-8,y:y-11,width:W-PLft-22,height:NH+22,rx:8,
+      fill:'var(--panel)','fill-opacity':li%2?.55:.9,stroke:'var(--line)','stroke-opacity':.55}));
+    svg.appendChild(S('text',{x:8,y:y+13,'font-size':10.5,fill:'var(--ink3)','font-weight':600},l.short));
+    svg.appendChild(S('text',{x:8,y:y+26,'font-size':9.5,fill:'var(--ink3)','fill-opacity':.72},l.tier));
+  });
+  var gEdge=S('g',{'stroke-linecap':'round',fill:'none'});svg.appendChild(gEdge);
+  var gNode=S('g');svg.appendChild(gNode);
+  var epath={};
+  edges.forEach(function(e){
+    var a=pos[e[0]],b=pos[e[1]];if(!a||!b)return;
+    var x1=a.x+NW/2,y1=a.y+NH,x2=b.x+NW/2,y2=b.y;
+    var dy=(y2-y1)*.45;
+    var p=S('path',{d:'M'+x1+' '+y1+'C'+x1+' '+(y1+dy)+','+x2+' '+(y2-dy)+','+x2+' '+y2,
+      stroke:'var(--dvaxis)','stroke-width':1,'stroke-opacity':.3});
+    gEdge.appendChild(p); (epath[e[0]+'>'+e[1]]=p);
+  });
+  var boxes={};
+  layers.forEach(function(l){l.nodes.forEach(function(nd){
+    var p=pos[nd.id];
+    var g=S('g',{'class':'k-dot',transform:'translate('+p.x+','+p.y+')'});
+    var rect=S('rect',{width:NW,height:NH,rx:7,fill:nd.bg,stroke:nd.color,'stroke-width':1.2});
+    g.appendChild(rect);
+    var name=nd.label, fs=11;
+    while(tw(name,fs)>NW-12&&fs>8.6)fs-=.5;
+    if(tw(name,fs)>NW-12){var cut=name;while(tw(cut+'…',fs)>NW-12&&cut.length>2)cut=cut.slice(0,-1);name=cut+'…';}
+    g.appendChild(S('text',{x:NW/2,y:15,'text-anchor':'middle','font-size':fs,'font-weight':620,fill:nd.color},name));
+    var kpi=nd.kpi||'';var kfs=8.8;
+    if(tw(kpi,kfs)>NW-10){var c2=kpi;while(tw(c2+'…',kfs)>NW-10&&c2.length>2)c2=c2.slice(0,-1);kpi=c2+'…';}
+    g.appendChild(S('text',{x:NW/2,y:27,'text-anchor':'middle','font-size':kfs,fill:'var(--ink3)'},kpi));
+    if(nd.tip)bindTip(g,nd.tip);
+    g.addEventListener('click',function(){o.onClick&&o.onClick(nd);focus(nd.id);});
+    gNode.appendChild(g);boxes[nd.id]={g:g,rect:rect,nd:nd};
+  });});
+  var cur=null, dimFn=null;
+  function walk(id,map,acc){ (map[id]||[]).forEach(function(x){ if(!acc[x]){acc[x]=1;walk(x,map,acc);} }); return acc; }
+  function focus(id){
+    if(cur===id){cur=null;paint(null);return;} cur=id;paint(id);
+  }
+  function base(k){return dimFn?(dimFn(boxes[k].nd)?1:0.14):1;}
+  function paint(id){
+    if(!id){
+      Object.keys(boxes).forEach(function(k){boxes[k].g.style.opacity=base(k);boxes[k].rect.setAttribute('stroke-width',1.2);});
+      Object.keys(epath).forEach(function(k){epath[k].setAttribute('stroke','var(--dvaxis)');
+        epath[k].setAttribute('stroke-opacity',.3);epath[k].setAttribute('stroke-width',1);});
+      o.onFocus&&o.onFocus(null);return;
+    }
+    var d=walk(id,down,{}),u=walk(id,up,{});
+    Object.keys(boxes).forEach(function(k){
+      var on=(k===id)||d[k]||u[k];
+      boxes[k].g.style.opacity=on?base(k):Math.min(base(k),.16);
+      boxes[k].rect.setAttribute('stroke-width',k===id?2.6:1.2);
+    });
+    Object.keys(epath).forEach(function(k){
+      var ab=k.split('>'),a=ab[0],b=ab[1];
+      var onD=(a===id||d[a])&&(d[b]||b===id||false);
+      var onU=(b===id||u[b])&&(u[a]||a===id||false);
+      var on=onD||onU;
+      epath[k].setAttribute('stroke',on?(onD?'var(--dv6)':'var(--dv1)'):'var(--dvaxis)');
+      epath[k].setAttribute('stroke-opacity',on?.72:.07);
+      epath[k].setAttribute('stroke-width',on?1.7:1);
+    });
+    o.onFocus&&o.onFocus({id:id,down:Object.keys(d),up:Object.keys(u)});
+  }
+  host.innerHTML='';host.appendChild(svg);
+  return {focus:focus,clear:function(){cur=null;paint(null);},pos:pos,boxes:boxes,
+    setDim:function(fn){dimFn=fn;paint(cur);},
+    downstream:function(id){return Object.keys(walk(id,down,{}));},
+    upstream:function(id){return Object.keys(walk(id,up,{}));}};
+}
+
+/* ---------- 主题切换后重画所有图 ---------- */
+var REDRAW=[];
+function onRedraw(fn){REDRAW.push(fn);}
+function redrawAll(){REDRAW.forEach(function(f){try{f();}catch(e){}});}
+
+/* ---------- 深链：读 hash 参数 ---------- */
+function hash(){var h=location.hash.replace(/^#/,'');var o={};
+  if(!h)return o;h.split('&').forEach(function(p){var i=p.indexOf('=');
+    if(i>0)o[decodeURIComponent(p.slice(0,i))]=decodeURIComponent(p.slice(i+1));});return o;}
+
+return {esc:esc,el:el,S:S,tw:tw,nav:nav,toc:toc,sortable:sortable,wrapTables:wrapTables,scatter:scatter,timeline:timeline,
+        dumbbell:dumbbell,dag:dag,bindTip:bindTip,tipOn:tipOn,tipOff:tipOff,placeLabels:placeLabels,
+        onRedraw:onRedraw,redrawAll:redrawAll,setTheme:setTheme,hash:hash};
+})();
+</script>
+<script>/* ===== 03 量化数据表 · 网页版（七张表，与 xlsx 同源） ===== */
+(function(){
+K.nav('03',1,'00_目录.html');
+var esc=K.esc, D=CNS, Q=CNS.q, FX=7.1;
+function txt(s){return String(s==null?'':s).replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim();}
+function n2(v,d){return v==null?'<span class="na">—</span>':(+v).toFixed(d==null?2:d);}
+function nm(v){return v==null?'<span class="na">—</span>':Math.round(v).toLocaleString('en-US');}
+function tag(c,t){return '<span class="tg '+c+'">'+esc(t)+'</span>';}
+var GN={G1:['已突围','t1'],G2:['接近突围','t2'],G3:['追赶中','t3'],G4:['被卡死','t4']};
+var GT={t1:'已突围',t2:'接近突围',t3:'追赶中',t4:'被卡死'};
+var NT={}; for(var k in D.niche) NT[k]=D.niche[k][0];
+var LN={}; D.layers.forEach(function(l){LN[l.id]=l.name;});
+var SL={A:'A 股',AH:'A+H',H:'港股',U:'未上市',NEW:'新上市',IPO:'待上市'};
+var CF={1:['已核实','t1'],2:['行业估算','t2'],0:['未核实','t5']};
+function mktNum(m){ if(typeof m==='number')return m;
+  var x=/^(\d+(?:\.\d+)?)\+?$/.exec(String(m||'').replace(/[, ]/g,'')); return x?parseFloat(x[1]):null; }
+function yr(t){var s=String(t||'');
+  if(/已超越|已追平|已基本追平|基本完成/.test(s))return[0,0];
+  var m=/(\d+)\s*[–\-~]\s*(\d+)\s*年/.exec(s); if(m)return[+m[1],+m[2]];
+  m=/(\d+)\s*年\s*\+/.exec(s); if(m)return[+m[1],+m[1]+5];
+  m=/(\d+)\s*年/.exec(s); if(m)return[+m[1],+m[1]];
+  return[null,null];}
+var MAXSEG=Math.max.apply(null,D.segments.map(function(s){return mktNum(s.mkt)||0;}));
+var SUMSEG=D.segments.reduce(function(a,s){return a+(mktNum(s.mkt)||0);},0);
+var FGRADE={}; D.focus.forEach(function(x){ if(!x.cd)return;
+  String(x.cd).split('/').forEach(function(c){c=c.trim();if(c)FGRADE[c]=x.grade;});});
+
+/* ---- 七张表的定义：cols[] = {t 表头, cls, get 排序值, cell 渲染, num} ---- */
+var SHEETS=[
+{id:'seg',n:'环节量化',c:D.segments.length,lead:'36 个环节的全球市场规模、国产化率与技术差距指数。「占比」是该环节占全部可量化环节合计规模的份额；规模没有可比口径的环节留空，不做推算填充。',
+ rows:function(){return D.segments;},
+ cols:[
+  {t:'环节',cls:'nm',get:function(x){return x.n;},cell:function(x){return esc(x.n);}},
+  {t:'评级',get:function(x){return ({G1:1,G2:2,G3:3,G4:4})[x.grade];},cell:function(x){return tag(GN[x.grade][1],GN[x.grade][0]);}},
+  {t:'全球规模',num:1,get:function(x){return mktNum(x.mkt);},cell:function(x){var v=mktNum(x.mkt);
+    return v==null?'<span class="na">口径缺失</span>':nm(v)+' <span class="na">亿美元</span>';}},
+  {t:'占合计',num:1,get:function(x){return mktNum(x.mkt);},cell:function(x){var v=mktNum(x.mkt);
+    return v==null?'<span class="na">—</span>':(v/SUMSEG*100).toFixed(1)+'%<div class="mini"><i style="width:'+
+    Math.max(2,v/MAXSEG*100)+'%;background:var(--blue)"></i></div>';}},
+  {t:'国产化率',num:1,get:function(x){return x.loc;},cell:function(x){return x.loc+'%<div class="mini"><i style="width:'+
+    Math.min(100,x.loc)+'%;background:var(--g1)"></i></div>';}},
+  {t:'国产化率原始表述',cls:'long',get:function(x){return x.locTxt;},cell:function(x){return esc(x.locTxt||'');}},
+  {t:'技术差距',num:1,get:function(x){return x.gapPct;},cell:function(x){return x.gapPct+'<div class="mini"><i style="width:'+
+    x.gapPct+'%;background:var(--g4)"></i></div>';}},
+  {t:'代表公司',cls:'long',get:function(x){return x.co;},cell:function(x){return esc(x.co||'');}},
+  {t:'差距说明',cls:'long',get:function(x){return txt(x.gap).length;},cell:function(x){return txt(x.gap);}}]},
+
+{id:'co',n:'公司量化',c:D.focus.length,lead:'53 家重点公司的营收、全球与中国份额、突围评级。实测 PE / PB / 市值三列直接引用「实测估值」那张表，不另存一份。',
+ rows:function(){return D.focus;},
+ cols:[
+  {t:'公司',cls:'nm',get:function(x){return x.n;},cell:function(x){return esc(x.n);}},
+  {t:'代码',cls:'mono',get:function(x){return x.cd;},cell:function(x){return esc(x.cd||'');}},
+  {t:'环节',get:function(x){return x.seg;},cell:function(x){return '<span style="color:var(--ink2)">'+esc(x.seg||'')+'</span>';}},
+  {t:'评级',get:function(x){return ({G1:1,G2:2,G3:3,G4:4})[x.grade];},cell:function(x){return tag(GN[x.grade][1],GN[x.grade][0]);}},
+  {t:'置信度',get:function(x){return x.conf;},cell:function(x){var c=CF[x.conf]||CF[0];return tag(c[1],c[0]);}},
+  {t:'营收',num:1,get:function(x){return x.rev;},cell:function(x){return x.rev==null?'<span class="na">未核实</span>':
+    nm(x.rev)+' <span class="na">亿元</span><div class="na">'+esc(x.revP||'')+'</div>';}},
+  {t:'全球份额',num:1,get:function(x){return x.gs;},cell:function(x){return x.gs==null?'<span class="na">未核实</span>':x.gs+'%';}},
+  {t:'中国份额',num:1,get:function(x){return x.cs;},cell:function(x){return x.cs==null?'<span class="na">未核实</span>':x.cs+'%';}},
+  {t:'实测 PE',num:1,get:function(x){var q=Q(x.q);return q?(q.pe!=null?q.pe:(q.peNeg!=null?q.peNeg:null)):null;},
+   cell:function(x){var q=Q(x.q);if(!q)return '<span class="na">未取</span>';
+    return q.pe!=null?q.pe.toFixed(2):(q.peNeg!=null?'<span style="color:var(--g4)">'+q.peNeg+'</span>':'<span class="na">存疑</span>');}},
+  {t:'实测 PB',num:1,get:function(x){var q=Q(x.q);return q?q.pb:null;},cell:function(x){var q=Q(x.q);return q?n2(q.pb):'<span class="na">未取</span>';}},
+  {t:'实测市值',num:1,get:function(x){var q=Q(x.q);return q?q.mc:null;},cell:function(x){var q=Q(x.q);
+    return q?CNS.fmtMC(q):'<span class="na">未取</span>';}},
+  {t:'与海外对标的差距',cls:'long',get:function(x){return txt(x.gap).length;},cell:function(x){return txt(x.gap);}}]},
+
+{id:'pool',n:'下游价值链与利润池',c:D.poolsG.length+D.poolsC.length,
+ lead:'全球与中国两套价值链各 12 层。利润池 = 规模 × 利润率。<b>两列单位不同</b>（亿美元 vs 亿元），「折亿美元」那列按 1:7.1 折算，只为放在同一量级看形状，绝对值不可直接比较。EDA 的利润率已按 07 号实测改为营业利润率 10.4%。',
+ rows:function(){var r=[];
+   D.poolsG.forEach(function(x){r.push({side:'全球',u:'亿美元',x:x});});
+   D.poolsC.forEach(function(x){r.push({side:'中国',u:'亿元',x:x});});return r;},
+ cols:[
+  {t:'价值链',get:function(r){return r.side;},cell:function(r){return tag(r.side==='全球'?'t5':'t4',r.side);}},
+  {t:'环节',cls:'nm',get:function(r){return r.x.n;},cell:function(r){return esc(r.x.n);}},
+  {t:'生态位',get:function(r){return r.x.t;},cell:function(r){return tag(({mono:'t6',dark:'t2',fut:'t5',thin:'t3'})[r.x.t]||'t5',NT[r.x.t]||r.x.t);}},
+  {t:'市场规模',num:1,get:function(r){return r.x.mkt;},cell:function(r){return nm(r.x.mkt)+' <span class="na">'+r.u+'</span>';}},
+  {t:'利润率',num:1,get:function(r){return r.x.mg;},cell:function(r){return r.x.mg+'%';}},
+  {t:'利润率口径',get:function(r){return r.x.mt;},cell:function(r){return '<span class="na">'+(r.x.mt==='g'?'毛利率':'营业利润率')+'</span>';}},
+  {t:'利润池',num:1,get:function(r){return r.x.mkt*Math.max(0,r.x.mg);},cell:function(r){
+    return r.x.mg<=0?'<span class="tg t4">亏损</span>':nm(r.x.mkt*r.x.mg/100)+' <span class="na">'+r.u+'</span>';}},
+  {t:'折亿美元',num:1,get:function(r){var v=r.x.mkt*Math.max(0,r.x.mg)/100;return r.u==='亿元'?v/FX:v;},
+   cell:function(r){if(r.x.mg<=0)return '<span class="na">—</span>';
+    var v=r.x.mkt*r.x.mg/100;return nm(r.u==='亿元'?v/FX:v);}},
+  {t:'代表海外玩家',cls:'long',get:function(r){return (r.x.ov||[]).join();},cell:function(r){return esc((r.x.ov||[]).join(' / '));}},
+  {t:'代表国产玩家',cls:'long',get:function(r){return (r.x.cn||[]).join();},cell:function(r){return esc((r.x.cn||[]).join(' / '));}},
+  {t:'说明',cls:'long',get:function(r){return txt(r.x.d).length;},cell:function(r){return txt(r.x.d);}}]},
+
+{id:'q',n:'实测估值 '+D.meta.priceDate,c:D.quotes.length,
+ lead:'<b>本系列估值的唯一真源。</b>40 家全部取自同一天，口径统一为 PE(TTM)。其他表里出现的 PE / PB / 市值都引用这里，不另存一份。',
+ rows:function(){return D.quotes;},
+ cols:[
+  {t:'市场',get:function(x){return x.reg;},cell:function(x){return tag(x.reg==='ov'?'t5':'t1',x.reg==='ov'?'海外':'国产');}},
+  {t:'公司',cls:'nm',get:function(x){return x.n;},cell:function(x){return esc(x.n);}},
+  {t:'代码',cls:'mono',get:function(x){return x.cd;},cell:function(x){return esc(x.cd);}},
+  {t:'环节',get:function(x){return x.seg;},cell:function(x){return '<span style="color:var(--ink2)">'+esc(x.seg||'')+'</span>';}},
+  {t:'市值',num:1,get:function(x){return x.mc==null?null:(x.reg==='cn'?x.mc:x.mc*FX);},cell:function(x){return CNS.fmtMC(x);}},
+  {t:'PE(TTM)',num:1,get:function(x){return x.pe!=null?x.pe:(x.peNeg!=null?x.peNeg:null);},
+   cell:function(x){return x.pe!=null?'<b>'+x.pe.toFixed(2)+'</b>':(x.peNeg!=null?'<span style="color:var(--g4)">'+x.peNeg+'</span>':'<span class="na">存疑</span>');}},
+  {t:'前瞻 PE',num:1,get:function(x){return x.fpe;},cell:function(x){return x.fpe!=null?n2(x.fpe):'<span class="na">—</span>';}},
+  {t:'PB',num:1,get:function(x){return x.pb;},cell:function(x){return n2(x.pb);}},
+  {t:'溢价倍数',num:1,get:function(x){return x.rel;},cell:function(x){return x.rel==null?'<span class="na">—</span>':
+    tag(x.rel<1?'t1':x.rel<3?'t5':x.rel<6?'t3':'t4',x.rel.toFixed(2)+'x')+(x.relv?'<div class="na">'+esc(x.relv)+'</div>':'');}},
+  {t:'亏损',get:function(x){return x.loss?1:0;},cell:function(x){return x.loss?tag('t4','亏损'):'';}},
+  {t:'此前记录',get:function(x){return x.old;},cell:function(x){return '<span class="na">'+esc(x.old||'—')+'</span>';}},
+  {t:'备注',cls:'long',get:function(x){return txt(x.d).length;},cell:function(x){return txt(x.d);}}]},
+
+{id:'catch',n:'追赶年限',c:D.catchup.length,
+ lead:'追平年限是<b>估算不是事实</b>，起止年份由区间换算而来（基准 2026）。「差距分」越大表示离追平越远。',
+ rows:function(){return D.catchup;},
+ cols:[
+  {t:'环节',cls:'nm',get:function(x){return x.s;},cell:function(x){return esc(x.s);}},
+  {t:'当前国产化率',cls:'long',get:function(x){return x.loc;},cell:function(x){return '<span style="color:var(--ink2)">'+esc(x.loc)+'</span>';}},
+  {t:'追平年限估算',get:function(x){var a=yr(x.yr);return a[1]==null?999:a[1];},cell:function(x){return tag(x.g,x.yr);}},
+  {t:'起',num:1,get:function(x){var a=yr(x.yr);return a[0]==null?null:2026+a[0];},cell:function(x){var a=yr(x.yr);
+    return a[0]==null?'<span class="na">无年限口径</span>':2026+a[0];}},
+  {t:'止',num:1,get:function(x){var a=yr(x.yr);return a[1]==null?null:2026+a[1];},cell:function(x){var a=yr(x.yr);
+    return a[1]==null?'<span class="na">—</span>':2026+a[1];}},
+  {t:'差距分',num:1,get:function(x){return x.sp;},cell:function(x){return x.sp+'<div class="mini"><i style="width:'+
+    Math.max(3,x.sp)+'%;background:var(--'+({t1:'g1',t2:'g2',t3:'g3',t4:'g4'})[x.g]+')"></i></div>';}},
+  {t:'评级',get:function(x){return x.g;},cell:function(x){return tag(x.g,GT[x.g]||'');}},
+  {t:'依据与关键变量',cls:'long',get:function(x){return txt(x.note).length;},cell:function(x){return txt(x.note);}}]},
+
+{id:'cons',n:'六模型共识',c:D.companies.length,
+ lead:'103 家公司 × 六个模型，实心格 = 那个模型点了名。<b>共识度只衡量「被提到」，不衡量对错</b>——六个模型在长鑫的上市状态上集体错了。',
+ rows:function(){return D.companies;},
+ cols:[].concat(
+  [{t:'公司',cls:'nm',get:function(x){return x.n;},cell:function(x){return esc(x.n);}},
+   {t:'代码',cls:'mono',get:function(x){return x.code;},cell:function(x){return esc(x.code||'');}},
+   {t:'价值链层',get:function(x){return x.l;},cell:function(x){return '<span style="color:var(--ink2)">'+esc(LN[x.l]||x.l)+'</span>';}},
+   {t:'上市状态',get:function(x){return x.s;},cell:function(x){return tag(x.s==='U'||x.s==='IPO'?'t3':'t5',SL[x.s]||x.s);}}],
+  D.models.map(function(m,i){return {t:m,num:1,get:function(x){return x.m.indexOf(i)>=0?1:0;},
+    cell:function(x){return '<span class="dot'+(x.m.indexOf(i)>=0?' on':'')+'" title="'+esc(m)+'"></span>';}};}),
+  [{t:'提到数',num:1,get:function(x){return x.m.length;},cell:function(x){return '<b>'+x.m.length+'</b>/6';}},
+   {t:'备注',cls:'long',get:function(x){return txt(x.note).length;},cell:function(x){return txt(x.note);}}])},
+
+{id:'doc',n:'说明与方法',c:null,doc:1}
+];
+
+/* ---- 渲染 ---- */
+var cur=SHEETS[0], q='', sorter=null;
+var tabs=document.getElementById('tabs');
+tabs.innerHTML=SHEETS.map(function(s,i){
+  return '<button class="tab'+(i===0?' on':'')+'" data-i="'+i+'">'+esc(s.n)+
+   (s.c?'<span class="c">'+s.c+'</span>':'')+'</button>';}).join('');
+[].slice.call(tabs.children).forEach(function(b,i){
+  b.onclick=function(){[].slice.call(tabs.children).forEach(function(o){o.classList.remove('on');});
+    b.classList.add('on');cur=SHEETS[i];q='';document.getElementById('q').value='';draw();};});
+document.getElementById('q').oninput=function(){q=this.value.trim();paint();};
+var full=false;
+document.getElementById('expand').onclick=function(){
+  full=!full;this.classList.toggle('on',full);this.textContent=full?'收起长文本':'展开长文本';
+  if(sorter)sorter.refresh();};
+
+function hay(r,cols){return cols.map(function(c){var v=c.get(r);return v==null?'':String(v);}).join(' ')+' '+
+  (r.n||'')+' '+(r.cd||r.code||'')+' '+txt(r.gap||r.d||r.note||(r.x&&r.x.d)||'');}
+function draw(){
+  var isDoc=!!cur.doc;
+  document.getElementById('q').style.display=isDoc?'none':'';
+  document.getElementById('dl').style.display='';
+  if(isDoc){document.getElementById('view').innerHTML=DOC();document.getElementById('cnt').textContent='';
+    document.getElementById('expand').style.display='none';
+    document.getElementById('empty').style.display='none';return;}
+  var cols=cur.cols;
+  document.getElementById('view').innerHTML=
+   '<p class="lead">'+cur.lead+'</p><div class="k-tw"><table><thead><tr>'+
+   cols.map(function(c){return '<th class="'+(c.num?'num':(c.cls==='long'?'longc':''))+'">'+esc(c.t)+'</th>';}).join('')+
+   '</tr></thead><tbody id="tb"></tbody></table></div>';
+  K.wrapTables('.wrap');
+  document.getElementById('expand').style.display='';
+  sorter=K.sortable('#tb',cols.map(function(c){return {get:c.get,desc:c.num?1:0};}),cur.rows(),render);
+  paint();
+}
+function render(rows){
+  var cols=cur.cols;
+  document.getElementById('tb').innerHTML=rows.map(function(r){
+    return '<tr>'+cols.map(function(c){
+      var v=c.cell(r);
+      if(c.cls==='long'){ /* 表格单元格里不能用 line-clamp（Chromium 会把行高算错），直接截字 */
+        var t=txt(v), sh=(t.length>96?t.slice(0,96)+'…':t);
+        v='<span title="'+esc(t)+'">'+esc(full?t:sh)+'</span>'; }
+      return '<td class="'+(c.num?'num':(c.cls||''))+'">'+v+'</td>';}).join('')+'</tr>';
+  }).join('');
+  document.getElementById('cnt').textContent='显示 '+rows.length+' / '+cur.rows().length+' 行';
+  document.getElementById('empty').style.display=rows.length?'none':'block';
+}
+function paint(){
+  if(!sorter||cur.doc)return;
+  sorter.setFilter(function(rows){ if(!q)return rows;
+    var k=q.toLowerCase();
+    return rows.filter(function(r){return hay(r,cur.cols).toLowerCase().indexOf(k)>=0;});});
+}
+function DOC(){
+  return '<div class="doc">'+
+  '<h4>这份数据表是什么</h4><dl>'+
+  '<dt>唯一数据源</dt><dd>本页七张表与国产替代研究的七个网页、Excel 版，全部由同一份 <code>data.js</code> 生成。改数字只改那一处，不会再出现同一家公司在三个页面写三个数。</dd>'+
+  '<dt>估值取数日</dt><dd>'+esc(D.meta.priceDate)+'（全部同日，A 股收盘 / 美股最新）。「实测估值」那张表是唯一真源，其余各表的 PE / PB / 市值都引用它。</dd>'+
+  '<dt>数据基准</dt><dd>市场规模主要为 2025 年；份额数据多为 2026Q1；公司营收为 2025 年报或 2026H1。</dd>'+
+  '<dt>汇率假设</dt><dd>1 美元 = '+FX+' 元。只用于「折亿美元」那一列，供放在同一量级看形状。</dd></dl>'+
+  '<h4>评级方法</h4><dl>'+
+  '<dt>'+tag('t1','已突围')+'</dt><dd>全球份额 ≥10%，或国内份额 ≥50% 且产品达国际主流水平</dd>'+
+  '<dt>'+tag('t2','接近突围')+'</dt><dd>国内份额 30–50%，成熟制程已替代但先进制程未破</dd>'+
+  '<dt>'+tag('t3','追赶中')+'</dt><dd>国内份额 10–30%，处于验证或小批量阶段</dd>'+
+  '<dt>'+tag('t4','被卡死')+'</dt><dd>国内份额 &lt;10%，存在明确代差且无量产替代方案</dd></dl>'+
+  '<h4>数据置信度</h4><dl>'+
+  '<dt>'+tag('t1','已核实')+'</dt><dd>来自公司年报、交易所公告或主流财经媒体明确报道</dd>'+
+  '<dt>'+tag('t2','行业估算')+'</dt><dd>来自行业研究报告，口径可能不一致</dd>'+
+  '<dt>'+tag('t5','未核实')+'</dt><dd>本次检索未找到可靠公开数据，<b>留空不填，不做推算</b></dd></dl>'+
+  '<h4>已知局限</h4><dl>'+
+  '<dt>口径</dt><dd>国产化率各家差异极大：半导体设备整体从 35%（券商）到 &gt;50%（工信部）都有，表里标注区间。</dd>'+
+  '<dt>分母</dt><dd>市场规模多为 2025 年，而 2026 年存储处于 AI 超级周期，用 2025 分母会低估存储环节权重。</dd>'+
+  '<dt>业务纯度</dt><dd>含非半导体业务的公司（精测电子、TCL 中环、立讯精密、工业富联）份额会被高估，已在备注标出。</dd>'+
+  '<dt>份额口径</dt><dd>出货量与销售额两种口径结论可能相反（2025 英伟达在华出货量 55%，2026Q1 销售额仅 15–20%）。</dd>'+
+  '<dt>估算与推演</dt><dd>「追赶年限」是估算不是事实；「下游价值链」里标 🔮 的属推演，均附证伪条件。</dd>'+
+  '<dt>单位</dt><dd>全球链单位是亿美元、中国链是亿元，绝对值不可直接比较。</dd></dl>'+
+  '<h4>修订记录</h4><dl>'+
+  '<dt>2026-08-12</dt><dd>接入金融数据接口同日重取 40 家估值，推翻三条结论：①实测英伟达 PE 仅 33.36，低于 AMAT 49.35 / 泛林 53.23；②国产设备对海外溢价约 2.3 倍而非 4–8 倍；③Synopsys 营业利润率仅 10.4%，「EDA 利润率最高」是错的。另发现四家公司在亏损而此前完全未标注。</dd>'+
+  '<dt>'+esc(D.meta.ver)+'</dt><dd>全部数据改由 data.js 单一来源生成；「下游价值链」的 EDA 利润率由 85%（毛利率）改为 10.4%（营业利润率）；新增「追赶年限」与「六模型共识」两张表；修正 01 号页面把沪硅产业的亏损数字错抄到华特气体一行。</dd></dl>'+
+  '<h4>主要来源</h4><dl><dt></dt><dd>SEMI、TrendForce／CFM 闪存市场、Bernstein Research、Yole、LightCounting、高工智能汽车研究院、中国信通院、集微咨询、前瞻产业研究院，及上交所披露与各公司年报（2026 年 8 月检索）。</dd></dl>'+
+  '</div>';
+}
+document.getElementById('foot').innerHTML=
+ '<b>免责</b>　本表不是投资建议，编制者不是投资顾问。数据来自公开行业报告与公司公告，口径不统一、时点混合，部分为估算与推演（已逐项标注）。个股决策请以交易所与公司公告为准，风险自担。<br>'+
+ '<b>同源</b>　本页与七个网页、Excel 版同由一份 data.js 生成，估值只有一个来源（'+esc(D.meta.priceDate)+' 同日实测）。';
+draw();
+})();
+</script>
+</body>
+</html>

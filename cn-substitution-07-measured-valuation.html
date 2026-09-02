@@ -13,13 +13,20 @@
  --pur:#7b4397;--purb:#f4edf8;
  --accent:#1f1e1c;
 }
-@media(prefers-color-scheme:dark){:root{
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
  --bg:#191817;--panel:#221f1d;--ink:#f0ece7;--ink2:#b6afa8;--ink3:#857d76;
  --line:#332f2c;--line2:#443e3a;
  --g1:#63b585;--g1b:#1a271f;--g4:#e07070;--g4b:#2c1919;
  --blue:#89aad6;--blueb:#1b222c;--gold:#d9b45c;--goldb:#2a2416;
  --pur:#b98cd4;--purb:#251d2b;
  --accent:#f0ece7;}}
+:root[data-theme="dark"]{--bg:#191817;--panel:#221f1d;--ink:#f0ece7;--ink2:#b6afa8;--ink3:#857d76;
+ --line:#332f2c;--line2:#443e3a;
+ --g1:#63b585;--g1b:#1a271f;--g4:#e07070;--g4b:#2c1919;
+ --blue:#89aad6;--blueb:#1b222c;--gold:#d9b45c;--goldb:#2a2416;
+ --pur:#b98cd4;--purb:#251d2b;
+ --accent:#f0ece7;}
+
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.65;
  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
@@ -77,6 +84,124 @@ tr.cheap td{background:color-mix(in srgb,var(--g1b) 45%,transparent)}
 footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink3);line-height:1.75}
 @media(max-width:820px){.wrap{padding:20px 12px 60px}h1{font-size:20px}.fix .ba{grid-template-columns:1fr}
  table{font-size:11.5px}th,td{padding:6px 4px}.hs{display:none}}
+.pbrow{display:grid;grid-template-columns:150px 1fr 76px 190px;gap:10px;align-items:center;font-size:12.5px;margin:6px 0}
+.pbn{font-weight:620}.pbv{font-family:ui-monospace,Menlo,monospace;color:var(--g4);font-weight:700}
+.pbm{color:var(--ink3);font-size:11.5px}
+.pbmed{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--ink3);opacity:.75;border-radius:1px}
+@media(max-width:760px){.pbrow{grid-template-columns:1fr 60px;grid-template-areas:"n v" "b b" "m m"}
+ .pbn{grid-area:n}.pbv{grid-area:v}.pbrow .bar{grid-area:b}.pbm{grid-area:m}}
+
+/* ==== 共用外壳 ==== */
+/* ===== 国产替代研究 · 共用外壳与图表样式 ===== */
+:root{
+ /* 统一 dataviz 调色板（浅色） */
+ --dv1:#41608c; --dv2:#2b7a8c; --dv3:#9a7112; --dv4:#7b4397; --dv5:#2f7d4f; --dv6:#b8492e;
+ --dvgrid:#e8e4df; --dvaxis:#b8b2ab; --dvlab:#57534e; --dvhalo:#faf9f7;
+}
+:root:not([data-theme="light"]) { }
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --dv1:#89aad6; --dv2:#6cc0d1; --dv3:#d9b45c; --dv4:#b98cd4; --dv5:#63b585; --dv6:#e08a6d;
+ --dvgrid:#2e2a27; --dvaxis:#5b544e; --dvlab:#b6afa8; --dvhalo:#191817;
+}}
+:root[data-theme="dark"]{
+ --dv1:#89aad6; --dv2:#6cc0d1; --dv3:#d9b45c; --dv4:#b98cd4; --dv5:#63b585; --dv6:#e08a6d;
+ --dvgrid:#2e2a27; --dvaxis:#5b544e; --dvlab:#b6afa8; --dvhalo:#191817;
+}
+
+/* ---------- 顶部一行提示 + 页尾长说明 ---------- */
+.k-notice{font-size:12px;color:var(--ink3);margin:-14px 0 22px;line-height:1.7}
+.k-notice a{color:var(--ink3);text-decoration:none;border-bottom:1px dotted currentColor;white-space:nowrap}
+.k-notice a:hover{color:var(--ink)}
+.k-tail{margin-top:46px;padding-top:6px;border-top:1px dashed var(--line2)}
+.k-tail>h2{font-size:16px}
+.k-tail .disc,.k-tail .warn,.k-tail .note,.k-tail .ten{font-size:12.2px}
+
+/* ---------- 顶部导航 ---------- */
+.k-nav{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--bg) 92%,transparent);
+ backdrop-filter:saturate(1.4) blur(8px);-webkit-backdrop-filter:saturate(1.4) blur(8px);
+ border-bottom:1px solid var(--line);margin:0 0 0}
+.k-navin{max-width:1400px;margin:0 auto;padding:7px 20px;display:flex;align-items:center;gap:10px;
+ font-size:12.5px;flex-wrap:wrap}
+.k-nav a{color:var(--ink2);text-decoration:none;padding:3px 8px;border-radius:6px;border:1px solid transparent;
+ white-space:nowrap;transition:.12s}
+.k-nav a:hover{background:var(--panel);border-color:var(--line);color:var(--ink)}
+.k-nav .k-here{font-weight:660;color:var(--ink);background:var(--panel);border-color:var(--line)}
+.k-nav .k-sp{flex:1 1 auto}
+.k-seq{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--ink3);
+ border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+.k-tog{font:inherit;font-size:12px;cursor:pointer;background:var(--panel);border:1px solid var(--line);
+ color:var(--ink2);border-radius:6px;padding:3px 9px;white-space:nowrap}
+.k-tog:hover{color:var(--ink);border-color:var(--line2)}
+
+/* ---------- 左侧粘性目录 ---------- */
+.k-toc{position:fixed;left:max(10px,calc(50% - var(--kw)/2 - 178px));top:96px;width:164px;z-index:40;
+ font-size:12px;line-height:1.45;max-height:calc(100vh - 130px);overflow-y:auto;
+ padding-right:6px;scrollbar-width:thin}
+.k-toc h6{margin:0 0 7px;font-size:10.5px;letter-spacing:.08em;color:var(--ink3);font-weight:650;text-transform:uppercase}
+.k-toc a{display:block;color:var(--ink3);text-decoration:none;padding:3.5px 8px;border-radius:5px;
+ border-left:2px solid transparent;transition:.12s}
+.k-toc a:hover{color:var(--ink);background:var(--panel)}
+.k-toc a.on{color:var(--ink);border-left-color:var(--accent);font-weight:600;background:var(--panel)}
+.k-tocm{display:none}
+/* 侧栏目录只在「正文两侧真的放得下」时才出现，由 JS 量出来打 html.k-wide */
+.k-toc{display:none}
+html.k-wide .k-toc{display:block}
+.k-tocm{display:block;position:sticky;top:38px;z-index:50;padding:6px 0 4px;background:var(--bg)}
+html.k-wide .k-tocm{display:none}
+.k-tocm select{font:inherit;font-size:12.5px;width:100%;max-width:420px;padding:5px 8px;border-radius:7px;
+ border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+
+/* ---------- 可排序表头 ---------- */
+th.k-s{cursor:pointer;user-select:none;position:relative;white-space:nowrap}
+th.k-s:hover{color:var(--ink)}
+th.k-s::after{content:"↕";opacity:.28;font-size:9px;margin-left:3px;vertical-align:1px}
+th.k-s.k-asc::after{content:"↑";opacity:.95}
+th.k-s.k-desc::after{content:"↓";opacity:.95}
+thead th{position:sticky;top:36px;background:var(--bg);z-index:5}
+/* .k-tw 是横向滚动容器，浏览器会把它也当成纵向滚动容器：
+   此时 top:36px 会把表头往下推 36px，正好盖住第一行。容器内一律贴 0。 */
+.k-tw thead th{top:0}
+
+/* ---------- 宽表格容器 ---------- */
+.k-tw{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+.k-tw>table{min-width:max-content}
+@media(max-width:520px){.k-tw>table{min-width:0}}
+
+/* ---------- 图表外壳 ---------- */
+.k-fig{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px 10px;margin:14px 0 18px}
+.k-fig h4{margin:0 0 2px;font-size:14px}
+.k-fig .k-cap{margin:0 0 10px;font-size:12px;color:var(--ink3);line-height:1.55}
+.k-figbody{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.k-figbody svg{display:block;max-width:100%;height:auto}
+.k-lg{display:flex;flex-wrap:wrap;gap:5px 14px;font-size:11.5px;color:var(--ink2);margin-top:9px;align-items:center}
+.k-lg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.k-lg .sq{border-radius:2px}
+.k-tip{position:fixed;pointer-events:none;opacity:0;transition:opacity .1s;z-index:200;max-width:290px;
+ background:var(--panel);border:1px solid var(--line2);border-radius:8px;padding:8px 10px;font-size:12px;
+ line-height:1.5;box-shadow:0 6px 24px rgba(0,0,0,.14);color:var(--ink)}
+.k-tip b{color:var(--ink)}
+.k-tip .k-tk{color:var(--ink3);font-size:11px}
+.k-dot{cursor:pointer;transition:opacity .12s}
+.k-dot:hover{opacity:.82}
+.k-hl{animation:k-flash 1.7s ease-out 1}
+@keyframes k-flash{0%,22%{box-shadow:0 0 0 3px color-mix(in srgb,var(--dv3) 62%,transparent)}100%{box-shadow:0 0 0 0 transparent}}
+
+/* ---------- 条形着色单元格 ---------- */
+.k-bc{position:relative;z-index:0}
+.k-bc::before{content:"";position:absolute;left:0;top:2px;bottom:2px;width:var(--w,0%);
+ background:color-mix(in srgb,var(--c,var(--dv1)) 17%,transparent);border-radius:3px;z-index:-1}
+
+/* ---------- 打印 ---------- */
+@media print{
+ :root{--bg:#fff;--panel:#fff}
+ .k-nav,.k-toc,.k-tocm,.k-tip,.k-noprint{display:none!important}
+ body{background:#fff}
+ .wrap{max-width:none;padding:0}
+ table{page-break-inside:auto} tr{page-break-inside:avoid}
+ .k-fig,.seg,.card,.etf{page-break-inside:avoid}
+ *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+
 </style>
 </head>
 <body>
@@ -84,15 +209,12 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);font-si
 
 <h1>实测估值数据 · 修正版</h1>
 <p class="sub">用金融数据接口重取同日数据，修正 02 与 04 号文件中基于混合时点二手来源的估值</p>
-<p class="meta">数据日期 <b>2026-08-12</b>（全部同日，A股收盘 / 美股最新）｜ 数据源：cn-financial（AKShare）· Alpha Vantage · Longbridge ｜ 覆盖 31 家国产 + 9 家海外对标</p>
+<p class="meta">数据日期 <b>2026-08-12</b>（全部同日，A股收盘 / 美股最新）｜ 数据源：cn-financial（AKShare）· Alpha Vantage · Longbridge ｜ 覆盖 31 家国产 + 9 家海外对标</p><p class="k-notice">本页不是投资建议 · 全部数据取自 2026-08-12 同一天，口径统一为 PE(TTM) · 这是本系列估值的唯一真源 <a href="#tail">完整口径、修正说明与免责 ↓</a></p>
 
-<div class="warn">
-<b>声明</b>　本页不是投资建议，我不是投资顾问。本页是对既有文件的<b>数据修正</b>，修正本身也可能有错——PE(TTM) 受一次性损益影响极大，跨市场比较存在会计准则差异。<b>本页最重要的作用不是给出新结论，而是说明「二手估值数据有多不可靠」。</b>
-</div>
 
-<div class="note">
-<b>为什么要做这一版</b>　02 与 04 号文件的估值来自 2026 年 5 月的券商文章与 4–8 月的财经报道，时点混杂且多为转述。这次接上金融数据接口后，<b>同一天、同一口径</b>重取了全部数字。结果是：<b>其中一条被我写进 README 和目录页的核心论断，方向就是错的。</b>下面第一节先讲被推翻的部分。
-</div>
+
+
+
 
 <h2>一、被实测数据推翻的三条结论<span class="n">这是本页最重要的部分</span></h2>
 
@@ -133,9 +255,18 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);font-si
 <p>对国产的含义反而更沉重：<b>华大九天当前处于亏损状态</b>（PE -2479，市值 538.83 亿，PB 10.36）。国产 EDA 龙头在一个连 Synopsys 都只能做到 10% 营业利润率的赛道里，且规模小两个数量级。</p>
 </div>
 
+<div class="k-fig">
+ <h4>此前写法 vs 同日实测 —— 一张图看清哪几家被写错了</h4>
+ <p class="k-cap">上面三条结论都是「此前各处写的口径」与「实测」的落差。这里把有两个口径可比的公司排在一起：
+ 每行一家，<b>空心点是此前记录，实心点是实测</b>，线段长度就是错的幅度。红色 = 实测更贵，绿色 = 实测更便宜。</p>
+ <div class="k-figbody"><div id="dbfig"></div></div>
+ <div class="k-lg" id="dblg"></div>
+</div>
+
 <h2>二、四家亏损公司<span class="n">此前完全未标注</span></h2>
 <p class="lead">02 号文件把这些公司标为「已突围」或「追赶中」，但没有任何一处提到它们在亏损。实测 PE 为负的有四家，合计市值 <b>6,959 亿元</b>（另有港股壁仞科技本次未取，大概率同样亏损）：</p>
 <div class="stat" id="lossstat"></div>
+<div id="losspb"></div>
 <div class="note">
 <b>国产 GPU 双雄合计市值 5,553 亿元，两家都在亏损。</b>摩尔线程 PB 22.10、沐曦 PB 21.85——<b>市场用市净率给它们定价，因为没有利润可定价</b>。这与寒武纪（有利润、PE 208、PB 51.23）是两种不同的估值状态：前者赌的是从 0 到 1，后者赌的是从 1 到 N。02 号文件把三家并列为「AI 芯片」而不区分，是个明显的粗糙处。
 </div>
@@ -185,114 +316,450 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);font-si
 <b>结论：</b>01/05/06 号文件里的<b>份额、国产化率、技术代差、利润分配结构</b>这些判断，不依赖估值数据，仍然成立。但凡是涉及<b>具体 PE 倍数与相对估值排序</b>的结论，以本页为准。
 </div>
 
+
+<section id="tail" class="k-tail">
+<h2>口径 · 修正 · 免责<span class="n">原来放在页面顶部的长说明，原文搬到这里</span></h2>
+<div class="warn">
+<b>声明</b>　本页不是投资建议，我不是投资顾问。本页是对既有文件的<b>数据修正</b>，修正本身也可能有错——PE(TTM) 受一次性损益影响极大，跨市场比较存在会计准则差异。<b>本页最重要的作用不是给出新结论，而是说明「二手估值数据有多不可靠」。</b>
+</div>
+<div class="note">
+<b>为什么要做这一版</b>　02 与 04 号文件的估值来自 2026 年 5 月的券商文章与 4–8 月的财经报道，时点混杂且多为转述。这次接上金融数据接口后，<b>同一天、同一口径</b>重取了全部数字。结果是：<b>其中一条被我写进 README 和目录页的核心论断，方向就是错的。</b>下面第一节先讲被推翻的部分。
+</div>
+</section>
 <footer>
 <b>数据来源与口径</b>　国产公司：cn-financial MCP（AKShare 数据源），2026-08-12 收盘，总市值单位亿元人民币，PE 为 TTM 口径。海外公司：Alpha Vantage COMPANY_OVERVIEW，最新财报期（NVDA/AMAT/SNPS 截至 2026-04-30，LRCX/ASML/TSM 截至 2026-06-30，MU 截至 2026-05-31，COHR/LITE 截至 2026-03-31），市值单位美元。行业分位：Longbridge valuation_rank，2026-08-11。<br>
 <b>已知局限</b>　（1）<b>PE(TTM) 对一次性损益极度敏感</b>——中科飞测实测 PE 2.17，几乎确定包含非经常性收益，本表标为存疑不参与比较。（2）跨市场 PE 比较存在会计准则（中国企业会计准则 vs US GAAP vs IFRS）与税制差异，仅作数量级参考。（3）海外公司财报期截止日不同（3/31、4/30、5/31、6/30），TTM 窗口不完全对齐。（4）港股标的（地平线 09660、壁仞 06082、禾赛、速腾、黑芝麻）本次未取，仍为缺口。（5）未上市公司（长江存储、上海微电子、华为海思）无公开估值，不在本表。（6）市值随行情每日变动，本表是 2026-08-12 的快照，不是持续有效的判断。<br>
 <b>与其他文件的关系</b>　本页只修正估值层面的数字与结论。01 号（六模型整合与共识度）、05 号（利润分配结构与生态位）、06 号（全产业链流程图）的非估值判断不受影响。02、04 号文件中与本页冲突的估值数字，以本页为准。
+<br><span style="opacity:.75"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">苏ICP备2026059001号</a></span>
 </footer>
 </div>
 
+<script>/* 共用数据（由 src/data.js 构建注入，勿手改） */
+var CNS=(function(){var D={"meta":{"ver":"2026-09-02","priceDate":"2026-08-12","asOf":"2026-08","note":"本文件是国产替代研究七页的唯一数据源。quotes（实测估值）由 07 号文件的同日取数构成，02 / 04 / 07 三页的 PE / PB / 市值全部从这里派生，不再各存一份。"},"quotes":[{"n":"NVIDIA","cd":"NVDA","reg":"ov","seg":"AI 加速芯片","mc":52681,"pe":33.36,"pb":26.96,"fpe":24.81,"rel":null,"old":"约 45x","d":"<b>全表最大市值，PE 却只有 33.36。</b>最近一季净利同比 +214.5%、营收 +85.2%，利润增速把 PE 摊薄了。毛利率 74.1%、营业利润率 65.6%、ROE 114.3%。"},{"n":"台积电","cd":"TSM","reg":"ov","seg":"晶圆代工","mc":21704,"pe":36.9,"pb":11.94,"fpe":25.32,"rel":null,"old":"约 20–30x","d":"毛利率 64.2%、营业利润率 60.3%。最近一季净利同比 +77.4%。"},{"n":"美光","cd":"MU","reg":"ov","seg":"存储 / HBM","mc":9809,"pe":19.46,"pb":9.65,"fpe":5.55,"rel":null,"old":"前瞻 <10x","d":"⚠ <b>营业利润率 80.4%，全表最高</b>，高于 SK 海力士的 76%。最近一季净利同比 <b>+1369%</b>。前瞻 PE 5.55 是全表最低——<b>周期股在盈利峰值时 PE 最低，这是风险不是便宜。</b>"},{"n":"ASML","cd":"ASML","reg":"ov","seg":"光刻机","mc":6658,"pe":59.16,"pb":26.51,"fpe":38.46,"rel":null,"old":"约 53%（毛利率）","d":"毛利率 52.7%、营业利润率 37.1%。EUV 全球唯一供应商，但 PE 高于英伟达。"},{"n":"应用材料","cd":"AMAT","reg":"ov","seg":"半导体设备","mc":4173,"pe":49.35,"pb":17.34,"fpe":33.11,"rel":null,"old":"约 20–25x ✗","d":"❗<b>此前记录错误约一倍。</b>实测 49.35，高于英伟达。毛利率 49.0%、营业利润率 31.9%。"},{"n":"泛林 Lam","cd":"LRCX","reg":"ov","seg":"刻蚀设备","mc":3897,"pe":53.23,"pb":30.74,"fpe":33.22,"rel":null,"old":"约 25–30x ✗","d":"❗<b>此前记录错误约一倍。</b>实测 53.23。毛利率 50.5%、营业利润率 37.4%、ROE 65.1%。"},{"n":"Synopsys","cd":"SNPS","reg":"ov","seg":"EDA","mc":787,"pe":94.25,"pb":2.59,"fpe":23.87,"rel":null,"old":"约 85%（毛利率）","d":"⚠ 毛利率 82.6% 但<b>营业利润率仅 10.4%、ROE 3.8%</b>，最近一季 EPS 同比 <b>-96%</b>。毛利率高不等于赚钱。"},{"n":"Coherent","cd":"COHR","reg":"ov","seg":"光模块","mc":636,"pe":154.1,"pb":6.95,"fpe":38.31,"rel":null,"old":"前瞻 49x / TTM >180x","d":"毛利率 37.0%、营业利润率 13.6%。中际旭创的主要对标。"},{"n":"Lumentum","cd":"LITE","reg":"ov","seg":"光模块","mc":633,"pe":156.14,"pb":23.29,"fpe":47.17,"rel":null,"old":"159x","d":"毛利率 40.8%、营业利润率 21.8%。最近一季营收同比 +90.1%。"},{"n":"长鑫科技","cd":"688825.SH","reg":"cn","seg":"DRAM","mc":35794.65,"pe":126.95,"pb":43.8,"rel":6.52,"relv":"美光 19.46","old":"推算 2026E 约 22–25x","d":"❗<b>此前按 2026E 推算 22–25x，TTM 口径实测 126.95。</b>两者不矛盾（一个用预测利润、一个用过去12个月），但目录页只写了低的那个，会误导。PB 43.80 是全表最高。"},{"n":"中芯国际","cd":"688981.SH","reg":"cn","seg":"晶圆代工","mc":10954.73,"pe":217.12,"pb":7.31,"rel":5.88,"relv":"台积电 36.90","old":"234x","d":"PB 仅 7.31，远低于同业。<b>代工是重资产周期股，PE 口径本身失真</b>，PB 或 EV/EBITDA 更合适——这一点此前已标注，实测印证。"},{"n":"华虹公司","cd":"688347.SH","reg":"cn","seg":"晶圆代工","mc":4747.47,"pe":962.17,"pb":10.49,"rel":26.1,"relv":"台积电 36.90","old":"未核实","d":"⚠ PE 962 说明利润接近于零。特色工艺路线不受 EUV 限制，但盈利能力与台积电差距巨大。"},{"n":"兆易创新","cd":"603986.SH","reg":"cn","seg":"利基存储","mc":2899.4,"pe":100.86,"pb":11.47,"rel":5.18,"relv":"美光 19.46","old":"未核实","d":"NOR Flash 与 MCU 为主，与长鑫不在同一价值层级。"},{"n":"北方华创","cd":"002371.SZ","reg":"cn","seg":"半导体设备","mc":5515.24,"pe":98.91,"pb":14.04,"rel":2,"relv":"AMAT 49.35","old":"90x（5月 81x）","d":"Longbridge：合理区间 48.65–81.88，<b>当前高于区间上沿，处近一年 93% 分位</b>（仅 6.9% 的时间比现在贵）。行业排名 20/69，行业中位数 93.93。"},{"n":"中微公司","cd":"688012.SH","reg":"cn","seg":"刻蚀设备","mc":3648.9,"pe":133.71,"pb":15.01,"rel":2.51,"relv":"泛林 53.23","old":"110.5x","d":"实测高于此前记录 21%。5nm CCP 刻蚀已进台积电验证，基本面支撑相对实。"},{"n":"拓荆科技","cd":"688072.SH","reg":"cn","seg":"薄膜沉积","mc":2043.56,"pe":124.28,"pb":28.2,"rel":2.52,"relv":"AMAT 49.35","old":"95.41x","d":"❗此前写「当前 PE 与 2026E 基本持平，几乎未透支未来」——实测 124.28，比 5 月记录高 30%，那个结论已不成立。"},{"n":"盛美上海","cd":"688082.SH","reg":"cn","seg":"清洗设备","mc":1515.84,"pe":89.74,"pb":10.38,"rel":1.82,"relv":"AMAT 49.35","old":"未核实","d":"<b>设备环节相对海外溢价最低的一家（1.82x）</b>，PB 10.38 也是设备股里较低的。"},{"n":"华海清科","cd":"688120.SH","reg":"cn","seg":"CMP 设备","mc":1356.49,"pe":123.59,"pb":17.57,"rel":2.5,"relv":"AMAT 49.35","old":"未核实"},{"n":"中科飞测","cd":"688361.SH","reg":"cn","seg":"量测检测","mc":1225.32,"pe":null,"pb":24.16,"rel":null,"old":"未核实","d":"⚠ <b>实测 PE 2.17，几乎确定包含大额非经常性收益，不可用于比较</b>，本表按存疑处理。"},{"n":"芯源微","cd":"688037.SH","reg":"cn","seg":"涂胶显影","mc":683.99,"pe":969.45,"pb":24.42,"rel":19.6,"relv":"AMAT 49.35","old":"未核实","d":"⚠ PE 969 说明利润极薄。东京电子在该环节全球份额超 85%，国产化率仅 10–15%。"},{"n":"江丰电子","cd":"300666.SZ","reg":"cn","seg":"溅射靶材","mc":728.7,"pe":132,"pb":14.06,"rel":null,"old":"未核实","d":"晶圆制造靶材国内市占 38%，材料端国产化最成功的一格，但全球市场仅约 20 亿美元。"},{"n":"鼎龙股份","cd":"300054.SZ","reg":"cn","seg":"CMP 抛光垫","mc":740.5,"pe":89.2,"pb":13.56,"rel":null,"old":"未核实","d":"此前记录毛利率 35–45%，实测 PE 89.20 在材料股中偏低。"},{"n":"雅克科技","cd":"002409.SZ","reg":"cn","seg":"前驱体 / 电子材料","mc":738.59,"pe":73.37,"pb":9.12,"rel":null,"old":"未核实","d":"<b>材料环节 PE 最低的一家。</b>"},{"n":"安集科技","cd":"688019.SH","reg":"cn","seg":"CMP 抛光液","mc":571.71,"pe":69.51,"pb":12.46,"rel":null,"old":"未核实","d":"PE 69.51，全部国产半导体材料股中第二低。"},{"n":"南大光电","cd":"300346.SZ","reg":"cn","seg":"光刻胶","mc":409.44,"pe":117.52,"pb":11.37,"rel":null,"old":"2025 营收 +18%","d":"2025 年底成为国内首家 ArF 光刻胶量产企业，已通过中芯与长江存储验证。"},{"n":"华特气体","cd":"688268.SH","reg":"cn","seg":"电子特气","mc":198.61,"pe":159.1,"pb":10.58,"rel":null,"old":"未核实","d":"<b>市值最小的重点标的（198.61 亿），但 PE 159.10 偏高。</b>"},{"n":"沪硅产业","cd":"688126.SH","reg":"cn","seg":"半导体硅片","mc":867.9,"pe":null,"pb":5.16,"loss":1,"rel":null,"old":"2025 净亏 15.08 亿","d":"❗<b>实测 PE -48.7，确认持续亏损。</b>PB 5.16 是全部国产标的中最低。12 英寸国产化率仅 10% + 价格战，「份额追上不等于盈利追上」的实证。","peNeg":-48.7},{"n":"海光信息","cd":"688041.SH","reg":"cn","seg":"服务器 CPU","mc":6686.19,"pe":245.27,"pb":28.46,"rel":7.35,"relv":"英伟达 33.36","old":"266x","d":"<b>国产盈利公司中 PE 最高的一家。</b>245 倍隐含的增速预期与其实际增速存在明显落差。"},{"n":"寒武纪","cd":"688256.SH","reg":"cn","seg":"AI 加速芯片","mc":6945.02,"pe":208.43,"pb":51.23,"rel":6.25,"relv":"英伟达 33.36","old":"305x","d":"实测低于此前记录（305x → 208.43），说明 5–8 月间盈利改善或股价回落。<b>但 PB 51.23、行业 PB 排名 168/172、PS 排名 167/172，按这两个口径是全行业最贵的一档。</b>"},{"n":"澜起科技","cd":"688008.SH","reg":"cn","seg":"内存接口","mc":2629.41,"pe":102.81,"pb":12.61,"rel":null,"old":"未核实","d":"全球三强之一，受益存储超级周期。PE 102.81 在设计股中偏低。"},{"n":"摩尔线程","cd":"688795.SH","reg":"cn","seg":"AI GPU","mc":2690.86,"pe":null,"pb":22.1,"loss":1,"rel":null,"old":"仍亏损","d":"❗实测 PE -362.94，<b>确认亏损</b>。市场用 PB 22.10 定价。2026H1 营收 17.36 亿（+147%），亏损收窄但未转正。","peNeg":-362.94},{"n":"沐曦股份","cd":"688802.SH","reg":"cn","seg":"AI GPU","mc":2861.88,"pe":null,"pb":21.85,"loss":1,"rel":null,"old":"未核实","d":"❗实测 PE -436.41，<b>确认亏损</b>，市值反超摩尔线程。六个模型全部遗漏此公司，02 号文件补入时也未标注亏损。","peNeg":-436.41},{"n":"华大九天","cd":"301269.SZ","reg":"cn","seg":"EDA","mc":538.83,"pe":null,"pb":10.36,"loss":1,"rel":null,"old":"未核实","d":"❗实测 PE -2479.19，<b>确认亏损</b>。国产 EDA 龙头在一个连 Synopsys 都只有 10.4% 营业利润率的赛道里，规模小两个数量级。","peNeg":-2479.19},{"n":"中际旭创","cd":"300308.SZ","reg":"cn","seg":"光模块","mc":10773.26,"pe":72.07,"pb":30.27,"rel":0.47,"relv":"Coherent 154.10","cheap":1,"old":"61x","d":"⭐ <b>相对对标折价 0.47x。</b>但行业分位显示：PE 排名 22/98（便宜）、<b>PB 排名 92/98、PS 排名 88/98（最贵一档）</b>。低 PE 靠 29% 净利率撑起，利润率一旦回落 PE 立刻变贵。"},{"n":"新易盛","cd":"300502.SZ","reg":"cn","seg":"光模块","mc":5970.21,"pe":55.59,"pb":29.3,"rel":0.36,"relv":"Coherent 154.10","cheap":1,"old":"未核实","d":"⭐ <b>折价最深的一家（0.36x），PE 比中际旭创还低 23%。</b>但 PB 29.30 与旭创相当，同样是高利润率撑出来的低 PE。"},{"n":"工业富联","cd":"601138.SH","reg":"cn","seg":"AI 服务器代工","mc":13017.72,"pe":27.75,"pb":7.41,"rel":null,"cheap":1,"old":"未核实","d":"⭐ <b>全表 PE 最低（27.75），且是国产第二大市值（1.30 万亿）。</b>低 PE 对应的是薄利——整机代工毛利率个位数，营收含大量非 AI 业务。<b>便宜有便宜的理由。</b>"},{"n":"长电科技","cd":"600584.SH","reg":"cn","seg":"封装测试","mc":1398.96,"pe":84.68,"pb":4.86,"rel":null,"old":"未核实","d":"<b>PB 4.86，国产标的中第二低。</b>全球第三大 OSAT，传统封装已完成替代，CoWoS 级仍依赖台积电。"},{"n":"通富微电","cd":"002156.SZ","reg":"cn","seg":"封装测试","mc":null,"pe":65.96,"pb":6.09,"rel":null,"old":"未核实","d":"AMD 主要封测合作方。PE 65.96、PB 6.09，均低于行业。"},{"n":"浪潮信息","cd":"000977.SZ","reg":"cn","seg":"AI 服务器","mc":1101.65,"pe":43.12,"pb":4.94,"rel":null,"cheap":1,"old":"未核实","d":"PE 43.12、PB 4.94，均处全表低位。整机环节薄利的估值体现。"},{"n":"达梦数据","cd":"688692.SH","reg":"cn","seg":"数据库","mc":269.76,"pe":47.34,"pb":6.94,"rel":null,"old":"未核实","d":"PE 47.34 在国产软件股中不算高。信创场景已成规模，商业市场仍由 Oracle 主导。"}],"margins":[{"n":"美光 MU","gm":72.6,"om":80.4,"roe":66.6,"rev":"$902.7 亿","d":"⚠ <b>营业利润率高于毛利率</b>——含大额投资收益或会计口径差异，也说明本轮存储周期的利润弹性极端。高于 SK 海力士的 76%。"},{"n":"英伟达 NVDA","gm":74.1,"om":65.6,"roe":114.3,"rev":"$2534.9 亿","d":"落差仅 8.5pct，运营效率极高。ROE 114.3% 为全表最高。"},{"n":"台积电 TSM","gm":64.2,"om":60.3,"roe":40,"rev":"NT$4.44 万亿","d":"落差 3.9pct，全表最小——重资产但运营极精简。"},{"n":"泛林 LRCX","gm":50.5,"om":37.4,"roe":65.1,"rev":"$232.3 亿","d":"落差 13.1pct。设备商的典型结构。"},{"n":"ASML","gm":52.7,"om":37.1,"roe":53.9,"rev":"€353.3 亿","d":"落差 15.6pct，EUV 研发投入巨大。"},{"n":"应用材料 AMAT","gm":49,"om":31.9,"roe":39.7,"rev":"$290.2 亿","d":"落差 17.1pct，设备三巨头中最大。"},{"n":"Lumentum LITE","gm":40.8,"om":21.8,"roe":22.8,"rev":"$24.9 亿","d":"落差 19.0pct。"},{"n":"Coherent COHR","gm":37,"om":13.6,"roe":4.7,"rev":"$66.0 亿","d":"落差 23.4pct，ROE 仅 4.7%。<b>中际旭创的对标其实盈利质量并不好</b>——这也是它 PE 高达 154 的原因之一。"},{"n":"Synopsys SNPS","gm":82.6,"om":10.4,"roe":3.8,"rev":"$86.8 亿","d":"⚠ <b>落差 72.2pct，全表最大。</b>毛利率最高但营业利润率倒数第一，最近一季 EPS 同比 -96%。用毛利率衡量 EDA 利润池会高估约 8 倍。"}]};
+var qc={},qn={};(D.quotes||[]).forEach(function(q){qc[q.cd]=q;qn[q.n]=q;});
+D.q=function(k){return qc[k]||qn[k]||null;};
+D.fmtMC=function(q){if(!q||q.mc==null)return '—';var v=Math.round(q.mc).toLocaleString('en-US');return q.reg==='ov'?('$'+v+' 亿'):(v+' 亿元');};
+D.fmtPE=function(q){return !q?'—':(q.pe==null?(q.loss?'亏损':'存疑'):q.pe.toFixed(2)+'x');};
+D.fmtPB=function(q){return (!q||q.pb==null)?'—':q.pb.toFixed(2);};
+D.rel=function(a,b){var x=D.q(a),y=D.q(b);return (!x||!y||x.pe==null||y.pe==null||y.pe<=0)?null:x.pe/y.pe;};
+return D;})();</script>
+<script>/*! 国产替代研究 · 共用交互与图表（零依赖，全部手写 SVG） */
+var K=(function(){
+var NS='http://www.w3.org/2000/svg';
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function el(t,a,h){var e=document.createElement(t);if(a)for(var k in a)e.setAttribute(k,a[k]);if(h!=null)e.innerHTML=h;return e;}
+function S(t,a,txt){var e=document.createElementNS(NS,t);if(a)for(var k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;}
+/* CJK 偏宽，粗略量一下文字宽度 */
+function tw(s,fs){var w=0;for(var i=0;i<s.length;i++){var c=s.charCodeAt(i);w+=c>0x2e80?1:(c>=65&&c<=90?.62:.52);}return w*fs;}
+
+/* ---------- 主题 ---------- */
+var LS=(function(){try{localStorage.getItem('x');return localStorage;}catch(e){return null;}})();
+function getTheme(){try{return (LS&&LS.getItem('cns-theme'))||'auto';}catch(e){return 'auto';}}
+function setTheme(v){
+  var r=document.documentElement;
+  if(v==='auto'){r.removeAttribute('data-theme');}else{r.setAttribute('data-theme',v);}
+  try{if(LS)LS.setItem('cns-theme',v);}catch(e){}
+  var b=document.getElementById('k-tog');
+  if(b)b.textContent=v==='auto'?'主题 · 跟随系统':(v==='dark'?'主题 · 深色':'主题 · 浅色');
+  redrawAll();
+}
+function cycleTheme(){var o=getTheme();setTheme(o==='auto'?'light':o==='light'?'dark':'auto');}
+
+/* ---------- 顶部导航 ---------- */
+var DOCS=[
+ ['06','全产业链流程图','06_全产业链流程图.html','cn-substitution-06-full-chain-flow.html'],
+ ['07','实测估值数据','07_实测估值数据_修正版.html','cn-substitution-07-measured-valuation.html'],
+ ['01','六模型整合与校正','01_国产替代价值链整合.html','cn-substitution-01-value-chain.html'],
+ ['02','差距量化与突围地图','02_国产替代量化分析.html','cn-substitution-02-quantified.html'],
+ ['03','量化数据表','03_量化数据表.html','cn-substitution-03-data.html'],
+ ['04','追赶时间 · 估值 · ETF','04_追赶时间_估值对比_ETF.html','cn-substitution-04-catchup-valuation-etf.html'],
+ ['05','下游价值链 · 利润池','05_下游价值链_利润池_生态位.html','cn-substitution-05-downstream-profit-pools.html']
+];
+var MODE=0, IDX='00_README.md';
+function nav(cur,mode,idxHref){
+  MODE=mode||0; if(idxHref)IDX=idxHref;
+  var i=-1;for(var k=0;k<DOCS.length;k++)if(DOCS[k][0]===cur)i=k;
+  function href(d){return MODE===1?d[3]:d[2];}
+  var prev=i>0?DOCS[i-1]:null, next=(i>=0&&i<DOCS.length-1)?DOCS[i+1]:null;
+  var COL=(MODE===2); /* 离线合集：链接改成切换父页签 */
+  function A(d,label){ return COL? '<a href="#" data-go="'+esc(d[0])+'">'+esc(label)+'</a>'
+                                 : '<a href="'+esc(href(d))+'">'+esc(label)+'</a>'; }
+  var h='<div class="k-navin">';
+  h+=COL?'<a href="#" data-go="_idx" title="回目录">目录</a>':'<a href="'+esc(IDX)+'" title="回目录">目录</a>';
+  h+='<span class="k-seq">'+(i+1)+' / '+DOCS.length+'</span>';
+  h+=prev?A(prev,'← '+prev[0]+' '+prev[1]):'<a style="opacity:.32;pointer-events:none">← 上一篇</a>';
+  h+=next?A(next,next[0]+' '+next[1]+' →'):'<a style="opacity:.32;pointer-events:none">下一篇 →</a>';
+  h+='<span class="k-sp"></span>';
+  h+='<button class="k-tog" id="k-tog" type="button">主题</button></div>';
+  var n=el('nav',{'class':'k-nav'},h);
+  document.body.insertBefore(n,document.body.firstChild);
+  document.getElementById('k-tog').onclick=cycleTheme;
+  if(COL) [].slice.call(n.querySelectorAll('a[data-go]')).forEach(function(a){
+    a.onclick=function(e){e.preventDefault();
+      try{parent.postMessage({cns:'go',id:a.getAttribute('data-go')},'*');}catch(err){}};});
+  setTheme(getTheme());
+}
+
+/* ---------- 粘性目录（由 h2 生成） ---------- */
+function toc(scope){
+  var root=document.querySelector(scope||'.wrap');if(!root)return;
+  var hs=[].slice.call(root.querySelectorAll('h2'));if(hs.length<2)return;
+  var items=hs.map(function(h,i){
+    if(!h.id)h.id='s'+(i+1);
+    var t=h.cloneNode(true);var n=t.querySelector('.n');if(n)n.remove();
+    return {id:h.id,t:(t.textContent||'').trim().replace(/\s+/g,' '),el:h};
+  });
+  var w=getComputedStyle(root).maxWidth;
+  var wpx=/px/.test(w)?parseFloat(w):1100;
+  document.documentElement.style.setProperty('--kw',wpx+'px');
+  function fit(){ /* 正文两侧各留 186px 才放得下侧栏目录，否则用顶部下拉 */
+    document.documentElement.classList.toggle('k-wide',window.innerWidth>=wpx+372);
+  }
+  fit();window.addEventListener('resize',fit,{passive:true});
+  var side=el('nav',{'class':'k-toc'},'<h6>本页目录</h6>'+items.map(function(x){
+    return '<a href="#'+x.id+'" data-t="'+x.id+'">'+esc(x.t)+'</a>';}).join(''));
+  document.body.appendChild(side);
+  var m=el('div',{'class':'k-tocm k-noprint'},'<select aria-label="跳到章节"><option value="">本页目录 —— 跳到章节…</option>'+
+    items.map(function(x){return '<option value="'+x.id+'">'+esc(x.t)+'</option>';}).join('')+'</select>');
+  root.insertBefore(m,root.firstChild);
+  m.querySelector('select').onchange=function(){if(this.value)document.getElementById(this.value).scrollIntoView({behavior:'smooth'});};
+  var links=[].slice.call(side.querySelectorAll('a'));
+  function mark(){
+    var best=0,y=window.scrollY+120;
+    items.forEach(function(x,i){if(x.el.offsetTop<=y)best=i;});
+    links.forEach(function(a,i){a.classList.toggle('on',i===best);});
+  }
+  window.addEventListener('scroll',mark,{passive:true});mark();
+}
+
+/* ---------- 表头排序 ---------- */
+function sortable(tableSel,cfg,rows,render,opt){
+  var tb=document.querySelector(tableSel);if(!tb)return;
+  var table=tb.closest('table'),ths=[].slice.call(table.querySelectorAll('thead th'));
+  var st={k:(opt&&opt.k)||null,dir:(opt&&opt.dir)||1},base=rows.slice();
+  var filt=(opt&&opt.filter)||function(r){return r;};
+  ths.forEach(function(th,i){
+    var key=cfg[i];if(!key)return;
+    th.classList.add('k-s');th.tabIndex=0;
+    function go(){st.dir=st.k===key?-st.dir:(key.desc?-1:1);st.k=key;paint();}
+    th.onclick=go;th.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}};
+  });
+  function paint(){
+    var r=filt(base.slice());
+    if(st.k){var f=st.k.get;
+      r.sort(function(a,b){var va=f(a),vb=f(b);
+        if(va==null&&vb==null)return 0; if(va==null)return 1; if(vb==null)return -1;
+        var c=typeof va==='number'?va-vb:String(va).localeCompare(String(vb),'zh');
+        return c*st.dir;});}
+    ths.forEach(function(th,i){var key=cfg[i];if(!key)return;
+      th.classList.toggle('k-asc',st.k===key&&st.dir===1);
+      th.classList.toggle('k-desc',st.k===key&&st.dir===-1);});
+    render(r);
+  }
+  paint();
+  return {refresh:paint,setFilter:function(fn){filt=fn;paint();}};
+}
+
+/* ---------- 宽表格自己横向滚动，不让整页横向滚 ---------- */
+function wrapTables(scope){
+  var root=document.querySelector(scope||'.wrap');if(!root)return;
+  [].slice.call(root.querySelectorAll('table')).forEach(function(t){
+    if(t.parentElement&&t.parentElement.classList.contains('k-tw'))return;
+    var p=t.parentElement,ok=false;
+    while(p&&p!==root){var ox=getComputedStyle(p).overflowX;if(ox==='auto'||ox==='scroll'){ok=true;break;}p=p.parentElement;}
+    if(ok)return;
+    var w=document.createElement('div');w.className='k-tw';
+    t.parentNode.insertBefore(w,t);w.appendChild(t);
+  });
+}
+
+/* ---------- 提示气泡 ---------- */
+var TIP=null;
+function tip(){if(!TIP){TIP=el('div',{'class':'k-tip'});document.body.appendChild(TIP);}return TIP;}
+function tipOn(e,html){var t=tip();t.innerHTML=html;t.style.opacity=1;tipMove(e);}
+function tipMove(e){var t=tip();var x=e.clientX+14,y=e.clientY+14;
+  var b=t.getBoundingClientRect();
+  if(x+b.width>innerWidth-8)x=e.clientX-b.width-14;
+  if(y+b.height>innerHeight-8)y=Math.max(8,e.clientY-b.height-14);
+  t.style.left=x+'px';t.style.top=y+'px';}
+function tipOff(){if(TIP)TIP.style.opacity=0;}
+function bindTip(node,html){
+  node.addEventListener('mouseenter',function(e){tipOn(e,html);});
+  node.addEventListener('mousemove',tipMove);
+  node.addEventListener('mouseleave',tipOff);
+}
+
+/* ---------- 标签避让：候选位打分，取重叠最小的一个 ---------- */
+function placeLabels(items,W,H,fs,seeds){
+  var placed=(seeds||[]).slice();
+  var cand=[[1,0,'start',.35],[-1,0,'end',.35],[0,-1,'middle',-.55],[0,1,'middle',1.15],
+            [1,-1,'start',-.25],[-1,-1,'end',-.25],[1,1,'start',1.0],[-1,1,'end',1.0],
+            [1.9,0,'start',.35],[-1.9,0,'end',.35],[0,-1.9,'middle',-.55],[0,1.9,'middle',1.15]];
+  function ov(a,b){var w=Math.min(a.x1,b.x1)-Math.max(a.x0,b.x0),h=Math.min(a.y1,b.y1)-Math.max(a.y0,b.y0);
+    return (w>0&&h>0)?w*h:0;}
+  items.forEach(function(it){
+    var w=tw(it.text,fs),h=fs*1.15,best=null,bestScore=Infinity;
+    for(var ci=0;ci<cand.length;ci++){
+      var c=cand[ci],pad=it.r+5;
+      var cx=it.x+c[0]*pad, cy=it.y+c[1]*pad+c[3]*fs;
+      var x0=c[2]==='start'?cx:c[2]==='end'?cx-w:cx-w/2;
+      var box={x0:x0-1.5,y0:cy-h*.82,x1:x0+w+1.5,y1:cy+h*.24};
+      var pen=0;
+      if(box.x0<2)pen+=(2-box.x0)*80; if(box.x1>W-2)pen+=(box.x1-(W-2))*80;
+      if(box.y0<2)pen+=(2-box.y0)*80; if(box.y1>H-2)pen+=(box.y1-(H-2))*80;
+      for(var p=0;p<placed.length;p++) pen+=ov(box,placed[p])*(placed[p].soft?0.55:1);
+      pen+=ci*0.6; /* 同分时优先靠前的候选位 */
+      if(pen<bestScore){bestScore=pen;best={x:cx,y:cy,anchor:c[2],box:box};}
+      if(pen<=ci*0.6+0.01)break;
+    }
+    placed.push(best.box);
+    it.lx=best.x;it.ly=best.y;it.anchor=best.anchor;it.show=true;it.clean=bestScore<8;
+  });
+  return items;
+}
+
+/* ---------- 散点 / 气泡图 ---------- */
+function scatter(host,o){
+  var W=o.w||940,H=o.h||460,PL=o.pl||58,PR=o.pr||22,PT=o.pt||18,PB=o.pb||46;
+  var pts=o.pts,fs=o.fs||10.5;
+  var xs=pts.map(function(p){return o.xLog?Math.log(Math.max(p.x,1e-6))/Math.LN10:p.x;});
+  var ys=pts.map(function(p){return o.yLog?Math.log(Math.max(p.y,1e-6))/Math.LN10:p.y;});
+  var x0=o.x0!=null?(o.xLog?Math.log(o.x0)/Math.LN10:o.x0):Math.min.apply(null,xs)-.4;
+  var x1=o.x1!=null?(o.xLog?Math.log(o.x1)/Math.LN10:o.x1):Math.max.apply(null,xs)+.4;
+  var y0=o.y0!=null?(o.yLog?Math.log(o.y0)/Math.LN10:o.y0):Math.min.apply(null,ys)-.3;
+  var y1=o.y1!=null?(o.yLog?Math.log(o.y1)/Math.LN10:o.y1):Math.max.apply(null,ys)+.3;
+  var X=function(v){var t=o.xLog?Math.log(Math.max(v,1e-6))/Math.LN10:v;return PL+(t-x0)/(x1-x0)*(W-PL-PR);};
+  var Y=function(v){var t=o.yLog?Math.log(Math.max(v,1e-6))/Math.LN10:v;return H-PB-(t-y0)/(y1-y0)*(H-PT-PB);};
+  var svg=S('svg',{viewBox:'0 0 '+W+' '+H,width:W,height:H,role:'img','aria-label':o.alt||o.title||'散点图'});
+  var g=S('g');svg.appendChild(g);
+  /* 象限底色与注释 */
+  if(o.qx!=null&&o.qy!=null){
+    var qx=X(o.qx),qy=Y(o.qy);
+    g.appendChild(S('rect',{x:PL,y:PT,width:Math.max(0,qx-PL),height:Math.max(0,qy-PT),fill:'var(--dv1)','fill-opacity':.03}));
+    g.appendChild(S('rect',{x:qx,y:qy,width:Math.max(0,W-PR-qx),height:Math.max(0,H-PB-qy),fill:'var(--dv1)','fill-opacity':.03}));
+    if(o.qHi)g.appendChild(S('rect',{x:PL,y:PT,width:Math.max(0,qx-PL),height:Math.max(0,qy-PT),
+      fill:'var(--dv3)','fill-opacity':.085,rx:4}));
+    g.appendChild(S('line',{x1:qx,y1:PT,x2:qx,y2:H-PB,stroke:'var(--dvaxis)','stroke-dasharray':'3 4','stroke-opacity':.7}));
+    g.appendChild(S('line',{x1:PL,y1:qy,x2:W-PR,y2:qy,stroke:'var(--dvaxis)','stroke-dasharray':'3 4','stroke-opacity':.7}));
+  }
+  /* 网格与轴 */
+  (o.xTicks||[]).forEach(function(t){var x=X(t.v);
+    g.appendChild(S('line',{x1:x,y1:PT,x2:x,y2:H-PB,stroke:'var(--dvgrid)'}));
+    g.appendChild(S('text',{x:x,y:H-PB+15,'text-anchor':'middle','font-size':10.5,fill:'var(--ink3)'},t.t));});
+  (o.yTicks||[]).forEach(function(t){var y=Y(t.v);
+    g.appendChild(S('line',{x1:PL,y1:y,x2:W-PR,y2:y,stroke:'var(--dvgrid)'}));
+    g.appendChild(S('text',{x:PL-7,y:y+3.5,'text-anchor':'end','font-size':10.5,fill:'var(--ink3)'},t.t));});
+  g.appendChild(S('line',{x1:PL,y1:H-PB,x2:W-PR,y2:H-PB,stroke:'var(--dvaxis)'}));
+  g.appendChild(S('line',{x1:PL,y1:PT,x2:PL,y2:H-PB,stroke:'var(--dvaxis)'}));
+  if(o.xLabel)g.appendChild(S('text',{x:(PL+W-PR)/2,y:H-8,'text-anchor':'middle','font-size':11,fill:'var(--dvlab)'},o.xLabel));
+  if(o.yLabel)g.appendChild(S('text',{x:14,y:(PT+H-PB)/2,'text-anchor':'middle','font-size':11,fill:'var(--dvlab)',
+    transform:'rotate(-90 14 '+((PT+H-PB)/2)+')'},o.yLabel));
+  var seeds=[];
+  (o.quads||[]).forEach(function(q){
+    var qx=q.px!=null?q.px:X(q.x), qy=q.py!=null?q.py:Y(q.y), qfs=q.fs||11, an=q.anchor||'middle';
+    g.appendChild(S('text',{x:qx,y:qy,'text-anchor':an,'font-size':qfs,fill:q.color||'var(--ink3)',
+      'font-weight':q.bold?700:400},q.text));
+    var qw=tw(q.text,qfs), x0=an==='start'?qx:an==='end'?qx-qw:qx-qw/2;
+    seeds.push({x0:x0-3,y0:qy-qfs,x1:x0+qw+3,y1:qy+qfs*.35});});
+  /* 点：大的先画，小的压在上面 */
+  var order=pts.map(function(p,i){return i;}).sort(function(a,b){return (pts[b].r||5)-(pts[a].r||5);});
+  var labels=[];
+  pts.forEach(function(p){var cx=X(p.x),cy=Y(p.y),r=(p.r||5);
+    seeds.push({x0:cx-r,y0:cy-r,x1:cx+r,y1:cy+r,soft:1});});
+  order.forEach(function(i){
+    var p=pts[i],cx=X(p.x),cy=Y(p.y),r=p.r||5;
+    var c=S('circle',{cx:cx,cy:cy,r:r,fill:p.fill===false?'none':p.c,'fill-opacity':p.fill===false?0:(p.o==null?.62:p.o),
+      stroke:p.c,'stroke-width':p.fill===false?1.9:1.1,'class':'k-dot'});
+    if(p.tip)bindTip(c,p.tip);
+    if(o.onClick)c.addEventListener('click',function(){o.onClick(p);});
+    g.appendChild(c);
+    if(p.label)labels.push({text:p.label,x:cx,y:cy,r:r,c:p.lc||'var(--ink2)',p:p});
+  });
+  placeLabels(labels,W,H,fs,seeds).forEach(function(t){
+    if(!t.show)return;
+    var e=S('text',{x:t.lx,y:t.ly,'text-anchor':t.anchor,'font-size':fs,fill:t.c,
+      stroke:'var(--dvhalo)','stroke-width':2.6,'paint-order':'stroke','stroke-linejoin':'round',
+      'style':'pointer-events:none'},t.text);
+    g.appendChild(e);
+  });
+  host.innerHTML='';host.appendChild(svg);
+  return svg;
+}
+
+/* ---------- 横向时间轴 ---------- */
+function timeline(host,o){
+  var rows=o.rows,rh=o.rh||21,PL=o.pl||168,PR=24,PT=30,PB=26;
+  var W=o.w||900,H=PT+rows.length*rh+PB;
+  var y0=o.from,y1=o.to;
+  var X=function(v){return PL+(v-y0)/(y1-y0)*(W-PL-PR);};
+  var svg=S('svg',{viewBox:'0 0 '+W+' '+H,width:W,height:H,role:'img','aria-label':o.alt||'时间轴'});
+  for(var yr=Math.ceil(y0);yr<=y1;yr++){
+    var x=X(yr);
+    svg.appendChild(S('line',{x1:x,y1:PT-8,x2:x,y2:H-PB+4,stroke:yr===o.now?'var(--dvaxis)':'var(--dvgrid)',
+      'stroke-dasharray':yr===o.now?'':'2 3'}));
+    svg.appendChild(S('text',{x:x,y:PT-13,'text-anchor':'middle','font-size':10.5,fill:'var(--ink3)'},String(yr)));
+  }
+  if(o.mark!=null){var mx=X(o.mark);
+    svg.appendChild(S('line',{x1:mx,y1:PT-8,x2:mx,y2:H-PB+4,stroke:'var(--dv3)','stroke-width':1.4,'stroke-dasharray':'5 3'}));
+    svg.appendChild(S('text',{x:mx+4,y:H-PB+16,'font-size':10.5,fill:'var(--dv3)','font-weight':600},o.markText||''));}
+  rows.forEach(function(r,i){
+    var y=PT+i*rh+rh/2;
+    svg.appendChild(S('text',{x:PL-9,y:y+3.5,'text-anchor':'end','font-size':11,fill:'var(--ink2)'},r.label));
+    var a=X(Math.max(y0,r.from)),b=X(Math.min(y1,r.to));
+    if(r.to<=r.from+0.01){ /* 已超越：画一个实心点 */
+      svg.appendChild(S('circle',{cx:a,cy:y,r:5,fill:r.c}));
+    }else{
+      var bar=S('rect',{x:a,y:y-6,width:Math.max(3,b-a),height:12,rx:6,fill:r.c,'fill-opacity':.75,'class':'k-dot'});
+      if(r.tip)bindTip(bar,r.tip);
+      svg.appendChild(bar);
+      if(r.open)svg.appendChild(S('path',{d:'M'+(b)+' '+(y-6)+'L'+(b+9)+' '+y+'L'+b+' '+(y+6)+'Z',fill:r.c,'fill-opacity':.75}));
+    }
+    if(r.right)svg.appendChild(S('text',{x:Math.min(W-PR,b+(r.open?13:7)),y:y+3.5,'font-size':10.5,fill:'var(--ink3)'},r.right));
+  });
+  host.innerHTML='';host.appendChild(svg);
+  return svg;
+}
+
+/* ---------- 哑铃图 ---------- */
+function dumbbell(host,o){
+  var rows=o.rows,rh=o.rh||24,PL=o.pl||120,PR=o.pr||64,PT=34,PB=30;
+  var W=o.w||880,H=PT+rows.length*rh+PB;
+  var lo=o.min,hi=o.max;
+  var X=function(v){return PL+(Math.max(lo,Math.min(hi,v))-lo)/(hi-lo)*(W-PL-PR);};
+  var svg=S('svg',{viewBox:'0 0 '+W+' '+H,width:W,height:H,role:'img','aria-label':o.alt||'哑铃图'});
+  (o.ticks||[]).forEach(function(t){var x=X(t);
+    svg.appendChild(S('line',{x1:x,y1:PT-10,x2:x,y2:H-PB+2,stroke:'var(--dvgrid)'}));
+    svg.appendChild(S('text',{x:x,y:PT-15,'text-anchor':'middle','font-size':10.5,fill:'var(--ink3)'},String(t)));});
+  rows.forEach(function(r,i){
+    var y=PT+i*rh+rh/2, xa=X(r.a), xb=X(r.b);
+    svg.appendChild(S('text',{x:PL-9,y:y+3.5,'text-anchor':'end','font-size':11.5,fill:'var(--ink2)'},r.label));
+    svg.appendChild(S('line',{x1:xa,y1:y,x2:xb,y2:y,stroke:r.c,'stroke-width':2.4,'stroke-opacity':.5}));
+    var p1=S('circle',{cx:xa,cy:y,r:4.6,fill:'var(--panel)',stroke:'var(--ink3)','stroke-width':1.6,'class':'k-dot'});
+    var p2=S('circle',{cx:xb,cy:y,r:5.4,fill:r.c,'class':'k-dot'});
+    if(r.tipA)bindTip(p1,r.tipA); if(r.tipB)bindTip(p2,r.tipB);
+    svg.appendChild(p1);svg.appendChild(p2);
+    var dir=(xb>xa)?1:-1;
+    svg.appendChild(S('text',{x:Math.max(xa,xb)+9,y:y+3.7,'font-size':10.5,fill:r.c,'font-weight':600},r.right||''));
+  });
+  if(o.xLabel)svg.appendChild(S('text',{x:(PL+W-PR)/2,y:H-8,'text-anchor':'middle','font-size':11,fill:'var(--dvlab)'},o.xLabel));
+  host.innerHTML='';host.appendChild(svg);
+  return svg;
+}
+
+/* ---------- 分层依赖图（自上而下 9 层） ---------- */
+function dag(host,o){
+  var layers=o.layers, edges=o.edges;
+  var NW=o.nw||118, NH=o.nh||34, GX=o.gx||13, LY=o.ly||96;
+  var maxN=Math.max.apply(null,layers.map(function(l){return l.nodes.length;}));
+  var PLft=o.plft||118;
+  var W=Math.max(o.wmin||860, PLft+maxN*(NW+GX)+30);
+  var H=42+layers.length*LY;
+  var pos={}, byId={};
+  layers.forEach(function(l,li){
+    var n=l.nodes.length, span=n*(NW+GX)-GX;
+    var startX=PLft+((W-PLft-30)-span)/2;
+    l.nodes.forEach(function(nd,ni){
+      pos[nd.id]={x:startX+ni*(NW+GX),y:34+li*LY,li:li,ni:ni,node:nd};
+      byId[nd.id]=nd;
+    });
+  });
+  /* 邻接 */
+  var down={},up={};
+  edges.forEach(function(e){ (down[e[0]]=down[e[0]]||[]).push(e[1]); (up[e[1]]=up[e[1]]||[]).push(e[0]); });
+  var svg=S('svg',{viewBox:'0 0 '+W+' '+H,width:W,height:H,role:'img','aria-label':o.alt||'产业链依赖图'});
+  /* 层带 */
+  layers.forEach(function(l,li){
+    var y=34+li*LY;
+    svg.appendChild(S('rect',{x:PLft-8,y:y-11,width:W-PLft-22,height:NH+22,rx:8,
+      fill:'var(--panel)','fill-opacity':li%2?.55:.9,stroke:'var(--line)','stroke-opacity':.55}));
+    svg.appendChild(S('text',{x:8,y:y+13,'font-size':10.5,fill:'var(--ink3)','font-weight':600},l.short));
+    svg.appendChild(S('text',{x:8,y:y+26,'font-size':9.5,fill:'var(--ink3)','fill-opacity':.72},l.tier));
+  });
+  var gEdge=S('g',{'stroke-linecap':'round',fill:'none'});svg.appendChild(gEdge);
+  var gNode=S('g');svg.appendChild(gNode);
+  var epath={};
+  edges.forEach(function(e){
+    var a=pos[e[0]],b=pos[e[1]];if(!a||!b)return;
+    var x1=a.x+NW/2,y1=a.y+NH,x2=b.x+NW/2,y2=b.y;
+    var dy=(y2-y1)*.45;
+    var p=S('path',{d:'M'+x1+' '+y1+'C'+x1+' '+(y1+dy)+','+x2+' '+(y2-dy)+','+x2+' '+y2,
+      stroke:'var(--dvaxis)','stroke-width':1,'stroke-opacity':.3});
+    gEdge.appendChild(p); (epath[e[0]+'>'+e[1]]=p);
+  });
+  var boxes={};
+  layers.forEach(function(l){l.nodes.forEach(function(nd){
+    var p=pos[nd.id];
+    var g=S('g',{'class':'k-dot',transform:'translate('+p.x+','+p.y+')'});
+    var rect=S('rect',{width:NW,height:NH,rx:7,fill:nd.bg,stroke:nd.color,'stroke-width':1.2});
+    g.appendChild(rect);
+    var name=nd.label, fs=11;
+    while(tw(name,fs)>NW-12&&fs>8.6)fs-=.5;
+    if(tw(name,fs)>NW-12){var cut=name;while(tw(cut+'…',fs)>NW-12&&cut.length>2)cut=cut.slice(0,-1);name=cut+'…';}
+    g.appendChild(S('text',{x:NW/2,y:15,'text-anchor':'middle','font-size':fs,'font-weight':620,fill:nd.color},name));
+    var kpi=nd.kpi||'';var kfs=8.8;
+    if(tw(kpi,kfs)>NW-10){var c2=kpi;while(tw(c2+'…',kfs)>NW-10&&c2.length>2)c2=c2.slice(0,-1);kpi=c2+'…';}
+    g.appendChild(S('text',{x:NW/2,y:27,'text-anchor':'middle','font-size':kfs,fill:'var(--ink3)'},kpi));
+    if(nd.tip)bindTip(g,nd.tip);
+    g.addEventListener('click',function(){o.onClick&&o.onClick(nd);focus(nd.id);});
+    gNode.appendChild(g);boxes[nd.id]={g:g,rect:rect,nd:nd};
+  });});
+  var cur=null, dimFn=null;
+  function walk(id,map,acc){ (map[id]||[]).forEach(function(x){ if(!acc[x]){acc[x]=1;walk(x,map,acc);} }); return acc; }
+  function focus(id){
+    if(cur===id){cur=null;paint(null);return;} cur=id;paint(id);
+  }
+  function base(k){return dimFn?(dimFn(boxes[k].nd)?1:0.14):1;}
+  function paint(id){
+    if(!id){
+      Object.keys(boxes).forEach(function(k){boxes[k].g.style.opacity=base(k);boxes[k].rect.setAttribute('stroke-width',1.2);});
+      Object.keys(epath).forEach(function(k){epath[k].setAttribute('stroke','var(--dvaxis)');
+        epath[k].setAttribute('stroke-opacity',.3);epath[k].setAttribute('stroke-width',1);});
+      o.onFocus&&o.onFocus(null);return;
+    }
+    var d=walk(id,down,{}),u=walk(id,up,{});
+    Object.keys(boxes).forEach(function(k){
+      var on=(k===id)||d[k]||u[k];
+      boxes[k].g.style.opacity=on?base(k):Math.min(base(k),.16);
+      boxes[k].rect.setAttribute('stroke-width',k===id?2.6:1.2);
+    });
+    Object.keys(epath).forEach(function(k){
+      var ab=k.split('>'),a=ab[0],b=ab[1];
+      var onD=(a===id||d[a])&&(d[b]||b===id||false);
+      var onU=(b===id||u[b])&&(u[a]||a===id||false);
+      var on=onD||onU;
+      epath[k].setAttribute('stroke',on?(onD?'var(--dv6)':'var(--dv1)'):'var(--dvaxis)');
+      epath[k].setAttribute('stroke-opacity',on?.72:.07);
+      epath[k].setAttribute('stroke-width',on?1.7:1);
+    });
+    o.onFocus&&o.onFocus({id:id,down:Object.keys(d),up:Object.keys(u)});
+  }
+  host.innerHTML='';host.appendChild(svg);
+  return {focus:focus,clear:function(){cur=null;paint(null);},pos:pos,boxes:boxes,
+    setDim:function(fn){dimFn=fn;paint(cur);},
+    downstream:function(id){return Object.keys(walk(id,down,{}));},
+    upstream:function(id){return Object.keys(walk(id,up,{}));}};
+}
+
+/* ---------- 主题切换后重画所有图 ---------- */
+var REDRAW=[];
+function onRedraw(fn){REDRAW.push(fn);}
+function redrawAll(){REDRAW.forEach(function(f){try{f();}catch(e){}});}
+
+/* ---------- 深链：读 hash 参数 ---------- */
+function hash(){var h=location.hash.replace(/^#/,'');var o={};
+  if(!h)return o;h.split('&').forEach(function(p){var i=p.indexOf('=');
+    if(i>0)o[decodeURIComponent(p.slice(0,i))]=decodeURIComponent(p.slice(i+1));});return o;}
+
+return {esc:esc,el:el,S:S,tw:tw,nav:nav,toc:toc,sortable:sortable,wrapTables:wrapTables,scatter:scatter,timeline:timeline,
+        dumbbell:dumbbell,dag:dag,bindTip:bindTip,tipOn:tipOn,tipOff:tipOff,placeLabels:placeLabels,
+        onRedraw:onRedraw,redrawAll:redrawAll,setTheme:setTheme,hash:hash};
+})();
+</script>
 <script>
 /* mc: 市值（国产=亿元人民币，海外=亿美元）; pe/pb: 实测; rel: vs对标倍数; old: 此前记录 */
-const D=[
-// ===== 海外对标 =====
-{n:'NVIDIA',cd:'NVDA',reg:'ov',seg:'AI 加速芯片',mc:52681,pe:33.36,pb:26.96,fpe:24.81,rel:null,old:'约 45x',
- d:'<b>全表最大市值，PE 却只有 33.36。</b>最近一季净利同比 +214.5%、营收 +85.2%，利润增速把 PE 摊薄了。毛利率 74.1%、营业利润率 65.6%、ROE 114.3%。'},
-{n:'台积电',cd:'TSM',reg:'ov',seg:'晶圆代工',mc:21704,pe:36.90,pb:11.94,fpe:25.32,rel:null,old:'约 20–30x',
- d:'毛利率 64.2%、营业利润率 60.3%。最近一季净利同比 +77.4%。'},
-{n:'美光',cd:'MU',reg:'ov',seg:'存储 / HBM',mc:9809,pe:19.46,pb:9.65,fpe:5.55,rel:null,old:'前瞻 <10x',
- d:'⚠ <b>营业利润率 80.4%，全表最高</b>，高于 SK 海力士的 76%。最近一季净利同比 <b>+1369%</b>。前瞻 PE 5.55 是全表最低——<b>周期股在盈利峰值时 PE 最低，这是风险不是便宜。</b>'},
-{n:'ASML',cd:'ASML',reg:'ov',seg:'光刻机',mc:6658,pe:59.16,pb:26.51,fpe:38.46,rel:null,old:'约 53%（毛利率）',
- d:'毛利率 52.7%、营业利润率 37.1%。EUV 全球唯一供应商，但 PE 高于英伟达。'},
-{n:'应用材料',cd:'AMAT',reg:'ov',seg:'半导体设备',mc:4173,pe:49.35,pb:17.34,fpe:33.11,rel:null,old:'约 20–25x ✗',
- d:'❗<b>此前记录错误约一倍。</b>实测 49.35，高于英伟达。毛利率 49.0%、营业利润率 31.9%。'},
-{n:'泛林 Lam',cd:'LRCX',reg:'ov',seg:'刻蚀设备',mc:3897,pe:53.23,pb:30.74,fpe:33.22,rel:null,old:'约 25–30x ✗',
- d:'❗<b>此前记录错误约一倍。</b>实测 53.23。毛利率 50.5%、营业利润率 37.4%、ROE 65.1%。'},
-{n:'Synopsys',cd:'SNPS',reg:'ov',seg:'EDA',mc:787,pe:94.25,pb:2.59,fpe:23.87,rel:null,old:'约 85%（毛利率）',
- d:'⚠ 毛利率 82.6% 但<b>营业利润率仅 10.4%、ROE 3.8%</b>，最近一季 EPS 同比 <b>-96%</b>。毛利率高不等于赚钱。'},
-{n:'Coherent',cd:'COHR',reg:'ov',seg:'光模块',mc:636,pe:154.10,pb:6.95,fpe:38.31,rel:null,old:'前瞻 49x / TTM >180x',
- d:'毛利率 37.0%、营业利润率 13.6%。中际旭创的主要对标。'},
-{n:'Lumentum',cd:'LITE',reg:'ov',seg:'光模块',mc:633,pe:156.14,pb:23.29,fpe:47.17,rel:null,old:'159x',
- d:'毛利率 40.8%、营业利润率 21.8%。最近一季营收同比 +90.1%。'},
-// ===== 国产 · 存储与代工 =====
-{n:'长鑫科技',cd:'688825.SH',reg:'cn',seg:'DRAM',mc:35794.65,pe:126.95,pb:43.80,rel:6.52,relv:'美光 19.46',old:'推算 2026E 约 22–25x',
- d:'❗<b>此前按 2026E 推算 22–25x，TTM 口径实测 126.95。</b>两者不矛盾（一个用预测利润、一个用过去12个月），但目录页只写了低的那个，会误导。PB 43.80 是全表最高。'},
-{n:'中芯国际',cd:'688981.SH',reg:'cn',seg:'晶圆代工',mc:10954.73,pe:217.12,pb:7.31,rel:5.88,relv:'台积电 36.90',old:'234x',
- d:'PB 仅 7.31，远低于同业。<b>代工是重资产周期股，PE 口径本身失真</b>，PB 或 EV/EBITDA 更合适——这一点此前已标注，实测印证。'},
-{n:'华虹公司',cd:'688347.SH',reg:'cn',seg:'晶圆代工',mc:4747.47,pe:962.17,pb:10.49,rel:26.1,relv:'台积电 36.90',old:'未核实',
- d:'⚠ PE 962 说明利润接近于零。特色工艺路线不受 EUV 限制，但盈利能力与台积电差距巨大。'},
-{n:'兆易创新',cd:'603986.SH',reg:'cn',seg:'利基存储',mc:2899.40,pe:100.86,pb:11.47,rel:5.18,relv:'美光 19.46',old:'未核实',
- d:'NOR Flash 与 MCU 为主，与长鑫不在同一价值层级。'},
-// ===== 国产 · 设备 =====
-{n:'北方华创',cd:'002371.SZ',reg:'cn',seg:'半导体设备',mc:5515.24,pe:98.91,pb:14.04,rel:2.00,relv:'AMAT 49.35',old:'90x（5月 81x）',
- d:'Longbridge：合理区间 48.65–81.88，<b>当前高于区间上沿，处近一年 93% 分位</b>（仅 6.9% 的时间比现在贵）。行业排名 20/69，行业中位数 93.93。'},
-{n:'中微公司',cd:'688012.SH',reg:'cn',seg:'刻蚀设备',mc:3648.90,pe:133.71,pb:15.01,rel:2.51,relv:'泛林 53.23',old:'110.5x',
- d:'实测高于此前记录 21%。5nm CCP 刻蚀已进台积电验证，基本面支撑相对实。'},
-{n:'拓荆科技',cd:'688072.SH',reg:'cn',seg:'薄膜沉积',mc:2043.56,pe:124.28,pb:28.20,rel:2.52,relv:'AMAT 49.35',old:'95.41x',
- d:'❗此前写「当前 PE 与 2026E 基本持平，几乎未透支未来」——实测 124.28，比 5 月记录高 30%，那个结论已不成立。'},
-{n:'盛美上海',cd:'688082.SH',reg:'cn',seg:'清洗设备',mc:1515.84,pe:89.74,pb:10.38,rel:1.82,relv:'AMAT 49.35',old:'未核实',
- d:'<b>设备环节相对海外溢价最低的一家（1.82x）</b>，PB 10.38 也是设备股里较低的。'},
-{n:'华海清科',cd:'688120.SH',reg:'cn',seg:'CMP 设备',mc:1356.49,pe:123.59,pb:17.57,rel:2.50,relv:'AMAT 49.35',old:'未核实'},
-{n:'中科飞测',cd:'688361.SH',reg:'cn',seg:'量测检测',mc:1225.32,pe:null,pb:24.16,rel:null,old:'未核实',
- d:'⚠ <b>实测 PE 2.17，几乎确定包含大额非经常性收益，不可用于比较</b>，本表按存疑处理。'},
-{n:'芯源微',cd:'688037.SH',reg:'cn',seg:'涂胶显影',mc:683.99,pe:969.45,pb:24.42,rel:19.6,relv:'AMAT 49.35',old:'未核实',
- d:'⚠ PE 969 说明利润极薄。东京电子在该环节全球份额超 85%，国产化率仅 10–15%。'},
-// ===== 国产 · 材料 =====
-{n:'江丰电子',cd:'300666.SZ',reg:'cn',seg:'溅射靶材',mc:728.70,pe:132.00,pb:14.06,rel:null,old:'未核实',
- d:'晶圆制造靶材国内市占 38%，材料端国产化最成功的一格，但全球市场仅约 20 亿美元。'},
-{n:'鼎龙股份',cd:'300054.SZ',reg:'cn',seg:'CMP 抛光垫',mc:740.50,pe:89.20,pb:13.56,rel:null,old:'未核实',
- d:'此前记录毛利率 35–45%，实测 PE 89.20 在材料股中偏低。'},
-{n:'雅克科技',cd:'002409.SZ',reg:'cn',seg:'前驱体 / 电子材料',mc:738.59,pe:73.37,pb:9.12,rel:null,old:'未核实',
- d:'<b>材料环节 PE 最低的一家。</b>'},
-{n:'安集科技',cd:'688019.SH',reg:'cn',seg:'CMP 抛光液',mc:571.71,pe:69.51,pb:12.46,rel:null,old:'未核实',
- d:'PE 69.51，全部国产半导体材料股中第二低。'},
-{n:'南大光电',cd:'300346.SZ',reg:'cn',seg:'光刻胶',mc:409.44,pe:117.52,pb:11.37,rel:null,old:'2025 营收 +18%',
- d:'2025 年底成为国内首家 ArF 光刻胶量产企业，已通过中芯与长江存储验证。'},
-{n:'华特气体',cd:'688268.SH',reg:'cn',seg:'电子特气',mc:198.61,pe:159.10,pb:10.58,rel:null,old:'未核实',
- d:'<b>市值最小的重点标的（198.61 亿），但 PE 159.10 偏高。</b>'},
-{n:'沪硅产业',cd:'688126.SH',reg:'cn',seg:'半导体硅片',mc:867.90,pe:null,pb:5.16,loss:1,rel:null,old:'2025 净亏 15.08 亿',
- d:'❗<b>实测 PE -48.7，确认持续亏损。</b>PB 5.16 是全部国产标的中最低。12 英寸国产化率仅 10% + 价格战，「份额追上不等于盈利追上」的实证。'},
-// ===== 国产 · 设计 =====
-{n:'海光信息',cd:'688041.SH',reg:'cn',seg:'服务器 CPU',mc:6686.19,pe:245.27,pb:28.46,rel:7.35,relv:'英伟达 33.36',old:'266x',
- d:'<b>国产盈利公司中 PE 最高的一家。</b>245 倍隐含的增速预期与其实际增速存在明显落差。'},
-{n:'寒武纪',cd:'688256.SH',reg:'cn',seg:'AI 加速芯片',mc:6945.02,pe:208.43,pb:51.23,rel:6.25,relv:'英伟达 33.36',old:'305x',
- d:'实测低于此前记录（305x → 208.43），说明 5–8 月间盈利改善或股价回落。<b>但 PB 51.23、行业 PB 排名 168/172、PS 排名 167/172，按这两个口径是全行业最贵的一档。</b>'},
-{n:'澜起科技',cd:'688008.SH',reg:'cn',seg:'内存接口',mc:2629.41,pe:102.81,pb:12.61,rel:null,old:'未核实',
- d:'全球三强之一，受益存储超级周期。PE 102.81 在设计股中偏低。'},
-{n:'摩尔线程',cd:'688795.SH',reg:'cn',seg:'AI GPU',mc:2690.86,pe:null,pb:22.10,loss:1,rel:null,old:'仍亏损',
- d:'❗实测 PE -362.94，<b>确认亏损</b>。市场用 PB 22.10 定价。2026H1 营收 17.36 亿（+147%），亏损收窄但未转正。'},
-{n:'沐曦股份',cd:'688802.SH',reg:'cn',seg:'AI GPU',mc:2861.88,pe:null,pb:21.85,loss:1,rel:null,old:'未核实',
- d:'❗实测 PE -436.41，<b>确认亏损</b>，市值反超摩尔线程。六个模型全部遗漏此公司，02 号文件补入时也未标注亏损。'},
-{n:'华大九天',cd:'301269.SZ',reg:'cn',seg:'EDA',mc:538.83,pe:null,pb:10.36,loss:1,rel:null,old:'未核实',
- d:'❗实测 PE -2479.19，<b>确认亏损</b>。国产 EDA 龙头在一个连 Synopsys 都只有 10.4% 营业利润率的赛道里，规模小两个数量级。'},
-// ===== 国产 · 下游 =====
-{n:'中际旭创',cd:'300308.SZ',reg:'cn',seg:'光模块',mc:10773.26,pe:72.07,pb:30.27,rel:0.47,relv:'Coherent 154.10',cheap:1,old:'61x',
- d:'⭐ <b>相对对标折价 0.47x。</b>但行业分位显示：PE 排名 22/98（便宜）、<b>PB 排名 92/98、PS 排名 88/98（最贵一档）</b>。低 PE 靠 29% 净利率撑起，利润率一旦回落 PE 立刻变贵。'},
-{n:'新易盛',cd:'300502.SZ',reg:'cn',seg:'光模块',mc:5970.21,pe:55.59,pb:29.30,rel:0.36,relv:'Coherent 154.10',cheap:1,old:'未核实',
- d:'⭐ <b>折价最深的一家（0.36x），PE 比中际旭创还低 23%。</b>但 PB 29.30 与旭创相当，同样是高利润率撑出来的低 PE。'},
-{n:'工业富联',cd:'601138.SH',reg:'cn',seg:'AI 服务器代工',mc:13017.72,pe:27.75,pb:7.41,rel:null,cheap:1,old:'未核实',
- d:'⭐ <b>全表 PE 最低（27.75），且是国产第二大市值（1.30 万亿）。</b>低 PE 对应的是薄利——整机代工毛利率个位数，营收含大量非 AI 业务。<b>便宜有便宜的理由。</b>'},
-{n:'长电科技',cd:'600584.SH',reg:'cn',seg:'封装测试',mc:1398.96,pe:84.68,pb:4.86,rel:null,old:'未核实',
- d:'<b>PB 4.86，国产标的中第二低。</b>全球第三大 OSAT，传统封装已完成替代，CoWoS 级仍依赖台积电。'},
-{n:'通富微电',cd:'002156.SZ',reg:'cn',seg:'封装测试',mc:null,pe:65.96,pb:6.09,rel:null,old:'未核实',
- d:'AMD 主要封测合作方。PE 65.96、PB 6.09，均低于行业。'},
-{n:'浪潮信息',cd:'000977.SZ',reg:'cn',seg:'AI 服务器',mc:1101.65,pe:43.12,pb:4.94,rel:null,cheap:1,old:'未核实',
- d:'PE 43.12、PB 4.94，均处全表低位。整机环节薄利的估值体现。'},
-{n:'达梦数据',cd:'688692.SH',reg:'cn',seg:'数据库',mc:269.76,pe:47.34,pb:6.94,rel:null,old:'未核实',
- d:'PE 47.34 在国产软件股中不算高。信创场景已成规模，商业市场仍由 Oracle 主导。'}
-];
+const D=CNS.quotes;
 
-const MARGIN=[
-{n:'美光 MU',gm:72.6,om:80.4,roe:66.6,rev:'$902.7 亿',d:'⚠ <b>营业利润率高于毛利率</b>——含大额投资收益或会计口径差异，也说明本轮存储周期的利润弹性极端。高于 SK 海力士的 76%。'},
-{n:'英伟达 NVDA',gm:74.1,om:65.6,roe:114.3,rev:'$2534.9 亿',d:'落差仅 8.5pct，运营效率极高。ROE 114.3% 为全表最高。'},
-{n:'台积电 TSM',gm:64.2,om:60.3,roe:40.0,rev:'NT$4.44 万亿',d:'落差 3.9pct，全表最小——重资产但运营极精简。'},
-{n:'泛林 LRCX',gm:50.5,om:37.4,roe:65.1,rev:'$232.3 亿',d:'落差 13.1pct。设备商的典型结构。'},
-{n:'ASML',gm:52.7,om:37.1,roe:53.9,rev:'€353.3 亿',d:'落差 15.6pct，EUV 研发投入巨大。'},
-{n:'应用材料 AMAT',gm:49.0,om:31.9,roe:39.7,rev:'$290.2 亿',d:'落差 17.1pct，设备三巨头中最大。'},
-{n:'Lumentum LITE',gm:40.8,om:21.8,roe:22.8,rev:'$24.9 亿',d:'落差 19.0pct。'},
-{n:'Coherent COHR',gm:37.0,om:13.6,roe:4.7,rev:'$66.0 亿',d:'落差 23.4pct，ROE 仅 4.7%。<b>中际旭创的对标其实盈利质量并不好</b>——这也是它 PE 高达 154 的原因之一。'},
-{n:'Synopsys SNPS',gm:82.6,om:10.4,roe:3.8,rev:'$86.8 亿',d:'⚠ <b>落差 72.2pct，全表最大。</b>毛利率最高但营业利润率倒数第一，最近一季 EPS 同比 -96%。用毛利率衡量 EDA 利润池会高估约 8 倍。'}
-];
+const MARGIN=CNS.margins;
 
 const ST={all:0};
 let f='all', sort='mc', dir=-1;
@@ -335,8 +802,13 @@ function draw(){
 Array.prototype.forEach.call(document.querySelectorAll('.chip'),function(b){
  b.onclick=function(){Array.prototype.forEach.call(document.querySelectorAll('.chip'),x=>x.classList.remove('on'));
   b.classList.add('on');f=b.dataset.f;draw();};});
-Array.prototype.forEach.call(document.querySelectorAll('th'),function(th){
- th.onclick=function(){const s=th.dataset.s;dir=(sort===s)?-dir:-1;sort=s;draw();};});
+Array.prototype.forEach.call(document.querySelectorAll('th[data-s]'),function(th){
+ th.classList.add('k-s');th.tabIndex=0;
+ function go(){const s=th.dataset.s;dir=(sort===s)?-dir:-1;sort=s;draw();
+  Array.prototype.forEach.call(document.querySelectorAll('th[data-s]'),function(o){
+   o.classList.toggle('k-asc',o.dataset.s===sort&&dir===1);
+   o.classList.toggle('k-desc',o.dataset.s===sort&&dir===-1);});}
+ th.onclick=go;th.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}};});
 
 const losses=D.filter(x=>x.loss);
 document.getElementById('lossstat').innerHTML=losses.map(function(x){
@@ -355,6 +827,75 @@ document.getElementById('tbm').innerHTML=MARGIN.map(function(x){
   +'<td style="color:var(--ink2);font-size:12.2px">'+x.d+'</td></tr>';}).join('');
 
 draw();
+</script>
+<script>/* ===== 07 页：哑铃图 + 亏损公司 PB 条 ===== */
+(function(){
+K.nav('07',1,'cn-substitution.html');
+K.toc('.wrap');K.wrapTables('.wrap');
+
+/* 把「此前记录」里的 PE 解析出来；区间取上沿，并标注为近似 */
+function oldPE(t){
+  var s=String(t||'');
+  if(/毛利率|营收|净亏|仍亏损|未核实/.test(s)) return null;
+  var rng=/(\d+(?:\.\d+)?)\s*[–\-~]\s*(\d+(?:\.\d+)?)\s*x/i.exec(s);
+  if(rng) return {v:parseFloat(rng[2]),lo:parseFloat(rng[1]),approx:1};
+  var one=/(-?\d+(?:\.\d+)?)\s*x/i.exec(s);
+  if(one) return {v:parseFloat(one[1]),approx:/约|前瞻|推算/.test(s)?1:0};
+  return null;
+}
+var rows=[];
+CNS.quotes.forEach(function(q){
+  if(q.pe==null)return; var o=oldPE(q.old); if(!o)return;
+  rows.push({q:q,old:o.v,lo:o.lo,approx:o.approx,now:q.pe,d:q.pe-o.v});
+});
+rows.sort(function(a,b){return b.d-a.d;});
+
+function drawDb(){
+  var host=document.getElementById('dbfig');
+  K.dumbbell(host,{w:900,pl:150,pr:96,min:0,max:330,ticks:[0,50,100,150,200,250,300],
+    xLabel:'PE（TTM，倍）—— 空心点 = 此前各处写的口径，实心点 = 2026-08-12 同日实测',
+    rows:rows.map(function(r){
+      var up=r.d>0;
+      return {label:(r.q.reg==='ov'?'🌍 ':'🇨🇳 ')+r.q.n,
+        a:Math.min(330,r.old), b:Math.min(330,r.now),
+        c:up?'var(--g4)':'var(--g1)',
+        right:(up?'+':'−')+Math.abs(r.d).toFixed(0)+(r.approx?' ≈':''),
+        tipA:'<b>'+K.esc(r.q.n)+'</b> · 此前记录<br>'+K.esc(r.q.old||'')+
+             (r.approx?'<br><span class="k-tk">区间／约数，取上沿作图</span>':''),
+        tipB:'<b>'+K.esc(r.q.n)+'</b> · 实测 '+CNS.meta.priceDate+'<br>PE '+r.now.toFixed(2)+
+             ' ｜ PB '+CNS.fmtPB(r.q)+' ｜ 市值 '+CNS.fmtMC(r.q)+
+             (r.q.fpe?'<br>前瞻 PE '+r.q.fpe:'')};
+    })});
+  document.getElementById('dblg').innerHTML=
+   '<span><i style="background:var(--g4)"></i>实测比此前写的更贵</span>'+
+   '<span><i style="background:var(--g1)"></i>实测比此前写的更便宜</span>'+
+   '<span style="color:var(--ink3)">带 ≈ 的行，此前记录本身是区间或约数（取上沿）</span>'+
+   '<span style="color:var(--ink3)">'+rows.length+' 家有可比的新旧两个口径；其余 '+(CNS.quotes.length-rows.length)+' 家此前未核实，无从对比</span>';
+}
+drawDb();K.onRedraw(drawDb);
+
+/* —— 四家亏损公司：没有 PE 可画，改看 PB —— */
+var loss=CNS.quotes.filter(function(x){return x.loss;});
+var withPe=CNS.quotes.filter(function(x){return x.pe!=null&&x.pb!=null&&x.reg==='cn';});
+var medPB=(function(){var a=withPe.map(function(x){return x.pb;}).sort(function(p,q){return p-q;});
+  return a.length?a[Math.floor(a.length/2)]:null;})();
+var maxPB=Math.max.apply(null,CNS.quotes.map(function(x){return x.pb||0;}));
+document.getElementById('losspb').innerHTML=
+ '<div class="k-fig" style="margin-top:12px"><h4>四家亏损公司只能看 PB</h4>'+
+ '<p class="k-cap">PE 为负时不可比，市场实际是用市净率给它们定价。灰色刻度是<b>有利润的 31 家国产标的的 PB 中位数 '+
+ (medPB!=null?medPB.toFixed(2):'—')+'</b>，用来看这四家贵在哪。</p>'+
+ loss.map(function(x){
+   var w=Math.max(2,x.pb/maxPB*100), mw=medPB!=null?(medPB/maxPB*100):null;
+   return '<div class="pbrow"><span class="pbn">'+K.esc(x.n)+'<span class="cd"> '+K.esc(x.cd)+'</span></span>'+
+    '<span class="bar" style="position:relative">'+
+      '<i style="width:'+w+'%;background:var(--g4)"></i>'+
+      (mw!=null?'<b class="pbmed" style="left:'+mw+'%"></b>':'')+'</span>'+
+    '<span class="pbv">PB '+x.pb.toFixed(2)+'</span>'+
+    '<span class="pbm">市值 '+Math.round(x.mc).toLocaleString('en-US')+' 亿元'+
+      (x.peNeg!=null?' ｜ PE '+x.peNeg:'')+'</span></div>';
+ }).join('')+
+ '<p class="k-cap" style="margin-top:8px">本页只有 PB 一个口径可用——PS（市销率）本次未取，不做推算填充。</p></div>';
+})();
 </script>
 </body>
 </html>
